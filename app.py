@@ -1,30 +1,30 @@
 """Main module to load the application"""
-from flask import Flask
+from flask import Flask, render_template
+
 APP = Flask(__name__)
+APP.config['TESTING'] = True
 
 
 @APP.route("/")
 def homepage():
-    return "<h1>Hello World</h1>"
+    return render_template('home.html', title='Home')
 
 
 @APP.route("/doctors")
 def doctors_page():
-    return "<h2>doctors page</h2>"
+    return render_template('doctors.html')
 
 
 @APP.route("/patients")
 def patients_page():
-    return "<h2>patients page"
+    return render_template('patients.html')
 
 
 @APP.route("/clerks")
 def clerks_page():
-    return "<h2>clerks page"
+    return render_template('clerks.html')
 
 
 if __name__ == "__main__":
     APP.run(debug=True, host='192.168.1.4', port=5000)
 
-# run application using flask run --host <ip-address> OR python3 app.py and set ip address in file
-# to start virtual environment. Run 'source venv/bin/activate'. To stop run 'deactivate'
