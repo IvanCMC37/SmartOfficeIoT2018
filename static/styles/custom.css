@@ -1,0 +1,16 @@
+.text-large {
+    font-size: 180%;
+}
+
+.extra-top-padding {
+   padding-top: 10px;
+}
+
+.wrapper {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+li {
+    padding-right: 50px;
+}
