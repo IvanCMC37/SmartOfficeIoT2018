@@ -1,0 +1,112 @@
+/**
+* Basic Styling
+*/
+
+html {
+    font-size: 14px;
+}
+
+.extra-top-padding {
+   padding-top: 10px;
+}
+
+.extra-bottom-padding {
+    padding-bottom: 20px;
+}
+
+.extra-bottom-margin {
+    margin-bottom: 20px;
+}
+
+.wrapper {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+li {
+    padding-right: 50px;
+}
+
+
+/**
+* Modal Styling
+*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index:1;
+    left:0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto; /*enables scroll bar if needed*/
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #f4f4f4;
+    margin: 20% auto;
+    /* padding: 20px; */
+    width: 70%;
+    box-shadow: 9 5px 8px 0 rgba(0,0,0,0.3), 0 7px 20px 0 rgba(0,0,0,0.17);
+    animation-name: modalopen;
+    animation-duration: 1s;
+}
+
+.closeBtn {
+    color: #ccc;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 30px;
+    /* animation-name: modalclose;
+    animation-duration: 1s; */
+}
+
+.submitBtn  {
+    position: absolute;
+    bottom: -5px;
+    right: 30px;
+}
+
+.closeBtn:hover, .closeBtn:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 10px 20px;
+}
+
+.modal-header  h2, .modal-footer h3 {
+    margin: 0;
+}
+
+.modal-footer {
+    justify-content: center;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+}
+
+.modal-header {
+    justify-content: center;
+    margin: 0;
+    padding: 15px;
+    color: #fff;
+}
+
+
+@keyframes modalopen {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@keyframes modalclose {
+    from {opacity: 1}
+    to {opacity: 0}
+}
+
+
+

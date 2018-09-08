@@ -19,8 +19,12 @@ def doctors_page():
 
 
 @APP.route("/patient")
-def patients_page():
-    return render_template('patients.html')
+def get_appointments():
+    return render_template('patient.html')
+
+@APP.route("/patient", methods=["POST"])
+def add_appointment():
+    return render_template('patient.html')
 
 
 @APP.route("/clerk")
