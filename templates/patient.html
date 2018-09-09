@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
+    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
+    <div class="modal">
+        <div class="modal-content" id="modal">
+           <div class="modal-header primary">
+               <h2>Book an Appointment</h2>
+               <span id="closeBtn" class="closeBtn">&times;</span>
+           </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    {{ form.csrf }}
+                    <div>
+                        <ul>
+                            <li>{{ form.first_name.label }} {{ form.first_name }}</li>
+                            <li>{{ form.last_name.label }} {{ form.last_name }}</li>
+                            <li>{{ form.doctor.label }} {{ form.doctor }}</li>
+                            <li>{{ form.date.label }} {{ form.date }}</li>
+                            <li>{{ form.appointment_type.label }} {{ form.appointment_type }}</li>
+                        </ul> 
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
+                    </div>
+                </form>           
+            </div>
+        </div>     
+    </div>
+    <script> 
+       
+            $("#modalBtn").click(function(e){
+                $(".modal").fadeIn(500);
+                e.stopImmediatePropagation(); // Stops other handlers from executing
+            });
+
+             $("#closeBtn").click(function(){
+                $(".modal").fadeOut(500);
+            });
+
+            $(document).click(function(e) {
+                if (!$(e.target).closest('#modal').length) {
+                    $('.modal').fadeOut();
+                }
+            });
+    </script>
+  
+{% endblock content %}

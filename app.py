@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
+from forms import AppointmentForm
 import os
 
 APP = Flask(__name__)
@@ -18,9 +19,10 @@ def doctors_page():
     return render_template('doctors.html')
 
 
-@APP.route("/patient")
-def patients_page():
-    return render_template('patients.html')
+@APP.route("/patient", methods=["GET","POST"])
+def appointments():
+    form = AppointmentForm(request.form)
+    return render_template('patient.html', form=form)
 
 
 @APP.route("/clerk")
