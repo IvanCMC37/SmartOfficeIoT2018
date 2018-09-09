@@ -27,6 +27,10 @@ li {
     padding-right: 50px;
 }
 
+ul {
+    list-style-type: none;
+}
+
 
 /**
 * Modal Styling
@@ -46,11 +50,9 @@ li {
 .modal-content {
     background-color: #f4f4f4;
     margin: 20% auto;
-    /* padding: 20px; */
-    width: 70%;
+    padding: 20px;
+    width: 50%;
     box-shadow: 9 5px 8px 0 rgba(0,0,0,0.3), 0 7px 20px 0 rgba(0,0,0,0.17);
-    animation-name: modalopen;
-    animation-duration: 1s;
 }
 
 .closeBtn {
@@ -59,8 +61,6 @@ li {
     top: 8px;
     right: 16px;
     font-size: 30px;
-    /* animation-name: modalclose;
-    animation-duration: 1s; */
 }
 
 .submitBtn  {
@@ -96,17 +96,5 @@ li {
     padding: 15px;
     color: #fff;
 }
-
-
-@keyframes modalopen {
-    from {opacity: 0}
-    to {opacity: 1}
-}
-
-@keyframes modalclose {
-    from {opacity: 1}
-    to {opacity: 0}
-}
-
 
 
