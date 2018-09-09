@@ -4,7 +4,7 @@
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
     <div class="modal">
-        <div class="modal-content" id="modal">
+        <div class="modal-content" id="patient-modal">
            <div class="modal-header primary">
                <h2>Book an Appointment</h2>
                <span id="closeBtn" class="closeBtn">&times;</span>
@@ -28,22 +28,5 @@
             </div>
         </div>     
     </div>
-    <script> 
-       
-            $("#modalBtn").click(function(e){
-                $(".modal").fadeIn(500);
-                e.stopImmediatePropagation(); // Stops other handlers from executing
-            });
-
-             $("#closeBtn").click(function(){
-                $(".modal").fadeOut(500);
-            });
-
-            $(document).click(function(e) {
-                if (!$(e.target).closest('#modal').length) {
-                    $('.modal').fadeOut();
-                }
-            });
-    </script>
   
 {% endblock content %}
