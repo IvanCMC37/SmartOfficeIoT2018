@@ -1,30 +1,15 @@
-//Get modal
-var modal = document.getElementById('modal');
+// Form animation
+$("#modalBtn").click(function(e){
+    $(".modal").fadeIn(500);
+    e.stopImmediatePropagation(); // Stops other handlers from executing
+});
 
-// // Get open modal button
-// var modalBtn = document.getElementById('modalBtn');
+ $("#closeBtn").click(function(){
+    $(".modal").fadeOut(500);
+});
 
-// //Get close button
-// var closeBtn = document.getElementsByClassName('closeBtn')[0];
-
-// //Listen for clicks
-// modalBtn.addEventListener('click', openAppointmentForm);
-// closeBtn.addEventListener('click', closeAppointmentForm);
-//Listen for outside click
-// window.addEventListener('click', outsideClick);
-
-
-// //Function to open modal
-// function openAppointmentForm(){
-//     modal.style.display = 'block';
-// }
-
-// function closeAppointmentForm(){
-//         modal.style.display = 'none';  
-// }
-
-// function outsideClick(e){
-//     if(e.target == modal){
-//         modal.style.display = 'none';
-//     }
-// }
+$(document).click(function(e) {
+    if (!$(e.target).closest('#patient-modal').length) {
+        $('.modal').fadeOut();
+    }
+});
