@@ -26,5 +26,5 @@ def clerks_page():
 
 
 if __name__ == "__main__":
-    APP.run(debug=True, host='192.168.1.4', port=5000)
+    APP.run(debug=True, host='10.132.151.46', port=5000)
 
