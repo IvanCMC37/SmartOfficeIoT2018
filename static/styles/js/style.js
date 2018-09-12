@@ -4,7 +4,7 @@ $("#modalBtn").click(function(e){
     e.stopImmediatePropagation(); // Stops other handlers from executing
 });
 
- $("#closeBtn").click(function(){
+$("#closeBtn").click(function(){
     $(".modal").fadeOut(500);
 });
 
