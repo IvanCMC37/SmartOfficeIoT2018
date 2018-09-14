@@ -8,3 +8,6 @@ source ~/.bashrc
 
 #### Recreating the database
 'gcloud sql databases create smartoffice --instance=smartoffice-db'
+
+#### When getting error object is not json serializable
+'result, errors = schema.user_schema.dump(new_user)'

@@ -3,14 +3,21 @@
 {% block content %}
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
+    <div>
+        {% for appointment in all_users %}
+        <li>{{ appointment.first_name }}</li>
+        {% endfor %}
+
+   </div>
     <div class="modal">
         <div class="modal-content" id="patient-modal">
            <div class="modal-header primary">
                <h2>Book an Appointment</h2>
                <span id="closeBtn" class="closeBtn">&times;</span>
            </div>
+
             <div class="modal-body">
-                <form action="{{url_for('add_appointment')}}" method="post">
+                <form action="{{url_for('appointments')}}" method="post">
                     {{ form.csrf }}
                     <div>
                         <ul>
@@ -18,8 +25,7 @@
                             <li>{{ form.last_name.label }} {{ form.last_name }}</li>
                             <li>{{ form.email.label }} {{ form.email }}</li>
                             <li>{{ form.specialization.label }} {{ form.specialization }}</li>
-                            <li>{{ form.appointment_type.label }} {{ form.appointment_type }}</li>
-                             
+                            <li>{{ form.appointment_type.label }} {{ form.appointment_type }}</li>   
                         </ul> 
                     </div>
                     <div class="modal-footer">
