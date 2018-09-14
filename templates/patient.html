@@ -10,15 +10,16 @@
                <span id="closeBtn" class="closeBtn">&times;</span>
            </div>
             <div class="modal-body">
-                <form action="" method="post">
+                <form action="{{url_for('add_appointment')}}" method="post">
                     {{ form.csrf }}
                     <div>
                         <ul>
                             <li>{{ form.first_name.label }} {{ form.first_name }}</li>
                             <li>{{ form.last_name.label }} {{ form.last_name }}</li>
-                            <li>{{ form.doctor.label }} {{ form.doctor }}</li>
-                            <li>{{ form.date.label }} {{ form.date }}</li>
+                            <li>{{ form.email.label }} {{ form.email }}</li>
+                            <li>{{ form.specialization.label }} {{ form.specialization }}</li>
                             <li>{{ form.appointment_type.label }} {{ form.appointment_type }}</li>
+                             
                         </ul> 
                     </div>
                     <div class="modal-footer">
@@ -28,5 +29,5 @@
             </div>
         </div>     
     </div>
-  
+   
 {% endblock content %}
