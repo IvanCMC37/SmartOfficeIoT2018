@@ -11,7 +11,7 @@ class User(db.Model):
     user_type = db.Column(db.String(20), unique=False)
 
     appointments = db.relationship('Appointment', backref = db.backref('user',lazy=True))
-    appointment_history = db.relationship('AppointmentHistory', backref=db.backref('user', lazy=True))
+    patient_history = db.relationship('PatientHistory', backref=db.backref('user', lazy=True))
 
     def __init__(self, first_name, last_name, email, specialization, user_type):
         self.first_name = first_name
@@ -26,14 +26,15 @@ class Appointment(db.Model):
     appointment_date = db.Column(db.Date, unique = False)
     appointment_time = db.Column(db.Time, unique = False)
 
-    def __init__(self, appointment_date, appointment_time):
+    def __init__(self, appointment_date, appointment_time, user_id):
         self.appointment_date = appointment_date
         self.appointment_time = appointment_time
+        self.user_id = user_id
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 
 
-class AppointmentHistory(db.Model):
+class PatientHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.String(100), unique=False)
     diagnoses = db.Column(db.String(50), unique=False)
@@ -57,9 +58,9 @@ class AppointmentSchema(ma.Schema):
         fields = ('appointment_date', 'appointment_time')
 
 
-class AppointmentHistorySchema(ma.Schema):
+class PatientHistorySchema(ma.Schema):
     class Meta:
-        # Fields to explose
+        # Fields to expose
         fields = ('notes', 'diagnoses')
 
 user_schema = UserSchema()
@@ -68,5 +69,5 @@ users_schema = UserSchema(many=True)
 appointment_schema = AppointmentSchema()
 appointments_schema = AppointmentSchema(many=True)
 
-appointment_history_schema = AppointmentHistorySchema()
-appointment_histories_schema = AppointmentHistorySchema(many=True)
+patient_history_schema = PatientHistorySchema()
+patient_histories_schema = PatientHistorySchema(many=True)

@@ -2,7 +2,7 @@ from wtforms import Form, TextField, TextAreaField, validators, StringField, Sub
 from flask_wtf import FlaskForm
 
 # first is the value submitted, second value is the text shown on the UI
-FAKEDATA = [("123","James Mcgregor"), ("1233", "John Snow"), ("1243", "Justin Bieber")]
+FAKEDATA = [("2","2:00"), ("3", "3:00"), ("4", "4:00")]
 
 class AppointmentForm(FlaskForm):
   appointment_date = DateField('Date:', validators=[validators.required()])
