@@ -26,7 +26,7 @@ class Appointment(db.Model):
     appointment_date = db.Column(db.Date, unique = False)
     appointment_time = db.Column(db.Time, unique = False)
 
-    def __init__(self, appointment_date, appointment_time, user_id):
+    def __init__(self, appointment_date, appointment_time):
         self.appointment_date = appointment_date
         self.appointment_time = appointment_time
 
@@ -54,7 +54,7 @@ class UserSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('appointment_date', 'appointment_time', 'user_id')
+        fields = ('appointment_date', 'appointment_time')
 
 
 class AppointmentHistorySchema(ma.Schema):
