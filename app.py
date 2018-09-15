@@ -11,13 +11,13 @@ import os, schema
 APP = Flask(__name__)
 
 bootstrap = Bootstrap(APP)
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.201.28.228/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.197.191.33/smartoffice'
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
 db = SQLAlchemy(APP)
 ma = Marshmallow(APP)
-db.init_app(APP)
+# db.init_app(APP)
 
 
 @APP.route("/")
@@ -38,11 +38,12 @@ def appointments():
     if request.method == 'POST':
         appointment_date = form.appointment_date.data
         appointment_time = form.appointment_time.data
+        
         new_appointment = schema.Appointment(appointment_date, appointment_time)
         schema.db.session.add(new_appointment)
         schema.db.session.commit()
 
-    all_appointments = schema.Appointment.query.filter(schema.User.id == 1)
+    all_appointments = schema.Appointment.query.all()
 
     return render_template('patient.html', form=form, all_appointments=all_appointments)
 
