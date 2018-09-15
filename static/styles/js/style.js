@@ -13,3 +13,8 @@ $(document).click(function(e) {
         $('.modal').fadeOut();
     }
 });
+
+// https://jqueryui.com/datepicker
+$(function() {
+    $("#datepicker").datepicker();
+  } );

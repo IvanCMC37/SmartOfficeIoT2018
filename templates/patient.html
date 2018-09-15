@@ -4,8 +4,9 @@
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
     <div>
-        {% for appointment in all_users %}
-        <li>{{ appointment.first_name }}</li>
+        {% for a in all_appointments %}
+        <li>{{ a.appointment_date }}</li>
+        <li>{{ a.appointment_time }}</li>
         {% endfor %}
 
    </div>
@@ -21,11 +22,8 @@
                     {{ form.csrf }}
                     <div>
                         <ul>
-                            <li>{{ form.first_name.label }} {{ form.first_name }}</li>
-                            <li>{{ form.last_name.label }} {{ form.last_name }}</li>
-                            <li>{{ form.email.label }} {{ form.email }}</li>
-                            <li>{{ form.specialization.label }} {{ form.specialization }}</li>
-                            <li>{{ form.appointment_type.label }} {{ form.appointment_type }}</li>   
+                            <li>{{ form.appointment_date.label }} {{ form.appointment_date(id = "datepicker") }}</li>
+                            <li>{{ form.appointment_time.label }} {{ form.appointment_time }}</li>
                         </ul> 
                     </div>
                     <div class="modal-footer">
