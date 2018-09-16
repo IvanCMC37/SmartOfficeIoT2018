@@ -11,7 +11,7 @@ import os, schema
 APP = Flask(__name__)
 
 bootstrap = Bootstrap(APP)
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.197.191.33/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -65,8 +65,7 @@ def appointment_detail(id):
 
 @APP.route("/clerk")
 def clerks_page():
-    return render_template('clerks.html')
-
+    return render_template('clerk.html')
 
 ##
 # temporary routes for creating users just use postman

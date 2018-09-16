@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
+    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
+
+    <div class="modal">
+        <div class="modal-content" id="patient-modal">
+          <div class="modal-header primary">
+              <h2>Book an Appointment</h2>
+              <span id="closeBtn" class="closeBtn">&times;</span>
+          </div>
+
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div>
+                        <ul>
+                        </ul> 
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
+                    </div>
+                </form>           
+            </div>
+        </div>     
+    </div>
+    <div id='calendar'></div>
+{% endblock content %}
