@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -35,25 +35,20 @@ def appointments():
     """Displays all the active appointments and allows new appointments to be made"""
     form = AppointmentForm()
 
-    ### ERROR POST REQUESTS keep happening on refresh
-    print("hasdsae")
-
     if request.method == 'POST':
         appointment_date = form.appointment_date.data
         appointment_time = form.appointment_time.data
-        print("he")
 
-        # user = schema.db.session.query(schema.User).query.get(id = 1)
-        new_appointment = schema.Appointment(appointment_date, appointment_time, 1)
-        #schema.db.session.flush() #fetch id from db
+        user = schema.User.query.get(1)
+        new_appointment = schema.Appointment(appointment_date, appointment_time, user_id = user.id)
         schema.db.session.add(new_appointment)
         schema.db.session.commit()
-        print("poo1")
-        return render_template('patient.html', form=form)
-    else:
-        all_appointments = schema.Appointment.query.all()
-        
-    print("poo1")
+
+        # need to refresh page to update appointments
+        return redirect(url_for('appointments'))
+
+    all_appointments = schema.Appointment.query.all()
+
     return render_template('patient.html', form=form, all_appointments=all_appointments)
 
 # endpoint to get user detail by id
@@ -65,8 +60,24 @@ def appointment_detail(id):
 
 @APP.route("/clerk")
 def clerks_page():
-    return render_template('clerk.html')
+    """Displays all the active appointments and allows new appointments to be made"""
+    form = AppointmentForm()
 
+    if request.method == 'POST':
+        appointment_date = form.appointment_date.data
+        appointment_time = form.appointment_time.data
+
+        user = schema.User.query.get(1)
+        new_appointment = schema.Appointment(appointment_date, appointment_time, user_id = user.id)
+        schema.db.session.add(new_appointment)
+        schema.db.session.commit()
+
+        # need to refresh page to update appointments
+        return redirect(url_for('appointments'))
+
+    all_appointments = schema.Appointment.query.all()
+
+    return render_template('clerk.html', form=form, all_appointments=all_appointments)
 ##
 # temporary routes for creating users just use postman
 ##

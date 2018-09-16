@@ -5,5 +5,5 @@ from flask_wtf import FlaskForm
 FAKEDATA = [("2","2:00"), ("3", "3:00"), ("4", "4:00")]
 
 class AppointmentForm(FlaskForm):
-  appointment_date = DateField('Date:', validators=[validators.required()])
+  appointment_date = DateField('Date:', format ='%d/%m/%Y' , validators=[validators.required()])
   appointment_time = SelectField('Time:', choices=FAKEDATA, validators=[validators.required()])
