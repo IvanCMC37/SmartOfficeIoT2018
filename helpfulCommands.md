@@ -18,3 +18,7 @@ gcloud sql instances patch smartoffice-db --authorized-networks=220.240.203.7
 #### When getting error object is not json serializable
 'result, errors = schema.user_schema.dump(new_user)'
 
+#### rasppi time config
+sudo raspi-config  //should keep rasppi in UTC time for security reasons
+
+
