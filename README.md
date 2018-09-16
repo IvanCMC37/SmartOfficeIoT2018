@@ -2,8 +2,8 @@
 
 > __Contributors:__ David B, Ivan C, Jitender P
 
-> David's branch is 'patient'
-> Ivan's branch is 'doctor'
-> Jitender's branch is 'clerk'
+> David's branch is 'patient'<br>
+> Ivan's branch is 'doctor'<br>
+> Jitender's branch is 'clerk'<br>
 
 Summary coming soon..
