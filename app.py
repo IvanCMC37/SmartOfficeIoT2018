@@ -97,8 +97,3 @@ if __name__ == "__main__":
     ips = os.popen('hostname -I').read()
     host = ips.split(' ')
     APP.run(host=host[0], port=5000, debug=True)
-
-
-
-
-
