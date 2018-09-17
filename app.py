@@ -35,15 +35,16 @@ def index():
 @APP.route('/results')
 def search_results(search):
     results = []
-    search_string = search.data['search']
+    search_string = search.data['patient_number']
  
-    if search.data['search'] == '':
-        qry = schema.User.query.get(1)
-        results = qry.all()
- 
-    if not results:
+    if len(search_string)>0:
+        qry = schema.User.query.get(search_results)
+        results =  schema.user_schema.jsonify(qry)
+    
+
+    if qry==None:
         flash('No results found!')
-        return redirect('/')
+        return redirect('/doctor')
     else:
         # display results
         return render_template('doctor_result.html', results=results)
