@@ -16,8 +16,6 @@
         <link href="{{ url_for('static',filename='styles/css/fullcalendar.print.min.css') }}" rel="stylesheet" media="print"/>
         <script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
         <script src="{{ url_for('static',filename='js/fullcalendar.min.js') }}"></script>
-        <!-- Custom JS -->
-        <script src="{{ url_for('static',filename='js/index.js') }}"></script>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand text-large extra-top-padding" href="#">Smart Office</a>
@@ -41,7 +39,8 @@
         <div class="wrapper">
             {% block content %}{% endblock content %}
         </div> 
-
+        <!-- Custom JS -->
+        <script src="{{ url_for('static',filename='js/index.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static',filename='styles/js/style.js') }}"></script>
     </body>
 

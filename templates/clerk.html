@@ -1,15 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <script>
+        var apptms='{{ all_appointments | tojson | safe }}';
+    </script>
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
-    <div>
-        {% for a in all_appointments %}
-        <li>{{ a.appointment_date }}</li>
-        <li>{{ a.appointment_time }}</li>
-        {% endfor %}
-
-    </div>
     <div class="modal">
         <div class="modal-content" id="patient-modal">
         <div class="modal-header primary">

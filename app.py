@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from forms import AppointmentForm
-import os, schema
+import os, schema, json
 
 
 APP = Flask(__name__)
@@ -47,7 +47,7 @@ def appointments():
         # need to refresh page to update appointments
         return redirect(url_for('appointments'))
 
-    all_appointments = schema.Appointment.query.all()
+    all_appointments = schema.Appointment.query.all()   
 
     return render_template('patient.html', form=form, all_appointments=all_appointments)
 
@@ -58,7 +58,7 @@ def appointment_detail(id):
     return schema.appointment_schema.jsonify(appointment)
 
 
-@APP.route("/clerk")
+@APP.route("/clerk", methods=["GET", "POST"])
 def clerks_page():
     """Displays all the active appointments and allows new appointments to be made"""
     form = AppointmentForm()
@@ -76,8 +76,9 @@ def clerks_page():
         return redirect(url_for('appointments'))
 
     all_appointments = schema.Appointment.query.all()
+    result = schema.appointments_schema.dump(all_appointments)
 
-    return render_template('clerk.html', form=form, all_appointments=all_appointments)
+    return render_template('clerk.html', form=form, all_appointments=result.data)
 ##
 # temporary routes for creating users just use postman
 ##
