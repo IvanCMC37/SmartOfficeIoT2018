@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from forms import AppointmentForm
+from forms import AppointmentForm, PatientSearchForm
 import os, schema
 
 
@@ -24,10 +24,29 @@ def homepage():
     return render_template('home.html', title='Home')
 
 
-@APP.route("/doctor")
-def doctors_page():
-    return render_template('doctors.html')
+@APP.route("/doctor", methods=['GET', 'POST'])
+def index():
+    search = PatientSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+ 
+    return render_template('doctor_index.html', form=search)
 
+@APP.route('/results')
+def search_results(search):
+    results = []
+    search_string = search.data['search']
+ 
+    if search.data['search'] == '':
+        qry = schema.User.query.get(1)
+        results = qry.all()
+ 
+    if not results:
+        flash('No results found!')
+        return redirect('/')
+    else:
+        # display results
+        return render_template('doctor_result.html', results=results)
 
 @APP.route("/patient", methods=["GET", "POST"])
 def appointments():
