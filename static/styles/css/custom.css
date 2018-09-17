@@ -97,4 +97,21 @@ ul {
     color: #fff;
 }
 
+/**
+* DateTime Styling
+*/
+
+table {
+    background-color: #f4f4f4;;
+    border-radius: 5px; 
+}
+
+td a {
+    color: rgb(104, 93, 93);
+}
+
+td {
+    padding: 5px;
+}
+
 
