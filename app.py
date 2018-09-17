@@ -11,7 +11,7 @@ import os, schema
 APP = Flask(__name__)
 
 bootstrap = Bootstrap(APP)
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.197.191.33/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
