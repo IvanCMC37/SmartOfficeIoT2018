@@ -1,16 +1,18 @@
-<doctype html>
+{% extends 'layout.html' %}
+
+{% block content %}
         <head>
-            <title>Flask Music Database</title>
+            <title>Patient Database</title>
         </head>
          
-        <h2>Flask Music Database</h2>
+        <h2>Patient Database</h2>
          
         {% from "_formhelpers.html" import render_field %}
         <form method=post>
           <dl>
-            {{ render_field(form.select) }}
             <p>
             {{ render_field(form.search) }}
           </dl>
           <p><input type=submit value=Search>
         </form>
+{% endblock content %}
