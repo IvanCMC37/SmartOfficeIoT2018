@@ -9,5 +9,4 @@ class AppointmentForm(FlaskForm):
   appointment_time = SelectField('Time:', choices=FAKEDATA, validators=[validators.required()])
 
 class PatientSearchForm(Form):
-  patient_number = StringField('Search for patient:', [validators.Length(min=1, max=5)])
-  search = StringField('')
+  patient_number = StringField('Patient ID:', [validators.Length(min=1, max=5)])
