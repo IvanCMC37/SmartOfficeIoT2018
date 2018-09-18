@@ -6,13 +6,18 @@ $(document).ready(function() {
     var today = d.getFullYear() + '-' +
         ((''+month).length<2 ? '0' : '') + month + '-' +
         ((''+day).length<2 ? '0' : '') + day;
-
+        console.log("appointments---"+appointments);
+        appointments=appointments.replace("start_datetime", "start");
+        appointments=appointments.replace("end_datetime", "end");
+        appointments= JSON.parse(appointments);
+        console.log(appointments[0].start);
+        console.log("appointments---"+appointments);
     $('#calendar').fullCalendar({
         defaultDate: today,
         defaultView: 'agendaWeek',
         weekends: false,
         navLinks: true, // can click day/week names to navigate views
-        selectable: true,
+        selectable: false,
         selectHelper: true,
         select: function(start, end) {
         var title = prompt('Event Title:');
@@ -29,7 +34,8 @@ $(document).ready(function() {
         },
         editable: true,
         eventLimit: true, // allow "more" link when too many events
-        events: [
+        events: appointments
+        /*events: [
         {
             title: 'All Day Event',
             start: '2018-03-01'
@@ -84,7 +90,7 @@ $(document).ready(function() {
             url: 'http://google.com/',
             start: '2018-03-28'
         }
-        ]
+        ]*/
     })
 
 });

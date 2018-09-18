@@ -11,7 +11,7 @@ import os, schema, json
 APP = Flask(__name__)
 
 bootstrap = Bootstrap(APP)
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -77,6 +77,7 @@ def clerks_page():
 
     all_appointments = schema.Appointment.query.all()
     result = schema.appointments_schema.dump(all_appointments)
+    print(result)
 
     return render_template('clerk.html', form=form, all_appointments=result.data)
 ##

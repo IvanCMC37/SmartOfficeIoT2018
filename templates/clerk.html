@@ -2,7 +2,7 @@
 
 {% block content %}
     <script>
-        var apptms='{{ all_appointments | tojson | safe }}';
+        var appointments='{{ all_appointments | tojson | safe }}';
     </script>
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>

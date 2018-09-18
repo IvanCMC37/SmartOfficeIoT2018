@@ -23,13 +23,15 @@ class User(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    appointment_date = db.Column(db.Date, unique = False)
-    appointment_time = db.Column(db.Time, unique = False)
+    start_datetime = db.Column(db.DateTime, unique = False)
+    end_datetime = db.Column(db.DateTime, unique = False)
+    title = db.Column(db.String(255), unique = False)
 
-    def __init__(self, appointment_date, appointment_time, user_id):
-        self.appointment_date = appointment_date
-        self.appointment_time = appointment_time
+    def __init__(self, start_datetime, end_datetime, user_id, title):
+        self.start_datetime = start_datetime
+        self.end_datetime = end_datetime
         self.user_id = user_id
+        self.title = title
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 
@@ -55,7 +57,7 @@ class UserSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('appointment_date', 'appointment_time')
+        fields = ('start_datetime', 'end_datetime', 'title')
 
 
 class PatientHistorySchema(ma.Schema):
