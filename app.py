@@ -5,13 +5,13 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from forms import AppointmentForm
-import os, schema
+import os, schema, json
 
 
 APP = Flask(__name__)
 
 bootstrap = Bootstrap(APP)
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.197.191.33/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -46,7 +46,11 @@ def appointments():
         # need to refresh page to update appointments
         return redirect(url_for('appointments'))
 
+<<<<<<< HEAD
     all_appointments = schema.Appointment.query.all()
+=======
+    all_appointments = schema.Appointment.query.all()   
+>>>>>>> clerk
 
     return render_template('patient.html', form=form, all_appointments=all_appointments)
 
@@ -57,11 +61,28 @@ def appointment_detail(id):
     return schema.appointment_schema.jsonify(appointment)
 
 
-@APP.route("/clerk")
+@APP.route("/clerk", methods=["GET", "POST"])
 def clerks_page():
-    return render_template('clerks.html')
+    """Displays all the active appointments and allows new appointments to be made"""
+    form = AppointmentForm()
 
+    if request.method == 'POST':
+        appointment_date = form.appointment_date.data
+        appointment_time = form.appointment_time.data
 
+        user = schema.User.query.get(1)
+        new_appointment = schema.Appointment(appointment_date, appointment_time, user_id = user.id)
+        schema.db.session.add(new_appointment)
+        schema.db.session.commit()
+
+        # need to refresh page to update appointments
+        return redirect(url_for('appointments'))
+
+    all_appointments = schema.Appointment.query.all()
+    result = schema.appointments_schema.dump(all_appointments)
+    print(result)
+
+    return render_template('clerk.html', form=form, all_appointments=result.data)
 ##
 # temporary routes for creating users just use postman
 ##
