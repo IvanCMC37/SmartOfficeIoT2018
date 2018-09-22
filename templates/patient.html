@@ -5,8 +5,9 @@
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
     <div>
         {% for a in all_appointments %}
-        <li>{{ a.appointment_date }}</li>
-        <li>{{ a.appointment_time }}</li>
+        <li>{{ a.start_datetime }}</li>
+        <li>{{ a.end_datetime }}</li>
+        <li>{{ a.title }}</li>
         {% endfor %}
 
    </div>
@@ -22,8 +23,8 @@
                     {{ form.csrf }}
                     <div>
                         <ul>
-                            <li>{{ form.appointment_date.label }} {{ form.appointment_date }}</li>
-                            <li>{{ form.appointment_time.label }} {{ form.appointment_time }}</li>
+                            <li>{{ form.start_datetime.label }} {{ form.start_datetime }}</li>
+                            <li>{{ form.end_datetime.label }} {{ form.end_datetime }}</li>
                         </ul> 
                     </div>
                     <div class="modal-footer">
@@ -33,5 +34,6 @@
             </div>
         </div>     
     </div>
+    <div id='calendar'></div>
    
 {% endblock content %}

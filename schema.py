@@ -25,20 +25,23 @@ class User(db.Model):
         return 'User(%s, %s, %s, %s, %s)' % (self.first_name, self.last_name, self.email, self.specialization, self.user_type)
 
 
+
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_datetime = db.Column(db.DateTime, unique = False)
     end_datetime = db.Column(db.DateTime, unique = False)
     title = db.Column(db.String(255), unique = False)
 
-    def __init__(self, start_datetime, end_datetime, user_id, title):
+    def __init__(self, start_datetime, end_datetime, title, user_id):
         self.start_datetime = start_datetime
         self.end_datetime = end_datetime
-        self.user_id = user_id
         self.title = title
+        self.user_id = user_id
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return 'Appointment(%s, %s, %s)' % (self.appointment_date, self.appointment_time, self.user_id)
+        return 'Appointment(%s, %s, %s, %s)' % (self.start_datetime, self.end_datetime, self.title, self.user_id)
 
 
 class PatientHistory(db.Model):
@@ -50,7 +53,7 @@ class PatientHistory(db.Model):
         self.notes = notes
         self.diagnoses = diagnoses
 
-    appointment_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return 'PatientHistory(%s, %s)' % (self.notes, self.diagnoses)
