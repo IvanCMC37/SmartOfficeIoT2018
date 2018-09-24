@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from forms import AppointmentForm, PatientSearchForm
-import os, schema, json
+import os, schema, json, config
 
 APP = Flask(__name__)
 
@@ -17,7 +17,7 @@ bootstrap = Bootstrap(APP)
 # Ivan
 #APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
 # david
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:raspberry@35.197.191.33/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
