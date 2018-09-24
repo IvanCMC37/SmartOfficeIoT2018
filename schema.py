@@ -19,7 +19,7 @@ class User(db.Model):
 
     # relationships reference the class. allows for additional queries to be run
     appointments = db.relationship('Appointment', backref = db.backref('user',lazy=True))
-    patient_history = db.relationship('PatientHistory', backref=db.backref('user', lazy=True))
+    # patient_history = db.relationship('PatientHistory', backref=db.backref('user', lazy=True))
 
     def __repr__(self):
         return 'User(%s, %s, %s, %s, %s)' % (self.first_name, self.last_name, self.email, self.specialization, self.user_type)
@@ -39,6 +39,8 @@ class Appointment(db.Model):
         self.user_id = user_id
     
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # relationships reference the class. allows for additional queries to be run
+    patient_histories = db.relationship('PatientHistory', backref = db.backref('appointment',lazy=True))
 
     def __repr__(self):
         return 'Appointment(%s, %s, %s, %s)' % (self.start_datetime, self.end_datetime, self.title, self.user_id)
@@ -53,7 +55,7 @@ class PatientHistory(db.Model):
         self.notes = notes
         self.diagnoses = diagnoses
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    appointment_id = db.Column(db.Integer, db.ForeignKey('appointment.id'), nullable=False)
 
     def __repr__(self):
         return 'PatientHistory(%s, %s)' % (self.notes, self.diagnoses)

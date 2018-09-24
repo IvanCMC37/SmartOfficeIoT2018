@@ -34,7 +34,7 @@ def appointment_detail(id):
 def patient_history(id):
     patient_history = schema.PatientHistory.query.all()
     print(patient_history)
-    # return schema.patient_histories_schema.jsonify(patient_history)
+    return schema.patient_histories_schema.jsonify(patient_history)
 
 
 ##
