@@ -45,14 +45,16 @@ def index():
 @APP.route('/results')
 def search_results(search):
     results = []
+    qry = None
     search_string = search.data['patient_number']
     print(search_string)
     if len(search_string)>0:
         qry = schema.User.query.get(search_string)
+        print(qry)
         results =  schema.user_schema.jsonify(qry)
-    
+        # return redirect('/doctor')
     if qry==None:
-        flash('No results found!')
+        flash('NO record on this patient number!')
         return redirect('/doctor')
     else:
         
