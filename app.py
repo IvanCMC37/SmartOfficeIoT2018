@@ -16,9 +16,9 @@ import api
 
 bootstrap = Bootstrap(APP)
 # Ivan
-# APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
 # david
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
+# APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
 
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
