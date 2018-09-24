@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from forms import AppointmentForm
+from forms import AppointmentForm, PatientSearchForm
 import os, schema, json
+
 
 APP = Flask(__name__)
 
@@ -14,7 +15,11 @@ import api
 
 
 bootstrap = Bootstrap(APP)
+# Ivan
+# APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
+# david
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
+
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -29,10 +34,30 @@ def homepage():
     return render_template('home.html', title='Home')
 
 
-@APP.route("/doctor")
-def doctors_page():
-    return render_template('doctors.html')
+@APP.route("/doctor", methods=['GET', 'POST'])
+def index():
+    search = PatientSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+ 
+    return render_template('doctor_index.html', form=search)
 
+@APP.route('/results')
+def search_results(search):
+    results = []
+    search_string = search.data['patient_number']
+    print(search_string)
+    if len(search_string)>0:
+        qry = schema.User.query.get(search_string)
+        results =  schema.user_schema.jsonify(qry)
+    
+    if qry==None:
+        flash('No results found!')
+        return redirect('/doctor')
+    else:
+        
+        # display results
+        return render_template('doctor_result.html', results=qry)
 
 @APP.route("/patient", methods=["GET", "POST"])
 def appointments():
