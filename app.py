@@ -54,7 +54,7 @@ def search_results(search):
         results =  schema.user_schema.jsonify(qry)
         # return redirect('/doctor')
     if qry==None:
-        flash('NO record on this patient number!')
+        flash('No record on this patient number!')
         return redirect('/doctor')
     else:
         

@@ -27,6 +27,15 @@ def appointment_detail(id):
     appointment = schema.Appointment.query.get(id)
     return schema.appointment_schema.jsonify(appointment)
 
+##
+# DOCTOR
+##
+@mod.route("/doctor/<id>", methods=["GET"])
+def patient_history(id):
+    patient_history = schema.PatientHistory.query.all()
+    print(patient_history)
+    # return schema.patient_histories_schema.jsonify(patient_history)
+
 
 ##
 # FAKE USER
