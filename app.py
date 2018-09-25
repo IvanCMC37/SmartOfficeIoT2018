@@ -12,13 +12,8 @@ APP = Flask(__name__)
 from api import mod
 import api
 
-
 bootstrap = Bootstrap(APP)
-# Ivan
-#APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
-# david
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
-
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -67,15 +62,13 @@ def appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
-        user = schema.User.query.get(1)
-        new_appointment = schema.Appointment(start_datetime, end_datetime, title, user_id = user.id)
-        api.add_appointment(new_appointment)
+        api.add_patient_appointment(start_datetime, end_datetime, title)
         # need to refresh page to update appointments
         return redirect(url_for('appointments'))
 
-    all_appointments = schema.Appointment.query.all()
+    # Show all appointments for current patient
+    all_appointments = schema.Appointment.query.filter_by(user_id = 1)
     result = schema.appointments_schema.dump(all_appointments)
-
 
     return render_template('patient.html', form=form, all_appointments=result.data)
 

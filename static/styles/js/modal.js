@@ -14,7 +14,7 @@ $(document).click(function(e) {
     }
 });
 
-// // https://jqueryui.com/datepicker
-// $(function() {
-//     $("#datepicker").datepicker();
-//   } );
+// https://jqueryui.com/datepicker
+$(function() {
+    $("#datepicker").datepicker();
+  } );

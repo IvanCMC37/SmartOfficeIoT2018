@@ -20,7 +20,7 @@ $(document).ready(function() {
         selectable: true,
         selectHelper: true,
         select: function(start, end) {
-        var title = prompt('Event Title:');
+        var title = prompt('Book Appointment:');
         var eventData;
         if (title) {
             eventData = {

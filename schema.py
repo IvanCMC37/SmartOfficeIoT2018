@@ -25,7 +25,6 @@ class User(db.Model):
         return 'User(%s, %s, %s, %s, %s)' % (self.first_name, self.last_name, self.email, self.specialization, self.user_type)
 
 
-
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_datetime = db.Column(db.DateTime, unique = False)
