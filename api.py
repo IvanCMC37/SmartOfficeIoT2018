@@ -71,3 +71,12 @@ def add_user():
     schema.db.session.commit()
     result = schema.user_schema.dump(new_user)
     return jsonify(result)
+
+##
+# GET ALL DOCTORS TEST EXAMPLE
+##
+@mod.route("/doctor", methods=["GET"])
+def get_doctors():
+    all_doctors = schema.Doctor.query.all()
+    result = schema.users_schema.dump(all_doctors)
+    return jsonify(result.data)
