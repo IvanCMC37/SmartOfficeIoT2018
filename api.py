@@ -23,7 +23,7 @@ def appointment_detail(id):
 ##
 # APPOINTMENTS
 ##
-@mod.route("/appointments", methods=["GET"])
+@mod.route("/appointment", methods=["GET"])
 def all_appointments():
     all_appointments = schema.Appointment.query.all() 
     result = schema.appointments_schema.dump(all_appointments)

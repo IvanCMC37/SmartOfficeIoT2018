@@ -91,7 +91,7 @@ class DoctorSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('start_datetime', 'end_datetime', 'title')
+        fields = ('id', 'start_datetime', 'end_datetime', 'title')
 
 
 class PatientHistorySchema(ma.Schema):

@@ -61,34 +61,36 @@ def search_results(search):
 def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made"""
     form = AppointmentForm()
+    print("testing the form")
 
-    if request.method == 'POST':
+    if request.method == 'POST' and "delete_appmt" in request.form:
+        """Deletes the appointment by id"""  
+        print("test the delete button") 
+        del_id = request.form['delete_appmt']
+        appointment = schema.Appointment.query.get(del_id)
+        schema.db.session.delete(appointment)
+        schema.db.session.commit()
+        print("delete success!")
+        # need to refresh page to update appointments
+        return redirect(url_for('patient_appointments'))
+
+    elif request.method == 'POST' and "book_appmt" in request.form:
+        print("test the book button") 
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
         api.add_patient_appointment(start_datetime, end_datetime, title)
-
         # need to refresh page to update appointments
-        return redirect(url_for('patient_appointments'))
+        return redirect(url_for('patient_appointments'))   
 
-    # Show all appointments for current patient
+    # Show all appointments for current patient.  id set to 1 as example for now
     all_appointments = schema.Appointment.query.filter_by(patient_id = 1)
     result = schema.appointments_schema.dump(all_appointments)
 
     return render_template('patient.html', form=form, all_appointments=result.data)
 
 
-## CANT FIGURE OTU DELETE
-# @APP.route("/patient", methods=["POST"])
-# def delete_patient_appointment():
-#     """Deletes the appointment by id"""  
-#     print("test??") 
-#     del_id = request.form['delete_id']
-#     appointment = schema.Appointment.query.get(del_id)
-#     schema.db.session.delete(appointment)
-#     schema.db.session.commit()
-#     print("delete success!")
-#     return redirect(url_for('delete_patient_appointment'))
+
 
 ##
 # CLERK
