@@ -9,8 +9,10 @@ import os, schema, json, config
 
 APP = Flask(__name__)
 
-from api import mod
-import api
+# from api import mod
+# import api
+from api.patient_api import mod
+from api import patient_api
 
 bootstrap = Bootstrap(APP)
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -59,33 +61,28 @@ def search_results(search):
 ##
 @APP.route("/patient", methods=["GET", "POST"])
 def patient_appointments():
-    """Displays all the active appointments and allows new appointments to be made"""
+    """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
-    print("testing the form")
 
     if request.method == 'POST' and "delete_appmt" in request.form:
-        """Deletes the appointment by id"""  
-        print("test the delete button") 
+        # Deletes the appointment by id  
         del_id = request.form['delete_appmt']
-        appointment = schema.Appointment.query.get(del_id)
-        schema.db.session.delete(appointment)
-        schema.db.session.commit()
-        print("delete success!")
-        # need to refresh page to update appointments
+        patient_api.delete_patient_appointment(del_id)
+        
         return redirect(url_for('patient_appointments'))
 
     elif request.method == 'POST' and "book_appmt" in request.form:
-        print("test the book button") 
+        # Submit form of appointment booking
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
-        api.add_patient_appointment(start_datetime, end_datetime, title)
-        # need to refresh page to update appointments
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title)
+        
         return redirect(url_for('patient_appointments'))   
 
-    # Show all appointments for current patient.  id set to 1 as example for now
-    all_appointments = schema.Appointment.query.filter_by(patient_id = 1)
-    result = schema.appointments_schema.dump(all_appointments)
+    # Gets all appoinments in list format and json format from api
+    all_appointments = patient_api.get_patient_appointments()
+    result = patient_api.get_patient_appointments_json()
 
     return render_template('patient.html', form=form, all_appointments=result.data)
 
@@ -95,7 +92,6 @@ def patient_appointments():
 ##
 # CLERK
 ##
-
 @APP.route("/clerk", methods=["GET", "POST"])
 def clerks_page():
     """Displays all the active appointments and allows new appointments to be made"""

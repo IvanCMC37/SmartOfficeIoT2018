@@ -1,14 +1,14 @@
 from flask import Blueprint, request, jsonify
 import schema
 
-mod = Blueprint("api",  __name__)
-
+mod = Blueprint("patient_api",  __name__)
 
 ##
 # PATIENT
 ##
 @mod.route("/patient", methods=["GET"])
-def patient_appointments():
+def get_patients():
+    """Returns JSON of all patients"""
     all_patients = schema.Patient.query.all() 
     result = schema.patients_schema.dump(all_patients)
     return jsonify(result.data)
@@ -16,9 +16,24 @@ def patient_appointments():
 # endpoint to get patient detail by id
 @mod.route("/patient/<id>", methods=["GET"])
 def appointment_detail(id):
+    """Returns JSON of a single patient"""
     patient = schema.Patient.query.get(id)
     return schema.patient_schema.jsonify(patient)
 
+def get_patient_appointments():
+    """Shows all appointments for the selected patient"""  #id set to 1 as example for now
+    all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
+    return all_appmts
+
+def get_patient_appointments_json():
+    """Return appointments for patient as JSON"""
+    result = schema.appointments_schema.dump(get_patient_appointments())
+    return result
+
+def delete_patient_appointment(del_id):
+    appointment = schema.Appointment.query.get(del_id)
+    schema.db.session.delete(appointment)
+    schema.db.session.commit()
 
 ##
 # APPOINTMENTS
@@ -36,30 +51,4 @@ def add_patient_appointment(start, end, title):
     schema.db.session.add(appmt)
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)
-    return jsonify(result.data)
-
-
-
-# ##
-# # CLERK
-# ##
-# @mod.route("/clerk", methods=["GET"])
-# def clerk_appointments(appmt):
-#     patient()
-
-
-
-# ##
-# # DOCTOR
-# ##
-
-
-
-##
-# GET ALL DOCTORS TEST EXAMPLE
-##
-@mod.route("/doctor", methods=["GET"])
-def get_doctors():
-    all_doctors = schema.Doctor.query.all()
-    result = schema.doctors_schema.dump(all_doctors)
     return jsonify(result.data)
