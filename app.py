@@ -5,8 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from forms import AppointmentForm, PatientSearchForm
-import os, schema, json
-
+import os, schema, json, config
 
 APP = Flask(__name__)
 
@@ -16,9 +15,9 @@ import api
 
 bootstrap = Bootstrap(APP)
 # Ivan
-APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
+#APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
 # david
-# APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:smartoffice@35.189.14.95/smartoffice'
+APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
@@ -73,13 +72,14 @@ def appointments():
         user = schema.User.query.get(1)
         new_appointment = schema.Appointment(start_datetime, end_datetime, title, user_id = user.id)
         api.add_appointment(new_appointment)
-
         # need to refresh page to update appointments
         return redirect(url_for('appointments'))
 
-    all_appointments = schema.Appointment.query.all()   
+    all_appointments = schema.Appointment.query.all()
+    result = schema.appointments_schema.dump(all_appointments)
 
-    return render_template('patient.html', form=form, all_appointments=all_appointments)
+
+    return render_template('patient.html', form=form, all_appointments=result.data)
 
 # # endpoint to get user detail by id
 # @APP.route("/patient/<id>", methods=["GET"])
@@ -87,6 +87,8 @@ def appointments():
 #     appointment = schema.Appointment.query.get(id)
 #     return schema.appointment_schema.jsonify(appointment)
 
+
+# http://fullcalendar.io
 
 @APP.route("/clerk", methods=["GET", "POST"])
 def clerks_page():

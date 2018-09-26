@@ -8,14 +8,13 @@ mod = Blueprint("api",  __name__)
 # PATIENT
 ##
 @mod.route("/patient", methods=["GET"])
-def get_appointments():
+def patient_appointments():
     all_appointments = schema.Appointment.query.all()   
     result = schema.appointments_schema.dump(all_appointments)
 
     return jsonify(result.data)
 
-@mod.route("/patient", methods=["POST"])
-def add_appointment(appmt):
+def add_patient_appointment(appmt):
     schema.db.session.add(appmt)
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)
@@ -50,6 +49,16 @@ def patient_history_update(id):
     schema.db.session.commit()
     return schema.patient_histories_schema.jsonify(user)
 # doctor calander event api 
+
+
+
+# ##
+# # CLERK
+# ##
+# @mod.route("/clerk", methods=["GET"])
+# def clerk_appointments(appmt):
+#     patient()
+
 
 
 ##
