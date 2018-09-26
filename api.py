@@ -39,14 +39,14 @@ def add_patient_appointment(start, end, title):
     return jsonify(result.data)
 
 ##
-# DOCTOR
+# Patient history
 ##
 # get patient history
-@mod.route("/doctor/<id>", methods=["GET"])
+@mod.route("/history/<id>", methods=["GET"])
 def patient_detail(id):
-    patient_history = schema.PatientHistory.query.all()
+    patient_history = schema.PatientHistory.query.get(id)
     print(patient_history)
-    return schema.patient_histories_schema.jsonify(patient_history)
+    return schema.patient_history_schema.jsonify(patient_history)
 
 # Edit patient history
 @mod.route("/doctor/<id>", methods=["PUT"])

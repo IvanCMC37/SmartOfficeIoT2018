@@ -65,7 +65,7 @@ class PatientHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.String(100), unique=False, nullable=False)
     diagnoses = db.Column(db.String(50), unique=False, nullable=False)
-    datetime = db.Column(db.Date, unique = False)
+    date = db.Column(db.Date, unique = False)
 
     def __init__(self, notes, diagnoses,date):
         self.notes = notes
@@ -75,7 +75,7 @@ class PatientHistory(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
     def __repr__(self):
-        return 'PatientHistory(%s, %s)' % (self.date,self.notes, self.diagnoses)
+        return 'PatientHistory(%s,%s, %s)' % (self.date,self.notes, self.diagnoses)
 
 
 class PatientSchema(ma.Schema):
