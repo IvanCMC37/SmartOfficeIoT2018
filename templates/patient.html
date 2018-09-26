@@ -1,17 +1,41 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <script>
+    <!-- <script>
         var appointments='{{ all_appointments | tojson | safe }}';
-    </script>
+    </script> -->
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
     <div>
-        {% for a in all_appointments %}
-        <li>{{ a.start_datetime }}</li>
-        <li>{{ a.end_datetime }}</li>
-        <li>{{ a.title }}</li>
-        {% endfor %}
+        <table class="table table-hover table-spacing">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Type</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Doctor</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            {% for a in all_appointments %}
+            <tbody>
+              <tr>
+                <td>{{ a.id }}</td>
+                <td>{{ a.title }}</td>
+                <td>{{ a.start_datetime }}</td>
+                <td>{{ a.end_datetime }}</td>
+                <td>doctor</td>
+                <td>
+                    <form action="{{ url_for('patient_appointments') }}" method="post">
+                        <input type="hidden" name="{{ a.id }}">
+                        <input type="submit" class="btn btn-secondary" value="Delete"/>
+                    </form>
+                </td>      
+              </tr>
+            </tbody>
+            {% endfor %}
+        </table>
 
    </div>
     <div class="modal">
@@ -22,7 +46,7 @@
            </div>
 
             <div class="modal-body">
-                <form action="{{url_for('appointments')}}" method="post">
+                <form action="{{url_for('patient_appointments')}}" method="post">
                     {{ form.csrf }}
                     <div>
                         <ul>
@@ -37,6 +61,6 @@
             </div>
         </div>     
     </div>
-    <div id='calendar'></div>
+    <!-- <div id='calendar'></div> -->
    
 {% endblock content %}

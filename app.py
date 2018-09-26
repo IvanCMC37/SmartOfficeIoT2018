@@ -15,7 +15,6 @@ import api
 bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
-
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
@@ -57,8 +56,12 @@ def search_results(search):
         # display results
         return render_template('doctor_result.html', results=qry)
 
+
+##
+# PATIENT
+##
 @APP.route("/patient", methods=["GET", "POST"])
-def appointments():
+def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made"""
     form = AppointmentForm()
 
@@ -66,26 +69,33 @@ def appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
-        user = schema.User.query.get(1)
-        new_appointment = schema.Appointment(start_datetime, end_datetime, title, user_id = user.id)
-        api.add_appointment(new_appointment)
+        api.add_patient_appointment(start_datetime, end_datetime, title)
+
         # need to refresh page to update appointments
-        return redirect(url_for('appointments'))
+        return redirect(url_for('patient_appointments'))
 
-    all_appointments = schema.Appointment.query.all()
+    # Show all appointments for current patient
+    all_appointments = schema.Appointment.query.filter_by(patient_id = 1)
     result = schema.appointments_schema.dump(all_appointments)
-
 
     return render_template('patient.html', form=form, all_appointments=result.data)
 
-# # endpoint to get user detail by id
-# @APP.route("/patient/<id>", methods=["GET"])
-# def appointment_detail(id):
-#     appointment = schema.Appointment.query.get(id)
-#     return schema.appointment_schema.jsonify(appointment)
 
+## CANT FIGURE OTU DELETE
+# @APP.route("/patient", methods=["POST"])
+# def delete_patient_appointment():
+#     """Deletes the appointment by id"""  
+#     print("test??") 
+#     del_id = request.form['delete_id']
+#     appointment = schema.Appointment.query.get(del_id)
+#     schema.db.session.delete(appointment)
+#     schema.db.session.commit()
+#     print("delete success!")
+#     return redirect(url_for('delete_patient_appointment'))
 
-# http://fullcalendar.io
+##
+# CLERK
+##
 
 @APP.route("/clerk", methods=["GET", "POST"])
 def clerks_page():
@@ -96,8 +106,8 @@ def clerks_page():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
 
-        user = schema.User.query.get(1)
-        new_appointment = schema.Appointment(start_datetime, end_datetime, title, user_id = user.id)
+        patient = schema.Patient.query.get(1)
+        new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
         schema.db.session.add(new_appointment)
         schema.db.session.commit()
 

@@ -31,6 +31,14 @@ ul {
     list-style-type: none;
 }
 
+th, tr {
+    border-radius: 12px;
+}
+
+tr {
+    box-shadow: 14px 26px 86px -8px #E8E8E8
+}
+
 
 /**
 * Modal Styling
