@@ -38,6 +38,30 @@ def add_patient_appointment(start, end, title):
     result = schema.appointment_schema.dump(appmt)
     return jsonify(result.data)
 
+##
+# DOCTOR
+##
+# get patient history
+@mod.route("/doctor/<id>", methods=["GET"])
+def patient_detail(id):
+    patient_history = schema.PatientHistory.query.all()
+    print(patient_history)
+    return schema.patient_histories_schema.jsonify(patient_history)
+
+# Edit patient history
+@mod.route("/doctor/<id>", methods=["PUT"])
+def patient_history_update(id):
+    user = schema.PatientHistory.query.get(id)
+    diagnoses = request.json['diagnoses']
+    notes = request.json['notes']
+
+    user.diagnoses = diagnoses
+    user.notes = notes
+
+    schema.db.session.commit()
+    return schema.patient_histories_schema.jsonify(user)
+# doctor calander event api 
+
 
 
 # ##
