@@ -15,6 +15,7 @@ from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 
 bootstrap = Bootstrap(APP)
+# Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
@@ -43,14 +44,16 @@ def index():
 @APP.route('/results')
 def search_results(search):
     results = []
+    qry = None
     search_string = search.data['patient_number']
     print(search_string)
     if len(search_string)>0:
-        qry = schema.Patient.query.get(search_string)
-        results =  schema.patient_schema.jsonify(qry)
-    
+        qry = schema.User.query.get(search_string)
+        print(qry)
+        results =  schema.user_schema.jsonify(qry)
+        # return redirect('/doctor')
     if qry==None:
-        flash('No results found!')
+        flash('No record on this patient number!')
         return redirect('/doctor')
     else:
         
