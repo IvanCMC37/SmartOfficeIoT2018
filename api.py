@@ -49,17 +49,19 @@ def patient_detail(id):
     return schema.patient_history_schema.jsonify(patient_history)
 
 # Edit patient history
-@mod.route("/doctor/<id>", methods=["PUT"])
+@mod.route("/history/<id>", methods=["POST"])
 def patient_history_update(id):
     user = schema.PatientHistory.query.get(id)
     diagnoses = request.json['diagnoses']
     notes = request.json['notes']
+    date =request.json['date']
 
     user.diagnoses = diagnoses
     user.notes = notes
+    user.date = date
 
     schema.db.session.commit()
-    return schema.patient_histories_schema.jsonify(user)
+    return schema.patient_history_schema.jsonify(user)
 # doctor calander event api 
 
 
