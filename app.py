@@ -14,9 +14,7 @@ import api
 
 
 bootstrap = Bootstrap(APP)
-# Ivan
-#APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:ksasdf@35.201.23.223/smartoffice'
-# david
+# Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
