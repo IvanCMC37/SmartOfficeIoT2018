@@ -65,39 +65,41 @@ class PatientHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     notes = db.Column(db.String(100), unique=False, nullable=False)
     diagnoses = db.Column(db.String(50), unique=False, nullable=False)
+    datetime = db.Column(db.Date, unique = False)
 
-    def __init__(self, notes, diagnoses):
+    def __init__(self, notes, diagnoses,date):
         self.notes = notes
         self.diagnoses = diagnoses
+        self.date = date
 
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
     def __repr__(self):
-        return 'PatientHistory(%s, %s)' % (self.notes, self.diagnoses)
+        return 'PatientHistory(%s, %s)' % (self.date,self.notes, self.diagnoses)
 
 
 class PatientSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('id','first_name', 'last_name', 'email')
 
 
 class DoctorSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('first_name', 'last_name', 'email', 'specialization')
+        fields = ('id','first_name', 'last_name', 'email', 'specialization')
 
 
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('start_datetime', 'end_datetime', 'title')
+        fields = ('id','start_datetime', 'end_datetime', 'title')
 
 
 class PatientHistorySchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('notes', 'diagnoses')
+        fields = ('id','date','notes', 'diagnoses')
 
 patient_schema = PatientSchema()
 patients_schema = PatientSchema(many=True)
