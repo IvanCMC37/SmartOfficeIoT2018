@@ -12,7 +12,6 @@ APP = Flask(__name__)
 from api import mod
 import api
 
-
 bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
