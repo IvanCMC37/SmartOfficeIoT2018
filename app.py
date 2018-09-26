@@ -9,10 +9,10 @@ import os, schema, json, config
 
 APP = Flask(__name__)
 
-# from api import mod
-# import api
-from api.patient_api import mod
-from api import patient_api
+from api.patient_api import p_mod
+from api.doctor_api import d_mod
+from api.clerk_api import c_mod
+from api import patient_api, doctor_api, clerk_api
 
 bootstrap = Bootstrap(APP)
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -22,7 +22,9 @@ APP.config['SECRET_KEY'] = 'secret'
 db = SQLAlchemy(APP)
 ma = Marshmallow(APP)
 
-APP.register_blueprint(mod, url_prefix="/api")
+APP.register_blueprint(p_mod, url_prefix="/api")
+APP.register_blueprint(d_mod, url_prefix="/api")
+APP.register_blueprint(c_mod, url_prefix="/api")
 
 
 @APP.route("/")

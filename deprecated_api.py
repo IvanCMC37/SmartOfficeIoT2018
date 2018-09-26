@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify
-import schema
+# from flask import Blueprint, request, jsonify
+# import schema
 
-mod = Blueprint("api",  __name__)
+# mod = Blueprint("api",  __name__)
 
 # ##
 # # PATIENT
@@ -70,11 +70,11 @@ mod = Blueprint("api",  __name__)
 
 
 
-##
-# GET ALL DOCTORS TEST EXAMPLE
-##
-@mod.route("/doctor", methods=["GET"])
-def get_doctors():
-    all_doctors = schema.Doctor.query.all()
-    result = schema.doctors_schema.dump(all_doctors)
-    return jsonify(result.data)
+# ##
+# # GET ALL DOCTORS TEST EXAMPLE
+# ##
+# @mod.route("/doctor", methods=["GET"])
+# def get_doctors():
+#     all_doctors = schema.Doctor.query.all()
+#     result = schema.doctors_schema.dump(all_doctors)
+#     return jsonify(result.data)

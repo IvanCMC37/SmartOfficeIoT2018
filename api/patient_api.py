@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
 import schema
 
-mod = Blueprint("patient_api",  __name__)
+p_mod = Blueprint("patient_api",  __name__)
 
 ##
 # PATIENT
 ##
-@mod.route("/patient", methods=["GET"])
+@p_mod.route("/patient", methods=["GET"])
 def get_patients():
     """Returns JSON of all patients"""
     all_patients = schema.Patient.query.all() 
@@ -14,7 +14,7 @@ def get_patients():
     return jsonify(result.data)
 
 # endpoint to get patient detail by id
-@mod.route("/patient/<id>", methods=["GET"])
+@p_mod.route("/patient/<id>", methods=["GET"])
 def appointment_detail(id):
     """Returns JSON of a single patient"""
     patient = schema.Patient.query.get(id)
@@ -38,7 +38,7 @@ def delete_patient_appointment(del_id):
 ##
 # APPOINTMENTS
 ##
-@mod.route("/appointment", methods=["GET"])
+@p_mod.route("/appointment", methods=["GET"])
 def all_appointments():
     all_appointments = schema.Appointment.query.all() 
     result = schema.appointments_schema.dump(all_appointments)
