@@ -67,10 +67,11 @@ class PatientHistory(db.Model):
     diagnoses = db.Column(db.String(50), unique=False, nullable=False)
     date = db.Column(db.Date, unique = False)
 
-    def __init__(self, notes, diagnoses,date):
+    def __init__(self, notes, diagnoses,date,patient_id):
         self.notes = notes
         self.diagnoses = diagnoses
         self.date = date
+        self.patient_id = patient_id
 
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
@@ -93,17 +94,13 @@ class DoctorSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-<<<<<<< HEAD
         fields = ('id', 'start_datetime', 'end_datetime', 'title')
-=======
-        fields = ('id','start_datetime', 'end_datetime', 'title')
->>>>>>> 1580de4bb78b49a6b4cccc7ac8bfa5d83f43ca66
 
 
 class PatientHistorySchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','date','notes', 'diagnoses')
+        fields = ('id','date','notes', 'diagnoses','patient_id')
 
 patient_schema = PatientSchema()
 patients_schema = PatientSchema(many=True)
