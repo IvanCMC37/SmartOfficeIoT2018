@@ -20,20 +20,36 @@ def appointment_detail(id):
     patient = schema.Patient.query.get(id)
     return schema.patient_schema.jsonify(patient)
 
-def get_patient_appointments():
-    """Shows all appointments for the selected patient"""  #id set to 1 as example for now
-    all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
-    return all_appmts
-
-def get_patient_appointments_json():
+def get_patient_appointments(*id):
     """Return appointments for patient as JSON"""
-    result = schema.appointments_schema.dump(get_patient_appointments())
+    if id:
+        print('test2')
+        all_appmts = schema.Appointment.query.filter_by(patient_id = id)    
+    else:
+        print('test1')
+        all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
+        
+
+    result = schema.appointments_schema.dump(all_appmts)
     return result
 
 def delete_patient_appointment(del_id):
     appointment = schema.Appointment.query.get(del_id)
     schema.db.session.delete(appointment)
     schema.db.session.commit()
+
+def reg_patient(first, last, email):
+    """Registers a new patient"""
+    patient = schema.Patient(first, last, email)
+    schema.db.session.add(patient)
+    schema.db.session.commit()
+    result = schema.patient_schema.dump(patient)
+    return jsonify(result.data)
+
+def get_reg_patients():
+    reg_patients = schema.Patient.query.all()
+    result = schema.patients_schema.dump(reg_patients)
+    return result
 
 ##
 # APPOINTMENTS
