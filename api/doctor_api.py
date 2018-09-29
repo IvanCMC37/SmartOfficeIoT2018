@@ -3,7 +3,6 @@ import schema
 
 d_mod = Blueprint("doctor_api",  __name__)
 
-
 ##
 # GET ALL DOCTORS TEST EXAMPLE
 ##
@@ -41,4 +40,6 @@ def add_patient_history():
     schema.db.session.add(new_history)
     schema.db.session.commit()
     return schema.patient_history_schema.jsonify(new_history)
+
 # doctor calander event api 
+# @d_mod.route("/assign_work", method=["POST"])
