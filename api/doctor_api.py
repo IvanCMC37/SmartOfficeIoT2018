@@ -3,6 +3,7 @@ import schema
 
 d_mod = Blueprint("doctor_api",  __name__)
 
+import doctor_calendar
 ##
 # GET ALL DOCTORS TEST EXAMPLE
 ##
@@ -42,4 +43,11 @@ def add_patient_history():
     return schema.patient_history_schema.jsonify(new_history)
 
 # doctor calander event api 
-# @d_mod.route("/assign_work", method=["POST"])
+@d_mod.route("/assign", methods=["POST"])
+def add_availabiliy():
+    input_date = request.json
+    print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
+
+    doctor_calendar.insertEvent(input_date['Allocated_dates'])
+
+    return jsonify(input_date)
