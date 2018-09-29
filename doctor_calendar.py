@@ -10,12 +10,12 @@ from oauth2client import file, client, tools
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
 # Add more token files for different doctors
-store = file.Storage('credentials/doctor_token_1.json')
-creds = store.get()
-if not creds or creds.invalid:
-    flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
-    creds = tools.run_flow(flow, store)
-service = build('calendar', 'v3', http=creds.authorize(Http()))
+# store = file.Storage('credentials/doctor_token_1.json')
+# creds = store.get()
+# if not creds or creds.invalid:
+#     flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
+#     creds = tools.run_flow(flow, store)
+# service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 # Test format
 input_date=[]
@@ -25,13 +25,25 @@ input_date.append(["2018-10-2T09:00:00","2018-10-2T17:00:00"])
 input_date.append(["2018-10-3T09:00:00","2018-10-3T17:00:00"])
 input_date.append(["2018-10-4T09:00:00","2018-10-4T17:00:00"])
 
+def token_decider(doctor_num):
+    store = file.Storage('credentials/doctor_token_{}.json'.format(doctor_num))
+    creds = store.get()
+    if not creds or creds.invalid:
+        print("Cant find")
+        flow = client.flow_from_clientsecrets('credentials/doctor_credentials_{}.json'.format(doctor_num), SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('calendar', 'v3', http=creds.authorize(Http()))
+    return service
+    # calendar_checker(service)
+
 def main():
     # for input_list in input_date:
     #     print(input_list[0])
     #     print(input_list[1])
-    insertEvent(input_date)
+    insertEvent(input_date, 1)
+    # token_decider(2)
 
-def calendar_checker():
+def calendar_checker(service):
     page_token = None
     while True:
         calendar_list = service.calendarList().list(pageToken=page_token).execute()
@@ -48,16 +60,16 @@ def calendar_checker():
     print("New calendar needed")
     return None
         
-def insertEvent(inputDate):
-    store = file.Storage('credentials/doctor_token_1.json')
-    creds = store.get()
-    if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
-        creds = tools.run_flow(flow, store)
-    service = build('calendar', 'v3', http=creds.authorize(Http()))
+def insertEvent(inputDate, doctor_num):
+    # store = file.Storage('credentials/doctor_token_1.json')
+    # creds = store.get()
+    # if not creds or creds.invalid:
+    #     flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
+    #     creds = tools.run_flow(flow, store)
+    # service = build('calendar', 'v3', http=creds.authorize(Http()))
+    service = token_decider(doctor_num)
 
-
-    checker_output = calendar_checker()
+    checker_output = calendar_checker(service)
     if(checker_output==None):
         secondaryCalendar = {
             'summary': "Work Day",
@@ -90,9 +102,9 @@ def insertEvent(inputDate):
         event = service.events().insert(calendarId=id, body=event).execute()
         print('Event created: {}'.format(event.get('htmlLink')))
 
-    event_checker(id)
+    event_checker(id,service)
 
-def event_checker(id):
+def event_checker(id,service):
     # Call the Calendar API
     now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')

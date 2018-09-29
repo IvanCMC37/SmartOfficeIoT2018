@@ -48,6 +48,6 @@ def add_availabiliy():
     input_date = request.json
     print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
 
-    doctor_calendar.insertEvent(input_date['Allocated_dates'])
+    doctor_calendar.insertEvent(input_date['Allocated_dates'],2)
 
     return jsonify(input_date)
