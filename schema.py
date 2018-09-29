@@ -85,7 +85,7 @@ class PatientSchema(ma.Schema):
 class DoctorSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('first_name', 'last_name', 'email', 'specialization')
+        fields = ('id', 'first_name', 'last_name', 'email', 'specialization')
 
 
 class AppointmentSchema(ma.Schema):

@@ -2,8 +2,8 @@
 
 {% block content %}
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
-    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
-    <button id="registerModal" type="button" class="btn btn-info extra-bottom-margin">Register</button>
+    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Book Appointment</button>
+    <button id="registerModal" type="button" class="btn btn-info extra-bottom-margin">Register Patient</button>
     <span class="extra-bottom-margin">Change Patient:</span>
     <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
 
@@ -86,6 +86,7 @@
                             <li>{{ form.title.label }} {{ form.title }}</li>
                             <li>{{ form.start_datetime.label }} {{ form.start_datetime }}</li>
                             <li>{{ form.end_datetime.label }} {{ form.end_datetime }}</li>
+                            <li>{{ form.doctor_id.label }} {{ form.doctor_id }}</li>
                         </ul> 
                     </div>
                     <div class="modal-footer">

@@ -23,10 +23,8 @@ def appointment_detail(id):
 def get_patient_appointments(*id):
     """Return appointments for patient as JSON"""
     if id:
-        print('test2')
         all_appmts = schema.Appointment.query.filter_by(patient_id = id)    
     else:
-        print('test1')
         all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
         
 
@@ -60,10 +58,10 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
-def add_patient_appointment(start, end, title):
-    patient = schema.Patient.query.get(1)
-    doctor = schema.Doctor.query.get(1)
-    appmt = schema.Appointment(start, end, title, patient_id = patient.id, doctor_id = doctor.id )
+def add_patient_appointment(start, end, title, p_id, d_id):
+    ## NEED TO ADD FUNCTIONALITY TO CHOOSE DOCTOR AND CREATE APPOINTMENT BASED ON PATIENT
+
+    appmt = schema.Appointment(start, end, title, patient_id = p_id, doctor_id = d_id )
     schema.db.session.add(appmt)
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)

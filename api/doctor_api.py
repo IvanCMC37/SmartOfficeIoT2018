@@ -12,3 +12,7 @@ def get_doctors():
     all_doctors = schema.Doctor.query.all()
     result = schema.doctors_schema.dump(all_doctors)
     return jsonify(result.data)
+
+def get_docs_iterable():
+    all_doctors = schema.Doctor.query.all()
+    return all_doctors

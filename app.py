@@ -79,7 +79,9 @@ def patient_appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title)
+        
+        p_id = request.form['select_patient']
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title, p_id, form.doctor_id.choices)
         
         return redirect(url_for('patient_appointments'))   
 
@@ -93,13 +95,11 @@ def patient_appointments():
         return redirect(url_for('patient_appointments'))
     
     elif request.method == 'POST' and 'select_patient' in request.form:
+        # Select a patient from the combo box and display appointments
         pat_id = request.form['select_patient']
         patients = patient_api.get_reg_patients()
         result = patient_api.get_patient_appointments(pat_id)
-        
         return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result.data, patients=patients.data) 
-
-   
     
     result = patient_api.get_patient_appointments()
     
