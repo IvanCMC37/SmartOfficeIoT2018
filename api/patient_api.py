@@ -52,8 +52,6 @@ def add_patient_appointment(start, end, title):
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)
     return jsonify(result.data)
-<<<<<<< HEAD:api/patient_api.py
-=======
 
 ##
 # Patient history
@@ -106,4 +104,3 @@ def get_doctors():
     all_doctors = schema.Doctor.query.all()
     result = schema.doctors_schema.dump(all_doctors)
     return jsonify(result.data)
->>>>>>> 1580de4bb78b49a6b4cccc7ac8bfa5d83f43ca66:api.py
