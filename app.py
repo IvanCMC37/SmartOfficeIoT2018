@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from forms import AppointmentForm, PatientSearchForm
+from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm
 import os, schema, json, config
 
 APP = Flask(__name__)
@@ -13,6 +13,7 @@ from api.patient_api import p_mod
 from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
+
 
 bootstrap = Bootstrap(APP)
 # Load from config.py
@@ -26,6 +27,7 @@ ma = Marshmallow(APP)
 APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
+
 
 
 @APP.route("/")
@@ -68,7 +70,8 @@ def search_results(search):
 def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
-
+    reg_form = RegisterPatientForm()
+    
     if request.method == 'POST' and "delete_appmt" in request.form:
         # Deletes the appointment by id  
         del_id = request.form['delete_appmt']
@@ -81,15 +84,34 @@ def patient_appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
+        
+        # p_id = request.form['select_patient']
         patient_api.add_patient_appointment(start_datetime, end_datetime, title)
         
         return redirect(url_for('patient_appointments'))   
 
-    # Gets all appoinments in list format and json format from api
-    all_appointments = patient_api.get_patient_appointments()
-    result = patient_api.get_patient_appointments_json()
+    elif request.method == 'POST' and "reg_patient" in request.form:
+        # Register a patient
+        first_name = reg_form.first_name.data
+        last_name = reg_form.last_name.data
+        email = reg_form.email.data
+        patient_api.reg_patient(first_name, last_name, email)
 
-    return render_template('patient.html', form=form, all_appointments=result.data)
+        return redirect(url_for('patient_appointments'))
+    
+    elif request.method == 'POST' and 'select_patient' in request.form:
+        # Select a patient from the combo box and display appointments
+        pat_id = request.form['select_patient']
+        patients = patient_api.get_reg_patients()
+        result = patient_api.get_patient_appointments(pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result.data, patients=patients.data) 
+    
+    result = patient_api.get_patient_appointments()
+    
+    # Get all patients and generate combo box values
+    patients = patient_api.get_reg_patients()
+
+    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result.data, patients=patients.data)
 
 
 
@@ -121,10 +143,11 @@ def clerks_page():
     return render_template('clerk.html', form=form, all_appointments=result.data)
 
 
+
 # Launch Application
 if __name__ == "__main__":
     """Take only the IPv4 address for connecting"""
     ips = os.popen('hostname -I').read()
     host = ips.split(' ')
     APP.run(host=host[0], port=5000, debug=True)
-    
+

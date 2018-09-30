@@ -81,13 +81,21 @@ class PatientHistory(db.Model):
 class PatientSchema(ma.Schema):
     class Meta:
         # Fields to expose
+<<<<<<< HEAD
         fields = ('id','first_name', 'last_name', 'email')
+=======
+        fields = ('id', 'first_name', 'last_name', 'email')
+>>>>>>> patient
 
 
 class DoctorSchema(ma.Schema):
     class Meta:
         # Fields to expose
+<<<<<<< HEAD
         fields = ('id','first_name', 'last_name', 'email', 'specialization')
+=======
+        fields = ('id', 'first_name', 'last_name', 'email', 'specialization')
+>>>>>>> patient
 
 
 class AppointmentSchema(ma.Schema):

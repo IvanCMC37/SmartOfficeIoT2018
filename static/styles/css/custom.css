@@ -16,6 +16,7 @@ html {
 
 .extra-bottom-margin {
     margin-bottom: 20px;
+    margin-right: 25px;
 }
 
 .wrapper {
@@ -39,12 +40,32 @@ tr {
     box-shadow: 14px 26px 86px -8px #E8E8E8
 }
 
+.combo-box {
+    width: 200px;
+}
+
+.form-select-patient {
+    display: inline-block;
+}
+
 
 /**
 * Modal Styling
 */
 .modal {
     background-color: rgba(0,0,0,0.5);
+}
+
+.modal2 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    overflow: hidden;
+    outline: 0;
 }
 
 .modal-content {
