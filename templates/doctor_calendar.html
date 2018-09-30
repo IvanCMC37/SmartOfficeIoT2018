@@ -82,6 +82,22 @@
                 
             </div>
         {%endif%}
+        {%if doctor_id != 0%}
+            <div>
+                <h3>Fill in the follow form in order to delete event on calendar</h3>
+                <form method="POST">
+                    {{form_2.csrf}}
+                    <p>Date: </p>
+                    {{form_2.year_f2}}
+                    {{form_2.month_f2}}
+                    {{form_2.day_f2}}
+                    
+                    <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                    <input type="submit" value="Delete event">
+                </form>
+                
+            </div>
+        {%endif%}
         <script>
                 let year_select = document.getElementById('year');
                 let month_select = document.getElementById('month');
@@ -90,6 +106,10 @@
                 let minute_1_select = document.getElementById('minute_1');
                 let hour_2_select = document.getElementById('hour_2');
                 let minute_2_select = document.getElementById('minute_2');
+
+                let year_f2_select = document.getElementById('year_f2');
+                let month_f2_select = document.getElementById('month_f2');
+                let day_f2_select = document.getElementById('day_f2');
                 
                 month_select.onchange =function(){
                     month = month_select.value;
@@ -161,6 +181,31 @@
                     // console.log(hour_2);
                     // console.log(hour_1>hour_2);
                     
+                }
+
+                month_f2_select.onchange =function(){
+                    month = month_f2_select.value;
+                    year = year_f2_select.value;
+                    day = 0;
+                    optionHTML ='';
+                    if (month==2){
+                        if((year%4==0 && year%100!=0 )||(year%400==0)){
+                            day =29;
+                        }
+                        else{
+                            day =28;
+                        }
+                    }
+                    else if (month==1 ||month==3||month==5||month==7||month==8||month==10||month==12){
+                        day =31;
+                    }
+                    else{
+                        day=30;
+                    }
+                    for(i =1; i<=day; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    day_f2_select.innerHTML=optionHTML;
                 }
 
         </script>

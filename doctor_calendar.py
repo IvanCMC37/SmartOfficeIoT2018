@@ -36,6 +36,8 @@ def token_decider(doctor_num):
     return service
 
 # def main():
+#     deletion_helper(2018,10,6,1)
+    # update_helper(2018,9,30,9,30,16,30,2)
 #     print(duplicated_calendar_checker(2018,12,2))
     # for input_list in input_date:
     #     print(input_list[0])
@@ -269,6 +271,69 @@ def duplicated_calendar_checker(month_check,inputYear,inputMonth,inputDay,doctor
     #     print("not included")
 
     # updated_instance = service.events().update(calendarId=id, eventId=instance['id'], body=instance).execute()
+
+def deletion_helper(inputYear,inputMonth,inputDay,doctor_num):
+    # Swap doctor calendar token
+    service = token_decider(doctor_num)
+
+    # Check if secondary Calendar already existed
+    checker_output = calendar_checker(service)
+    if(checker_output==None):
+        secondaryCalendar = {
+            'summary': "Work Day",
+            'timeZone': 'Australia/Melbourne'
+        }
+
+        created_calendar = service.calendars().insert(body=secondaryCalendar).execute()
+
+        print(created_calendar['id'])
+        id = created_calendar['id']
+    else:
+        id = checker_output
+    # now = datetime.utcnow().isoformat() + 'Z'
+    time_start = "{}-{}-{}T09:00:00+11:00".format(inputYear,inputMonth,inputDay)
+    time_end = "{}-{:02d}-{}T17:00:00+11:00".format(inputYear,inputMonth,inputDay)
+    events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
+                                        maxResults=5, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['id'])
+        event['status']='cancelled'
+        service.events().update(calendarId=id, eventId=event['id'], body=event).execute()
+
+def update_helper(inputYear,inputMonth,inputDay,inputH1,inputM1,inputH2,inputM2,doctor_num):
+    # Swap doctor calendar token
+    service = token_decider(doctor_num)
+
+    # Check if secondary Calendar already existed
+    checker_output = calendar_checker(service)
+    if(checker_output==None):
+        secondaryCalendar = {
+            'summary': "Work Day",
+            'timeZone': 'Australia/Melbourne'
+        }
+
+        created_calendar = service.calendars().insert(body=secondaryCalendar).execute()
+
+        print(created_calendar['id'])
+        id = created_calendar['id']
+    else:
+        id = checker_output
+    time_start = "{}-{}-{}T09:00:00+11:00".format(inputYear,inputMonth,inputDay)
+    time_end = "{}-{:02d}-{}T17:00:00+11:00".format(inputYear,inputMonth,inputDay)
+    events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
+                                        maxResults=5, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['id'])
+        # print(event['start']['dateTime'])
+        event['start']['dateTime'] = "{}-{:02d}-{:02d}T{:02d}:{:02d}:00+10:00".format(inputYear,inputMonth,inputDay,inputH1,inputM1)
+        event['end']['dateTime'] ="{}-{:02d}-{:02d}T{:02d}:{:02d}:00+10:00".format(inputYear,inputMonth,inputDay,inputH2,inputM2)
+        service.events().update(calendarId=id, eventId=event['id'], body=event).execute()
 
 # if __name__ == '__main__':
 #     main()

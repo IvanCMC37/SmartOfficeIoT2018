@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from wtforms_sqlalchemy.fields import QuerySelectField
-from forms import AppointmentForm, PatientSearchForm,CalendarForm
+from forms import AppointmentForm, PatientSearchForm,CalendarForm,CalendarForm_2
 import os, schema, json, config
 APP = Flask(__name__)
 
@@ -44,7 +44,9 @@ def index():
     # print(date_list)
     doctor_id = 0
     form = CalendarForm()
+    form_2 = CalendarForm_2()
     form.day.choices = [(str(x),str(x)) for x in date_list]
+    form_2.day_f2.choices = [(str(x),str(x)) for x in date_list]
 
     doctor_infos = requests.get('{}{}'.format(server_url,"doctor")).json()
     # print(request.form)
@@ -67,9 +69,9 @@ def index():
             "year":year,
             "doctor_id":doctor_id
         }
-        dup_check = requests.post('{}{}'.format(server_url,"duplicated_check"),json=input).json()
+        dup_check = requests.post('{}{}'.format(server_url,"doctor/duplicated_check"),json=input).json()
         if dup_check== False:
-            r = requests.post('{}{}'.format(server_url,"quick_assign"),json=input)
+            r = requests.post('{}{}'.format(server_url,"doctor/quick_assign"),json=input)
         else:
             flash("{}-{} already creadted, can't create again!!!".format(year,month))
     elif request.method == 'POST' and len(request.form)==8:
@@ -94,16 +96,36 @@ def index():
             "minute_2":minute_2,
             "doctor_id":doctor_id
         }
-        dup_check = requests.post('{}{}'.format(server_url,"duplicated_check"),json=input).json()
+        dup_check = requests.post('{}{}'.format(server_url,"doctor/duplicated_check"),json=input).json()
         if dup_check== False:
             print("you can add")
-            r = requests.post('{}{}'.format(server_url,"assign"),json=input)
+            r = requests.post('{}{}'.format(server_url,"doctor/assign"),json=input)
         else:
             print("you can edit")
+            r = requests.post('{}{}'.format(server_url,"doctor/update_event"),json=input)
+    elif request.method == 'POST' and len(request.form)==4:
+        print(request.form)
+        month = request.form['month_f2']
+        year = request.form['year_f2']
+        day = request.form['day_f2']
+        doctor_id = int(request.form['doctor_id'])
+        print(doctor_id)
+        input = {
+            "month":month,
+            "year":year,
+            "day":day,
+            "doctor_id":doctor_id
+        }
+        dup_check = requests.post('{}{}'.format(server_url,"doctor/duplicated_check"),json=input).json()
+        if dup_check== False:
+            flash("{}-{}-{} doesn't have any event to be deleted.".format(year,month,day))
+        else:
+            print("you can delete")
+            r = requests.post('{}{}'.format(server_url,"doctor/delete_event"),json=input)
     else:
         print("Normal GET request")
  
-    return render_template('doctor_calendar.html',form=form,doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
+    return render_template('doctor_calendar.html',form_2=form_2,form=form,doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
 
 
 @APP.route('/results')

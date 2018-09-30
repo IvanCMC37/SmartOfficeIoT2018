@@ -43,7 +43,7 @@ def add_patient_history():
     return schema.patient_history_schema.jsonify(new_history)
 
 # doctor calander event api 
-@d_mod.route("/assign", methods=["POST"])
+@d_mod.route("/doctor/assign", methods=["POST"])
 def add_availabiliy():
     input_json = request.json
     year = input_json['year']
@@ -61,7 +61,7 @@ def add_availabiliy():
 
     return jsonify(input_json)
 
-@d_mod.route("/quick_assign", methods=["POST"])
+@d_mod.route("/doctor/quick_assign", methods=["POST"])
 def add_monthly_availability():
     input_json = request.json
     year = input_json['year']
@@ -72,11 +72,11 @@ def add_monthly_availability():
 
     return jsonify(input_json)
 
-@d_mod.route("/duplicated_check", methods=["POST"])
+@d_mod.route("/doctor/duplicated_check", methods=["POST"])
 def duplicated_check():
     input_json = request.json
     print(len(input_json))
-    if(len(input_json)==8):
+    if(len(input_json)>3):
         day = input_json['day']
         month_check = False
     else:
@@ -89,3 +89,32 @@ def duplicated_check():
     respond=doctor_calendar.duplicated_calendar_checker(month_check,int(year),int(month),int(day),int(doctor_id))
 
     return jsonify(respond)
+
+@d_mod.route("/doctor/delete_event", methods=["POST"])
+def delete_action():
+    input_json = request.json
+    print(len(input_json))
+    day = input_json['day']
+    year = input_json['year']
+    month = input_json['month']
+    doctor_id = input_json['doctor_id']
+    doctor_calendar.deletion_helper(int(year),int(month),int(day),int(doctor_id))
+
+    return jsonify(input_json)
+
+@d_mod.route("/doctor/update_event", methods=["POST"])
+def update_action():
+    input_json = request.json
+    print(len(input_json))
+    day = input_json['day']
+    year = input_json['year']
+    month = input_json['month']
+    hour_1 = input_json['hour_1']
+    hour_2 = input_json['hour_2']
+    minute_1 = input_json['minute_1']
+    minute_2 = input_json['minute_2']
+    doctor_id = input_json['doctor_id']
+
+    doctor_calendar.update_helper(int(year),int(month),int(day),int(hour_1),int(minute_1),int(hour_2),int(minute_2),int(doctor_id))
+
+    return jsonify(input_json)
