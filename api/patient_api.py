@@ -57,14 +57,14 @@ def add_patient_appointment(start, end, title):
 # Patient history
 ##
 # get patient history
-@mod.route("/history/<id>", methods=["GET"])
+@p_mod.route("/history/<id>", methods=["GET"])
 def patient_detail(id):
     patient_history = schema.PatientHistory.query.get(id)
     print(patient_history)
     return schema.patient_history_schema.jsonify(patient_history)
 
 # Edit patient history
-@mod.route("/history/<id>", methods=["POST"])
+@p_mod.route("/history/<id>", methods=["POST"])
 def patient_history_update(id):
     user = schema.PatientHistory.query.get(id)
     diagnoses = request.json['diagnoses']
@@ -99,7 +99,7 @@ def patient_history_update(id):
 ##
 # GET ALL DOCTORS TEST EXAMPLE
 ##
-@mod.route("/doctor", methods=["GET"])
+@p_mod.route("/doctor", methods=["GET"])
 def get_doctors():
     all_doctors = schema.Doctor.query.all()
     result = schema.doctors_schema.dump(all_doctors)
