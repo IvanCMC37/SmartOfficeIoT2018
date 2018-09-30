@@ -10,14 +10,18 @@ $(document).ready(function() {
         appointments=appointments.replace("start_datetime", "start");
         appointments=appointments.replace("end_datetime", "end");
         appointments= JSON.parse(appointments);
-        console.log(appointments[0].start);
+        //console.log(appointments[0].start);
         console.log("appointments---"+appointments);
     $('#calendar').fullCalendar({
         defaultDate: today,
         defaultView: 'agendaWeek',
+        minTime: "09:00:00",
+        maxTime: "17:30:00",
+        height: "auto",
+        allDaySlot: false,
         weekends: false,
         navLinks: true, // can click day/week names to navigate views
-        selectable: true,
+        selectable: false,
         selectHelper: true,
         select: function(start, end) {
         var title = prompt('Book Appointment:');

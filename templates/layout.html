@@ -4,11 +4,11 @@
         <meta charset="utf-8"/>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
-        <!-- Full Calendar Styles and JS  ** NOT USING ANYMORE
+        <!-- Full Calendar Styles and JS  -->
         <link href="{{ url_for('static',filename='styles/css/fullcalendar.css') }}" rel="stylesheet" />
         <link href="{{ url_for('static',filename='styles/css/fullcalendar.print.css') }}" rel="stylesheet" media="print"/>
         <script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
-        <script src="{{ url_for('static',filename='js/fullcalendar.js') }}"></script> -->
+        <script src="{{ url_for('static',filename='js/fullcalendar.js') }}"></script>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <!-- Minty theme from https://bootswatch.com/minty/ -->
@@ -40,7 +40,7 @@
             {% block content %}{% endblock content %}
         </div> 
         <!-- Custom JS -->
-        <!-- <script src="{{ url_for('static',filename='js/index.js') }}"></script> -->
+        <script src="{{ url_for('static',filename='js/index.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static',filename='styles/js/modal.js') }}"></script>
     </body>
 

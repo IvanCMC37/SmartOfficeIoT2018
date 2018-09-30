@@ -1,25 +1,97 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <!-- <script>
+    <script>
         var appointments='{{ all_appointments | tojson | safe }}';
-    </script> -->
+    </script>
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
-    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Create New</button>
+    <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Book Appointment</button>
+    <button id="registerModal" type="button" class="btn btn-info extra-bottom-margin">Register Patient</button>
+    <span class="extra-bottom-margin">Change Patient:</span>
+    <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
+
+        <select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
+                <option selected="">Select a patient</option>
+                {% for p in patients %}
+                <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>
+                {% endfor %}
+        </select>  
+    </form>
+    <h3 class="extra-top-padding extra-bottom-padding">This persons appointments</h3>
+    <div>
+        <table class="table table-hover table-spacing">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Type</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Doctor</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            {% for a in all_appointments %}
+            <tbody>
+              <tr>
+                <td>{{ a.id }}</td>
+                <td>{{ a.title }}</td>
+                <td>{{ a.start_datetime }}</td>
+                <td>{{ a.end_datetime }}</td>
+                <td>doctor</td>
+                <td>
+                    <form action="{{ url_for('patient_appointments') }}" method="post">
+                        <input type="hidden" name="delete_appmt" value="{{ a.id }}">
+                        <input type="submit" class="btn btn-secondary" value="Delete"/>
+                    </form>
+                </td>      
+              </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+   </div>
+   <div id='calendar'></div><br/><br/>
+   <div class="modal2">
+    <div class="modal-content" id="register-modal">
+        <div class="modal-header primary">
+            <h2>Register a Patient</h2>
+            <span id="closeBtnReg" class="closeBtn">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form action="{{url_for('patient_appointments')}}" method="post">
+                {{ form.csrf }}
+                <input type="hidden" name="reg_patient"/>
+                <div>
+                    <ul>
+                        <li>{{ reg_form.first_name.label }} {{ reg_form.first_name }}</li>
+                        <li>{{ reg_form.last_name.label }} {{ reg_form.last_name }}</li>
+                        <li>{{ reg_form.email.label }} {{ reg_form.email }}</li>
+                    </ul> 
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
+                </div>
+            </form>           
+        </div>
+    </div>
+   </div>
     <div class="modal">
         <div class="modal-content" id="patient-modal">
-        <div class="modal-header primary">
-            <h2>Book an Appointment</h2>
-            <span id="closeBtn" class="closeBtn">&times;</span>
-        </div>
+           <div class="modal-header primary">
+               <h2>Book an Appointment</h2>
+               <span id="closeBtn" class="closeBtn">&times;</span>
+           </div>
 
             <div class="modal-body">
-                <form action="{{url_for('appointments')}}" method="post">
+                <form action="{{url_for('patient_appointments')}}" method="post">
                     {{ form.csrf }}
+                    <input type="hidden" name="book_appmt"/>
                     <div>
                         <ul>
+                            <li>{{ form.title.label }} {{ form.title }}</li>
                             <li>{{ form.start_datetime.label }} {{ form.start_datetime }}</li>
                             <li>{{ form.end_datetime.label }} {{ form.end_datetime }}</li>
+                           
+                           
                         </ul> 
                     </div>
                     <div class="modal-footer">
@@ -29,5 +101,4 @@
             </div>
         </div>     
     </div>
-    <!-- <div id='calendar'></div> -->
 {% endblock content %}
