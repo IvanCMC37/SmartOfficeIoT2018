@@ -81,13 +81,13 @@ class PatientHistory(db.Model):
 class PatientSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','first_name', 'last_name', 'email')
+        fields = ('id', 'first_name', 'last_name', 'email')
 
 
 class DoctorSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','first_name', 'last_name', 'email', 'specialization')
+        fields = ('id', 'first_name', 'last_name', 'email', 'specialization')
 
 
 class AppointmentSchema(ma.Schema):
