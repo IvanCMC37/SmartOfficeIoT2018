@@ -25,6 +25,7 @@ def get_patient_appointments(*id):
     if id:
         all_appmts = schema.Appointment.query.filter_by(patient_id = id)    
     else:
+        # Loads appointments for first patient by default
         all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
         
 
@@ -58,10 +59,10 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
-def add_patient_appointment(start, end, title, p_id, d_id):
+def add_patient_appointment(start, end, title):
     ## NEED TO ADD FUNCTIONALITY TO CHOOSE DOCTOR AND CREATE APPOINTMENT BASED ON PATIENT
 
-    appmt = schema.Appointment(start, end, title, patient_id = p_id, doctor_id = d_id )
+    appmt = schema.Appointment(start, end, title, patient_id = 1, doctor_id = 1 )
     schema.db.session.add(appmt)
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)

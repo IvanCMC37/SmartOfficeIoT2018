@@ -1,14 +1,13 @@
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField, SelectField, DateField
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms import Form, TextField, validators, StringField, SelectField, DateField
 from flask_wtf import FlaskForm
-import schema
-
+from wtforms_sqlalchemy.fields import QuerySelectField
+  
 
 class AppointmentForm(FlaskForm):
   title = TextField('Type:', validators=[validators.required()])
   start_datetime = DateField('Start Date:', format ='%d/%m/%Y' , validators=[validators.required()])
   end_datetime = DateField('End Date:', format ='%d/%m/%Y', validators=[validators.required()])
-  doctor_id = QuerySelectField('Doctors', query_factory = lambda: schema.Doctor.query.all(), allow_blank=False )
+ # doctor_id = QuerySelectField(query_factory=doctor_query(), allow_blank=True)
  
 
 class RegisterPatientForm(FlaskForm):
@@ -19,4 +18,6 @@ class RegisterPatientForm(FlaskForm):
 
 class PatientSearchForm(Form):
   patient_number = StringField('Patient ID:', [validators.Length(min=1, max=5)])
-  
+
+
+

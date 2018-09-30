@@ -14,6 +14,7 @@ from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 
+
 bootstrap = Bootstrap(APP)
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -25,6 +26,7 @@ ma = Marshmallow(APP)
 APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
+
 
 
 @APP.route("/")
@@ -80,8 +82,8 @@ def patient_appointments():
         end_datetime = form.end_datetime.data
         title = form.title.data
         
-        p_id = request.form['select_patient']
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title, p_id, form.doctor_id.choices)
+        # p_id = request.form['select_patient']
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title)
         
         return redirect(url_for('patient_appointments'))   
 
@@ -138,10 +140,11 @@ def clerks_page():
     return render_template('clerk.html', form=form, all_appointments=result.data)
 
 
+
 # Launch Application
 if __name__ == "__main__":
     """Take only the IPv4 address for connecting"""
     ips = os.popen('hostname -I').read()
     host = ips.split(' ')
     APP.run(host=host[0], port=5000, debug=True)
-    
+
