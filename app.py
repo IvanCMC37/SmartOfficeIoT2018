@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from wtforms_sqlalchemy.fields import QuerySelectField
-from forms import AppointmentForm, PatientSearchForm
+from forms import AppointmentForm, PatientSearchForm,CalendarForm
 import os, schema, json, config
 APP = Flask(__name__)
 
@@ -39,8 +39,13 @@ def index():
     # print(server_url)
     year_list = [2018,2019]
     month_list = [1,2,3,4,5,6,7,8,9,10,11,12]
-    date_list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    date_list = []
+    date_list.extend(range(1, 32))
+    # print(date_list)
     doctor_id = 0
+    form = CalendarForm()
+    form.day.choices = [(str(x),str(x)) for x in date_list]
+
     doctor_infos = requests.get('{}{}'.format(server_url,"doctor")).json()
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
@@ -100,13 +105,8 @@ def index():
     #    print(len(input['Allocated_dates']))
     #    r = requests.post('http://192.168.1.12:5000/api/assign',json=input)
  
-    return render_template('doctor_calendar.html',doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
+    return render_template('doctor_calendar.html',form=form,doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
 
-def doctor_query():
-    r=requests.get('http://192.168.1.12:5000/api/doctor')
-    print(r.json())
-
-    return r
 
 @APP.route('/results')
 def search_results(search):

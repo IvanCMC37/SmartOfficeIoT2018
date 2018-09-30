@@ -59,7 +59,108 @@
                 </form>
             </div>
         {%endif%}
-        
+        <div>
+            <h3>Fill in the follow form in order to edit/add event on calendar</h3>
+            <form method="POST">
+                {{form.csrf}}
+                <p>Date: </p>
+                {{form.year}}
+                {{form.month}}
+                {{form.day}}
+                <br>
+                <p>Start time: </p>
+                {{form.hour_1}}
+                {{form.minute_1}}
+                <br>
+                <p>End time: </p>
+                {{form.hour_2}}
+                {{form.minute_2}}
+                <input type="submit" value="Edit/Add event">
+            </form>
+            
+        </div>
+        <script>
+                let year_select = document.getElementById('year');
+                let month_select = document.getElementById('month');
+                let day_select = document.getElementById('day');
+                let hour_1_select = document.getElementById('hour_1');
+                let minute_1_select = document.getElementById('minute_1');
+                let hour_2_select = document.getElementById('hour_2');
+                let minute_2_select = document.getElementById('minute_2');
+                
+                month_select.onchange =function(){
+                    month = month_select.value;
+                    year = year_select.value;
+                    day = 0;
+                    optionHTML ='';
+                    if (month==2){
+                        if((year%4==0 && year%100!=0 )||(year%400==0)){
+                            day =29;
+                        }
+                        else{
+                            day =28;
+                        }
+                    }
+                    else if (month==1 ||month==3||month==5||month==7||month==8||month==10||month==12){
+                        day =31;
+                    }
+                    else{
+                        day=30;
+                    }
+                    for(i =1; i<=day; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    day_select.innerHTML=optionHTML;
+                }
+                hour_1_select.onchange = function(){
+                    hour_1 = parseInt(hour_1_select.value);
+                    hour_2 = parseInt(hour_2_select.value);
+                    h_start =9;
+                    optionHTML ='';
+                    optionHTML_2 ='';
+                    min = ['00','30'];
+                    // console.log(hour_1);
+                    // console.log(hour_2);
+                    // console.log(hour_1>hour_2);
+                    for(i =hour_1+1; i<=17; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    hour_2_select.innerHTML=optionHTML;
+                    hour_2 = parseInt(hour_2_select.value);
+                    // console.log(min[0]);
+                    if(hour_2<17){
+                        // console.log("1");
+                        for(i =0; i<min.length; i++){
+                        optionHTML_2 +='<option value="'+min[i]+'">'+min[i]+'</option>';
+                        }
+                    }
+                    else{
+                        // console.log("2");
+                        optionHTML_2 +='<option value="'+"00"+'">'+"00"+'</option>';
+                    }
+                    minute_2_select.innerHTML=optionHTML_2;
+                }
+                hour_2_select.onchange = function(){
+                    hour_2 = parseInt(hour_2_select.value);
+                    // h_start =9;
+                    min = ['00','30'];
+                    optionHTML ='';
+                    if(hour_2==17){
+                        optionHTML +='<option value="'+"00"+'">'+"00"+'</option>';
+                    }
+                    else{
+                        for(i =0; i<min.length; i++){
+                        optionHTML +='<option value="'+min[i]+'">'+min[i]+'</option>';
+                        }
+                    }
+                    minute_2_select.innerHTML=optionHTML;
+                    // console.log(hour_1);
+                    // console.log(hour_2);
+                    // console.log(hour_1>hour_2);
+                    
+                }
+
+        </script>
         <!-- <div align="left">
             <form method="POST">
                     <select name="month_1">
@@ -106,9 +207,6 @@
                     <br><br>
                 <input type="submit" >
             </form>
-            <p>This is some text.</p>
-              <p>This is some text.</p>
-              <p>This is some text.</p>
           </div> -->
 
 {% endblock content %}
