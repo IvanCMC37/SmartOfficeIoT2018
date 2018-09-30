@@ -93,11 +93,7 @@ class DoctorSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-<<<<<<< HEAD
-        fields = ('id', 'start_datetime', 'end_datetime', 'title')
-=======
         fields = ('id','start_datetime', 'end_datetime', 'title')
->>>>>>> 1580de4bb78b49a6b4cccc7ac8bfa5d83f43ca66
 
 
 class PatientHistorySchema(ma.Schema):
