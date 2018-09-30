@@ -60,7 +60,7 @@ def calendar_checker(service):
     print("New calendar needed")
     return None
         
-def insertEvent(inputDate, doctor_num):
+def insertEvent(input_json, doctor_num):
     # Swap doctor calendar token
     service = token_decider(doctor_num)
 
@@ -79,24 +79,26 @@ def insertEvent(inputDate, doctor_num):
     else:
         id = checker_output
 
-    for inputDate_list in inputDate:
-        time_start = inputDate_list['start_time']
-        time_end = inputDate_list['end_time']
-        event = {
-            'summary': 'Available time for patient',
-            'start': {
-                'dateTime': time_start,
-                'timeZone': 'Australia/Melbourne',
-            },
-            'end': {
-                'dateTime': time_end,
-                'timeZone': 'Australia/Melbourne',
-            },
-            'transparency': 'transparent'
-        }
+    # for inputDate_list in inputDate:
+    time_start = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_1'],input_json['minute_1'])
+    time_end = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_2'],input_json['minute_2'])
+    print(time_start)
+    print(time_end)
+    event = {
+        'summary': 'Available time for patient',
+        'start': {
+            'dateTime': time_start,
+            'timeZone': 'Australia/Melbourne',
+        },
+        'end': {
+            'dateTime': time_end,
+            'timeZone': 'Australia/Melbourne',
+        },
+        'transparency': 'transparent'
+    }
 
-        event = service.events().insert(calendarId=id, body=event).execute()
-        print('Event created: {}'.format(event.get('htmlLink')))
+    event = service.events().insert(calendarId=id, body=event).execute()
+    print('Event created: {}'.format(event.get('htmlLink')))
 
     # Print out latest 10 events
     event_checker(id,service)
@@ -216,7 +218,7 @@ def last_event_check(id_store, service,time_end_1,id):
         instance['status'] = 'cancelled'
         service.events().update(calendarId=id, eventId=instance['id'], body=instance).execute()
         
-def duplicated_calendar_checker(inputYear,inputMonth,doctor_num):
+def duplicated_calendar_checker(month_check,inputYear,inputMonth,inputDay,doctor_num):
     # Swap doctor calendar token
     service = token_decider(doctor_num)
 
@@ -234,14 +236,21 @@ def duplicated_calendar_checker(inputYear,inputMonth,doctor_num):
         id = created_calendar['id']
     else:
         id = checker_output
-    # now = datetime.utcnow().isoformat() + 'Z'
-    time_start = "{}-{}-01T09:00:00+11:00".format(inputYear,inputMonth)
-    if(str(inputMonth)=="12"):
-        # print("input is on dec")
-        time_end = "{}-{:02d}-01T00:00:00+11:00".format(inputYear+1,1)
+
+    if (month_check==True):
+        # now = datetime.utcnow().isoformat() + 'Z'
+        time_start = "{}-{}-01T09:00:00+11:00".format(inputYear,inputMonth)
+        if(str(inputMonth)=="12"):
+            # print("input is on dec")
+            time_end = "{}-{:02d}-01T00:00:00+11:00".format(inputYear+1,1)
+        else:
+            # print("normal route")
+            time_end = "{}-{:02d}-01T00:00:00+11:00".format(inputYear,inputMonth+1)
     else:
-        # print("normal route")
-        time_end = "{}-{:02d}-01T00:00:00+11:00".format(inputYear,inputMonth+1)
+         # now = datetime.utcnow().isoformat() + 'Z'
+        time_start = "{}-{}-{}T09:00:00+11:00".format(inputYear,inputMonth,inputDay)
+        time_end = "{}-{:02d}-{}T17:00:00+11:00".format(inputYear,inputMonth,inputDay)
+   
 
     # time_1 ="2018-09-01T00:00:00Z"
     # time_2 ="2018-10-01T00:00:00Z"

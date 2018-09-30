@@ -45,15 +45,21 @@ def add_patient_history():
 # doctor calander event api 
 @d_mod.route("/assign", methods=["POST"])
 def add_availabiliy():
-    
-    input_date = request.json
-    print(input_date)
-    print(len(input_date['Allocated_dates']))
-    print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
+    input_json = request.json
+    year = input_json['year']
+    month = input_json['month']
+    day = input_json['day']
+    hour_1 = input_json['hour_1']
+    hour_2 = input_json['hour_2']
+    minute_1 = input_json['minute_1']
+    minute_2 = input_json['minute_2']
+    doctor_id = input_json['doctor_id']
 
-    doctor_calendar.insertEvent(input_date['Allocated_dates'],1)
+    # print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
 
-    return jsonify(input_date)
+    doctor_calendar.insertEvent(input_json,int(doctor_id))
+
+    return jsonify(input_json)
 
 @d_mod.route("/quick_assign", methods=["POST"])
 def add_monthly_availability():
@@ -69,10 +75,17 @@ def add_monthly_availability():
 @d_mod.route("/duplicated_check", methods=["POST"])
 def duplicated_check():
     input_json = request.json
+    print(len(input_json))
+    if(len(input_json)==8):
+        day = input_json['day']
+        month_check = False
+    else:
+        day= 1
+        month_check = True
+
     year = input_json['year']
     month = input_json['month']
     doctor_id = input_json['doctor_id']
-    print("Quick assigning monthly event for Doctor No.{} on {}-{}".format(doctor_id,year,month))
-    respond=doctor_calendar.duplicated_calendar_checker(int(year),int(month),int(doctor_id))
+    respond=doctor_calendar.duplicated_calendar_checker(month_check,int(year),int(month),int(day),int(doctor_id))
 
     return jsonify(respond)

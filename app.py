@@ -47,6 +47,8 @@ def index():
     form.day.choices = [(str(x),str(x)) for x in date_list]
 
     doctor_infos = requests.get('{}{}'.format(server_url,"doctor")).json()
+    # print(request.form)
+    # print(len(request.form))
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
         print(request.form['doctor_id'])
@@ -70,40 +72,36 @@ def index():
             r = requests.post('{}{}'.format(server_url,"quick_assign"),json=input)
         else:
             flash("{}-{} already creadted, can't create again!!!".format(year,month))
-    # elif request.method == 'POST':
-    #     print("second form")
-    #     print(request.form)
-    #     start_time = "2018-{}-{}T{}:{}:00".format(request.form["month_1"],request.form["date_1"],request.form["hour_1"],request.form["minute_1"])
-    #     end_time = "2018-{}-{}T{}:{}:00".format(request.form["month_2"],request.form["date_2"],request.form["hour_2"],request.form["minute_2"])
-    #     print(start_time)
-    #     print(end_time)
-    #     input = {
-    #         "Allocated_dates":[ {
-    #             "start_time": start_time,
-    #             "end_time": end_time,
-    #             "doctor_id":doctor_id
-    #         }]
-    #     }
-    #     print(input['Allocated_dates'])
-    #     print(len(input['Allocated_dates']))
-    #     r = requests.post('http://192.168.1.12:5000/api/assign',json=input)
-    
-    # search = PatientSearchForm(request.form)
-    # if request.method == 'POST':
-    #    print(request.form)
-    #    start_time = "2018-{}-{}T{}:{}:00".format(request.form["month_1"],request.form["date_1"],request.form["hour_1"],request.form["minute_1"])
-    #    end_time = "2018-{}-{}T{}:{}:00".format(request.form["month_2"],request.form["date_2"],request.form["hour_2"],request.form["minute_2"])
-    #    print(start_time)
-    #    print(end_time)
-    #    input = {
-    #        "Allocated_dates":[ {
-    #            "start_time": start_time,
-    #            "end_time": end_time
-    #        }]
-    #    }
-    #    print(input['Allocated_dates'])
-    #    print(len(input['Allocated_dates']))
-    #    r = requests.post('http://192.168.1.12:5000/api/assign',json=input)
+    elif request.method == 'POST' and len(request.form)==8:
+        print(request.form)
+        month = request.form['month']
+        year = request.form['year']
+        day = request.form['day']
+        hour_1 = request.form['hour_1']
+        minute_1 = request.form['minute_1']
+        hour_2 = request.form['hour_2']
+        minute_2 = request.form['minute_2']
+        doctor_id = int(request.form['doctor_id'])
+        print(doctor_id)
+
+        input = {
+            "month":month,
+            "year":year,
+            "day":day,
+            "hour_1":hour_1,
+            "hour_2":hour_2,
+            "minute_1": minute_1,
+            "minute_2":minute_2,
+            "doctor_id":doctor_id
+        }
+        dup_check = requests.post('{}{}'.format(server_url,"duplicated_check"),json=input).json()
+        if dup_check== False:
+            print("you can add")
+            r = requests.post('{}{}'.format(server_url,"assign"),json=input)
+        else:
+            print("you can edit")
+    else:
+        print("Normal GET request")
  
     return render_template('doctor_calendar.html',form=form,doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
 

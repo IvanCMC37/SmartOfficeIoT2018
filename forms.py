@@ -23,4 +23,4 @@ class CalendarForm(FlaskForm):
   hour_1 = SelectField('hour',choices=[("9","9"),("10","10"),("11","11"),("12","12"),("13","13"),("14","14"),("15","15"),("16","16")])
   minute_1 = SelectField('minute',choices=[('00','00'),('30','30')])
   hour_2 = SelectField('hour',choices=[("10","10"),("11","11"),("12","12"),("13","13"),("14","14"),("15","15"),("16","16"),("17","17")])
-  minute_2 = SelectField('minute',choices=[('00','00')])
+  minute_2 = SelectField('minute',choices=[('00','00'),('30','30')])
