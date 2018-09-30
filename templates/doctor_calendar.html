@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+        <head>
+            <title>Doctor Calendar Assignment</title>
+        </head>
+        <div align="middle">
+            {%if doctor_id ==1%}
+                <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor1 -->
+                <iframe src="https://calendar.google.com/calendar/embed?src=iil8aoh34pcl0e737aldnrrjnc%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+            {%if doctor_id ==2%}
+                <h3>Calendar Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor2 -->
+                <iframe src="https://calendar.google.com/calendar/embed?src=3pjm535a9dnes869bmjc90ao78%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+        </div>
+        <div align ="left">
+                <h3>Choose a doctor to log in</h3>
+                <form method="POST">
+                    <select name="doctor_id">
+                            {% for x in doctor_infos%}
+                                <option value={{x['id']}}>{{"Dr. "+x['first_name']+" "+x['last_name']}}</option>
+                            {% endfor%}
+                    </select>
+                    <input type="submit" value ="Submit">
+                </form>
+            </div>
+        {%if doctor_id != 0%}
+            <div align ="left">
+                <!-- <p>{{doctor_id}}</p> -->
+                <h3>Monthly quick assignfor Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+                <form method="POST">
+                    <p>Please choose year and month</p>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        
+                            {% for message in messages %}
+                                <p class=flashes style="color:red;">{{ message }}</p>
+                            {% endfor %}
+                        
+                        {% endif %}
+                    {% endwith %} 
+                    <p></p>
+                    <select name="year">
+                            {% for x in year_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    
+                    <select name="month">
+                            {% for x in month_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                    <input type="submit" value ="Quick assign">
+                </form>
+            </div>
+        {%endif%}
+        
+        <!-- <div align="left">
+            <form method="POST">
+                    <select name="month_1">
+                        {% for x in date_list%}
+                            <option value={{x}}>{{x}}</option>
+                        {% endfor%}
+                    </select>
+                    <select name="date_1">
+                            {% for x in date_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    <select name="hour_1">
+                            {% for x in date_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    <select name="minute_1">
+                            {% for x in date_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    <br>
+                    <select name="month_2">
+                            {% for x in date_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                        </select>
+                        <select name="date_2">
+                                {% for x in date_list%}
+                                    <option value={{x}}>{{x}}</option>
+                                {% endfor%}
+                        </select>
+                        <select name="hour_2">
+                                {% for x in date_list%}
+                                    <option value={{x}}>{{x}}</option>
+                                {% endfor%}
+                        </select>
+                        <select name="minute_2">
+                                {% for x in date_list%}
+                                    <option value={{x}}>{{x}}</option>
+                                {% endfor%}
+                        </select>
+                    <br><br>
+                <input type="submit" >
+            </form>
+            <p>This is some text.</p>
+              <p>This is some text.</p>
+              <p>This is some text.</p>
+          </div> -->
+
+{% endblock content %}

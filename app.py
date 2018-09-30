@@ -4,16 +4,16 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from wtforms_sqlalchemy.fields import QuerySelectField
 from forms import AppointmentForm, PatientSearchForm
 import os, schema, json, config
-
 APP = Flask(__name__)
 
 from api.patient_api import p_mod
 from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
-
+import requests
 bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -26,7 +26,8 @@ ma = Marshmallow(APP)
 APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
-
+doc_list=[]
+server_url= ""
 
 @APP.route("/")
 def homepage():
@@ -35,11 +36,77 @@ def homepage():
 
 @APP.route("/doctor", methods=['GET', 'POST'])
 def index():
-    search = PatientSearchForm(request.form)
-    if request.method == 'POST':
-        return search_results(search)
+    # print(server_url)
+    year_list = [2018,2019]
+    month_list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    date_list = [1,2,3,4,5,6,7,8,9,10,11,12]
+    doctor_id = 0
+    doctor_infos = requests.get('{}{}'.format(server_url,"doctor")).json()
+    if request.method == 'POST' and len(request.form)==1:
+        print("Chose a doctor calendar")
+        print(request.form['doctor_id'])
+        doctor_id=int(request.form['doctor_id'])
+    elif request.method == 'POST' and len(request.form)==3:
+        # print(len(request.form))
+        # print("Quick Assign Form")
+        
+        print(request.form)
+        month = request.form['month']
+        year = request.form['year']
+        doctor_id = int(request.form['doctor_id'])
+        print(doctor_id)
+        input = {
+            "month":month,
+            "year":year,
+            "doctor_id":doctor_id
+        }
+        dup_check = requests.post('{}{}'.format(server_url,"duplicated_check"),json=input).json()
+        if dup_check== False:
+            r = requests.post('{}{}'.format(server_url,"quick_assign"),json=input)
+        else:
+            flash("{}-{} already creadted, can't create again!!!".format(year,month))
+    # elif request.method == 'POST':
+    #     print("second form")
+    #     print(request.form)
+    #     start_time = "2018-{}-{}T{}:{}:00".format(request.form["month_1"],request.form["date_1"],request.form["hour_1"],request.form["minute_1"])
+    #     end_time = "2018-{}-{}T{}:{}:00".format(request.form["month_2"],request.form["date_2"],request.form["hour_2"],request.form["minute_2"])
+    #     print(start_time)
+    #     print(end_time)
+    #     input = {
+    #         "Allocated_dates":[ {
+    #             "start_time": start_time,
+    #             "end_time": end_time,
+    #             "doctor_id":doctor_id
+    #         }]
+    #     }
+    #     print(input['Allocated_dates'])
+    #     print(len(input['Allocated_dates']))
+    #     r = requests.post('http://192.168.1.12:5000/api/assign',json=input)
+    
+    # search = PatientSearchForm(request.form)
+    # if request.method == 'POST':
+    #    print(request.form)
+    #    start_time = "2018-{}-{}T{}:{}:00".format(request.form["month_1"],request.form["date_1"],request.form["hour_1"],request.form["minute_1"])
+    #    end_time = "2018-{}-{}T{}:{}:00".format(request.form["month_2"],request.form["date_2"],request.form["hour_2"],request.form["minute_2"])
+    #    print(start_time)
+    #    print(end_time)
+    #    input = {
+    #        "Allocated_dates":[ {
+    #            "start_time": start_time,
+    #            "end_time": end_time
+    #        }]
+    #    }
+    #    print(input['Allocated_dates'])
+    #    print(len(input['Allocated_dates']))
+    #    r = requests.post('http://192.168.1.12:5000/api/assign',json=input)
  
-    return render_template('doctor_index.html', form=search)
+    return render_template('doctor_calendar.html',doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
+
+def doctor_query():
+    r=requests.get('http://192.168.1.12:5000/api/doctor')
+    print(r.json())
+
+    return r
 
 @APP.route('/results')
 def search_results(search):
@@ -48,17 +115,16 @@ def search_results(search):
     search_string = search.data['patient_number']
     print(search_string)
     if len(search_string)>0:
-        qry = schema.User.query.get(search_string)
-        print(qry)
-        results =  schema.user_schema.jsonify(qry)
-        # return redirect('/doctor')
-    if qry==None:
+        qry = requests.get('http://192.168.1.12:5000/api/patient/{}'.format(search_string))
+        print(qry.json())
+    if qry == None:
         flash('No record on this patient number!')
         return redirect('/doctor')
     else:
-        
+        print("end")
+        print(qry.json())
         # display results
-        return render_template('doctor_result.html', results=qry)
+        return render_template('doctor_index.html', results=qry)
 
 
 ##
@@ -126,5 +192,6 @@ if __name__ == "__main__":
     """Take only the IPv4 address for connecting"""
     ips = os.popen('hostname -I').read()
     host = ips.split(' ')
+    server_url = "http://{}:{}/api/".format(host[0],5000)
     APP.run(host=host[0], port=5000, debug=True)
     

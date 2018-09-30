@@ -45,9 +45,34 @@ def add_patient_history():
 # doctor calander event api 
 @d_mod.route("/assign", methods=["POST"])
 def add_availabiliy():
+    
     input_date = request.json
+    print(input_date)
+    print(len(input_date['Allocated_dates']))
     print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
 
-    doctor_calendar.insertEvent(input_date['Allocated_dates'],2)
+    doctor_calendar.insertEvent(input_date['Allocated_dates'],1)
 
     return jsonify(input_date)
+
+@d_mod.route("/quick_assign", methods=["POST"])
+def add_monthly_availability():
+    input_json = request.json
+    year = input_json['year']
+    month = input_json['month']
+    doctor_id = input_json['doctor_id']
+    print("Quick assigning monthly event for Doctor No.{} on {}-{}".format(doctor_id,year,month))
+    doctor_calendar.insertEvent_2(int(year),int(month),int(doctor_id))
+
+    return jsonify(input_json)
+
+@d_mod.route("/duplicated_check", methods=["POST"])
+def duplicated_check():
+    input_json = request.json
+    year = input_json['year']
+    month = input_json['month']
+    doctor_id = input_json['doctor_id']
+    print("Quick assigning monthly event for Doctor No.{} on {}-{}".format(doctor_id,year,month))
+    respond=doctor_calendar.duplicated_calendar_checker(int(year),int(month),int(doctor_id))
+
+    return jsonify(respond)
