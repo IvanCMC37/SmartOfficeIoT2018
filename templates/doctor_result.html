@@ -1,5 +1,127 @@
 {% extends 'layout.html' %}
-
 {% block content %}
+    <head>  
+        <title>Patient History Page</title>
+    </head>
+    {%if logic== False%}
+        <div align ="center">
+            <h1>Wrong use of the page...</h1>
+            <h1>Redircting...</h1>
+            <script>
+                var server_url = '{{server_url}}';
+                setTimeout(function (){
+                    window.location.replace(server_url+"doctor/a");
+                }, 3000); 
+            </script>
+        </div> 
+    {%endif%}
+    <div align="center">
+        <form method="POST">
+                <table>
+                    <!-- <tr>
+                        <td>
+                            <input type="text" name="date" readonly value="">
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td>
+                            Patient ID : 
+                        </td>
+                        <td>
+                            <input type="text" name="id" readonly value={{patient_infos['id']}}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Patient Name : 
+                        </td>
+                        <td>
+                            <input type="text" name="firstname" readonly value={{patient_infos['first_name']}}>
+                            <input type="text" name="lastname" readonly value={{patient_infos['last_name']}}>
+                        </td>
+                    </tr>
+                    <tr>
+                            <td>
+                                New Notes :
+                            </td>
+                            <td>
+                                <textarea rows="4" cols="50" name="notes" required></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                New Diagnoses :
+                            </td>
+                            <td>
+                                <textarea rows="4" cols="50" name="diagnoses" required></textarea>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td>
+                                <input type="hidden" name ="patient_id" value={{patient_id}}>
+                                <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                                <input type="submit" value ="Submit"  >
+                        </td>
+                    </tr>
+                        
+                </table>
+                <table>
+                        <tr>
+                                <td>
+                                        <input type="checkbox" name="check" value="check" required>
+                                        I confirmed the infos were checked before submitting
+                                </td>
+                            </tr>
+                        
+                </table>
+                
+        </form>
+    </div>
+    <br><br>
+    <div>
+        <table class="table table-hover table-spacing">
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Diagnoses</th>
+                </tr>
+            </thead>
+            {%for x in patient_histories%}
+                <tbody>
+                    <td>{{ x['date'] }}</td>
+                    <td>{{ x['notes'] }}</td>
+                    <td>{{ x['diagnoses'] }}</td>
+                </tbody>
+            {%endfor%}
+            
+        </table>
+    </div>
+    <!-- <script>
+            function getCurrentDateTime(){
+                console.log("123123");
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; 
+                    var yyyy = today.getFullYear();
+                    var hh = today.getHours();
+                    var minutes = today.getMinutes();
+                    var sec = today.getSeconds();
+                    
+                    if(dd<10) 
+                    {
+                        dd='0'+dd;
+                    } 
 
+                    if(mm<10) 
+                    {
+                        mm='0'+mm;
+                    } 
+                    
+                    today = mm+'-'+dd+'-'+yyyy+' '+ hh+":"+minutes+":"+sec;
+                    
+                    document.getElementById("date").value ="today";
+                }
+        </script> -->
 {% endblock content %}

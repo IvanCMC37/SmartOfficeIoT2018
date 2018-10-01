@@ -32,9 +32,9 @@ def token_decider(doctor_num):
     service = build('calendar', 'v3', http=creds.authorize(Http()))
     return service
 
-def main():
+# def main():
     # monthly_reader(2018,12,1)
-    main_calendar_appointer(1, 1)
+    # main_calendar_appointer(1, 1)
 #     deletion_helper(2018,10,6,1)
     # update_helper(2018,9,30,9,30,16,30,2)
 #     print(duplicated_calendar_checker(2018,12,2))
@@ -366,5 +366,5 @@ def main_calendar_appointer(input_json, doctor_num):
     return event_
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

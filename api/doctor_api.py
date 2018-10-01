@@ -48,8 +48,6 @@ def add_availabiliy():
     input_json = request.json
     doctor_id = input_json['doctor_id']
 
-    # print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
-
     doctor_calendar.insertEvent(input_json,int(doctor_id))
 
     return jsonify(input_json)
@@ -126,6 +124,17 @@ def monthly_check():
 
 @d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
 def appoint_gcalendar():
+    #  {
+    # "month":"10",
+    # "year":"2018",
+    # "day":"2",
+    # "hour_1":"12",
+    # "hour_2":"13",
+    # "minute_1": "30",
+    # "minute_2":"00",
+    # "doctor_id":"1",
+    # "id": "2"
+    # }
     input_json = request.json
     doctor_id = input_json['doctor_id']
 

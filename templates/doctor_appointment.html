@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+        <head>
+            <title>Doctor Appointment Calendar</title>
+        </head>
+        <div align="middle">
+            {%if doctor_id ==1%}
+                <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor1 -->
+            <iframe src="https://calendar.google.com/calendar/embed?src=gdhfk8rlue2pltmd0474cor9qk%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+            {%if doctor_id ==2%}
+                <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor2 -->
+            <iframe src="https://calendar.google.com/calendar/embed?src=22fc23dosnvhf261g4pn5u75vg%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+        </div>
+        <div align ="left">
+            <h3>Choose a doctor to log in</h3>
+            <form method="POST">
+                <select name="doctor_id">
+                        {% for x in doctor_infos%}
+                            <option value={{x['id']}}>{{"Dr. "+x['first_name']+" "+x['last_name']}}</option>
+                        {% endfor%}
+                </select>
+                <input type="submit" value ="Submit">
+            </form>
+        </div>
+        {%if doctor_id != 0%}
+          <div align ="left">
+              <h3>Choose a patient to start the appointment</h3>
+              <form method="POST">
+                  <select name="patient_id">
+                          {% for x in patient_infos%}
+                              <option value={{x['id']}}>{{x['id']}} - {{x['first_name']}} {{x['last_name']}}</option>
+                          {% endfor%}
+                  </select>
+                  <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                  <input type="submit" value ="Go">
+              </form>
+          </div>
+        {%endif%}
+
+{% endblock content %}
