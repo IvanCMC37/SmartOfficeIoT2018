@@ -151,6 +151,8 @@ def doctor_page_2():
 @APP.route('/doctor/result', methods=['GET', 'POST'])
 def doctor_page_3():
     logic = False
+    doctor_infos=[]
+    patient_infos=[]
     if request.method == 'POST':
         logic = True
         print(request.form)
