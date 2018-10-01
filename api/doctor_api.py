@@ -46,13 +46,6 @@ def add_patient_history():
 @d_mod.route("/doctor/assign", methods=["POST"])
 def add_availabiliy():
     input_json = request.json
-    year = input_json['year']
-    month = input_json['month']
-    day = input_json['day']
-    hour_1 = input_json['hour_1']
-    hour_2 = input_json['hour_2']
-    minute_1 = input_json['minute_1']
-    minute_2 = input_json['minute_2']
     doctor_id = input_json['doctor_id']
 
     # print("Total {} event(s) will be added.".format(len(input_date['Allocated_dates'])))
@@ -118,3 +111,23 @@ def update_action():
     doctor_calendar.update_helper(int(year),int(month),int(day),int(hour_1),int(minute_1),int(hour_2),int(minute_2),int(doctor_id))
 
     return jsonify(input_json)
+
+# Api to return list of event time of the month
+@d_mod.route("/doctor/monthly_check", methods=["POST"])
+def monthly_check():
+    input_json = request.json
+    print(len(input_json))
+
+    year = input_json['year']
+    month = input_json['month']
+    doctor_id = input_json['doctor_id']
+    respond=doctor_calendar.monthly_reader(int(year),int(month),int(doctor_id))
+    return jsonify({'days': respond})
+
+@d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
+def appoint_gcalendar():
+    input_json = request.json
+    doctor_id = input_json['doctor_id']
+
+    event=doctor_calendar.main_calendar_appointer(input_json,int(doctor_id))
+    return jsonify(event)
