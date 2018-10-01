@@ -14,7 +14,7 @@
                 {% endfor %}
         </select>  
     </form>
-    <h3 class="extra-top-padding extra-bottom-padding">This persons appointments</h3>
+    <h3 class="extra-top-padding extra-bottom-padding">{{ pat.first_name }} appointments</h3>
     <div>
         <table class="table table-hover table-spacing">
             <thead>
@@ -27,14 +27,14 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            {% for a in all_appointments %}
             <tbody>
+            {% for a in all_appointments %}
               <tr>
                 <td>{{ a.id }}</td>
                 <td>{{ a.title }}</td>
                 <td>{{ a.start_datetime }}</td>
                 <td>{{ a.end_datetime }}</td>
-                <td>doctor</td>
+                <td>{{ a.doctor.first_name }}</td>
                 <td>
                     <form action="{{ url_for('patient_appointments') }}" method="post">
                         <input type="hidden" name="delete_appmt" value="{{ a.id }}">
@@ -42,8 +42,8 @@
                     </form>
                 </td>      
               </tr>
-            </tbody>
             {% endfor %}
+            </tbody>
         </table>
    </div>
    <div class="modal2">
@@ -86,7 +86,13 @@
                             <li>{{ form.title.label }} {{ form.title }}</li>
                             <li>{{ form.start_datetime.label }} {{ form.start_datetime }}</li>
                             <li>{{ form.end_datetime.label }} {{ form.end_datetime }}</li>
-                           
+                            <select name="select_doctor" class="custom-select combo-box extra-bottom-margin">
+                                    <option selected="">Select a doctor</option>
+                                    {% for d in doctors %}
+                                    <option value="{{ d.id }}">{{ d.first_name }} {{ d.last_name }}</option>
+                                    {% endfor %}
+                            </select>  
+                            
                            
                         </ul> 
                     </div>
@@ -98,3 +104,4 @@
         </div>     
     </div>
 {% endblock content %}
+

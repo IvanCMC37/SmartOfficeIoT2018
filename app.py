@@ -71,6 +71,15 @@ def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
     reg_form = RegisterPatientForm()
+
+    # Get all patients and generate combo box values
+    patients = patient_api.get_reg_patients()
+
+    # Get all doctors and generate combo box values
+    doctors = doctor_api.get_docs()
+
+    # Set default patient to 1
+    pat = patient_api.get_patient_by_object(1)
     
     if request.method == 'POST' and "delete_appmt" in request.form:
         # Deletes the appointment by id  
@@ -84,11 +93,10 @@ def patient_appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         title = form.title.data
+        d_id = request.form['select_doctor']
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title, 1, d_id)
         
-        # p_id = request.form['select_patient']
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title)
-        
-        return redirect(url_for('patient_appointments'))   
+        return redirect(url_for('patient_appointments'))
 
     elif request.method == 'POST' and "reg_patient" in request.form:
         # Register a patient
@@ -102,16 +110,14 @@ def patient_appointments():
     elif request.method == 'POST' and 'select_patient' in request.form:
         # Select a patient from the combo box and display appointments
         pat_id = request.form['select_patient']
-        patients = patient_api.get_reg_patients()
         result = patient_api.get_patient_appointments(pat_id)
-        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result.data, patients=patients.data) 
+        pat = patient_api.get_patient_by_object(pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
     
     result = patient_api.get_patient_appointments()
-    
-    # Get all patients and generate combo box values
-    patients = patient_api.get_reg_patients()
+    # appt_patient_name = patient_api.get_patient_name(result)
 
-    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result.data, patients=patients.data)
+    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
 
 
 

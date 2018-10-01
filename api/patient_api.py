@@ -23,14 +23,20 @@ def appointment_detail(id):
 def get_patient_appointments(*id):
     """Return appointments for patient as JSON"""
     if id:
-        all_appmts = schema.Appointment.query.filter_by(patient_id = id)    
+        all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=id).join(schema.Doctor).join(schema.Patient).all()
     else:
         # Loads appointments for first patient by default
-        all_appmts = schema.Appointment.query.filter_by(patient_id = 1)
+        all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=1).join(schema.Doctor).join(schema.Patient).all()
         
+    return all_appmts
 
-    result = schema.appointments_schema.dump(all_appmts)
-    return result
+def get_patient_by_object(pat):
+    patient = schema.Patient.query.get(pat)
+    return patient
+
+
+
+
 
 def delete_patient_appointment(del_id):
     appointment = schema.Appointment.query.get(del_id)
@@ -59,10 +65,10 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
-def add_patient_appointment(start, end, title):
+def add_patient_appointment(start, end, title, p_id, d_id):
     ## NEED TO ADD FUNCTIONALITY TO CHOOSE DOCTOR AND CREATE APPOINTMENT BASED ON PATIENT
 
-    appmt = schema.Appointment(start, end, title, patient_id = 1, doctor_id = 1 )
+    appmt = schema.Appointment(start, end, title, patient_id = p_id, doctor_id = d_id)
     schema.db.session.add(appmt)
     schema.db.session.commit()
     result = schema.appointment_schema.dump(appmt)
@@ -72,14 +78,14 @@ def add_patient_appointment(start, end, title):
 # Patient history
 ##
 # get patient history
-@mod.route("/history/<id>", methods=["GET"])
+@p_mod.route("/history/<id>", methods=["GET"])
 def patient_detail(id):
     patient_history = schema.PatientHistory.query.get(id)
     print(patient_history)
     return schema.patient_history_schema.jsonify(patient_history)
 
 # Edit patient history
-@mod.route("/history/<id>", methods=["POST"])
+@p_mod.route("/history/<id>", methods=["POST"])
 def patient_history_update(id):
     user = schema.PatientHistory.query.get(id)
     diagnoses = request.json['diagnoses']
