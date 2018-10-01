@@ -88,15 +88,20 @@ def patient_appointments():
         
         return redirect(url_for('patient_appointments'))
 
+    #PAT ID IS NEEDED IN THIS REQUEST
     elif request.method == 'POST' and "book_appmt" in request.form:
         # Submit form of appointment booking
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
+        pat_id = request.form['pat_id']
+        print(pat_id)
         title = form.title.data
         d_id = request.form['select_doctor']
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title, 1, d_id)
-        
-        return redirect(url_for('patient_appointments'))
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, d_id)
+        pat = patient_api.get_patient_by_object(pat_id)
+        result = patient_api.get_patient_appointments(pat_id)
+        print(result)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
 
     elif request.method == 'POST' and "reg_patient" in request.form:
         # Register a patient
@@ -107,6 +112,7 @@ def patient_appointments():
 
         return redirect(url_for('patient_appointments'))
     
+    ## PAT ID COMES FROM THIS POST REQ
     elif request.method == 'POST' and 'select_patient' in request.form:
         # Select a patient from the combo box and display appointments
         pat_id = request.form['select_patient']
