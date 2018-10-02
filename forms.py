@@ -1,6 +1,6 @@
-from wtforms import Form, TextField, validators, StringField, SelectField, DateField
+from wtforms import Form, TextField, validators, StringField, SelectField
 from flask_wtf import FlaskForm
-from wtforms_sqlalchemy.fields import QuerySelectField
+from wtforms.fields.html5 import DateField
   
 
 class AppointmentForm(FlaskForm):
@@ -17,6 +17,3 @@ class RegisterPatientForm(FlaskForm):
 
 class PatientSearchForm(Form):
   patient_number = StringField('Patient ID:', [validators.Length(min=1, max=5)])
-
-
-

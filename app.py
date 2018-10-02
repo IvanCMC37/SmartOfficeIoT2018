@@ -14,7 +14,6 @@ from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 
-
 bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -24,10 +23,10 @@ APP.config['SECRET_KEY'] = 'secret'
 db = SQLAlchemy(APP)
 ma = Marshmallow(APP)
 
+# Register api blueprints
 APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
-
 
 
 @APP.route("/")
@@ -42,6 +41,7 @@ def index():
         return search_results(search)
  
     return render_template('doctor_index.html', form=search)
+
 
 @APP.route('/results')
 def search_results(search):
@@ -74,7 +74,6 @@ def patient_appointments():
 
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
-
     # Get all doctors and generate combo box values
     doctors = doctor_api.get_docs()
 
@@ -88,11 +87,11 @@ def patient_appointments():
         
         return redirect(url_for('patient_appointments'))
 
-    #PAT ID IS NEEDED IN THIS REQUEST
     elif request.method == 'POST' and "book_appmt" in request.form:
         # Submit form of appointment booking
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
+        
         pat_id = request.form['pat_id']
         print(pat_id)
         title = form.title.data
@@ -112,7 +111,6 @@ def patient_appointments():
 
         return redirect(url_for('patient_appointments'))
     
-    ## PAT ID COMES FROM THIS POST REQ
     elif request.method == 'POST' and 'select_patient' in request.form:
         # Select a patient from the combo box and display appointments
         pat_id = request.form['select_patient']
@@ -121,11 +119,8 @@ def patient_appointments():
         return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
     
     result = patient_api.get_patient_appointments()
-    # appt_patient_name = patient_api.get_patient_name(result)
 
     return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
-
-
 
 
 ##
