@@ -34,6 +34,11 @@ def homepage():
     return render_template('home.html', title='Home')
 
 
+@APP.route("/about")
+def aboutpage():
+    return render_template('about.html', title='About')
+
+
 @APP.route("/doctor", methods=['GET', 'POST'])
 def index():
     search = PatientSearchForm(request.form)
@@ -92,7 +97,10 @@ def patient_appointments():
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
         
-        pat_id = request.form['pat_id']
+        if request.form['pat_id']:
+            pat_id = request.form['pat_id']
+        else:
+            pat_id = 1
         print(pat_id)
         title = form.title.data
         d_id = request.form['select_doctor']

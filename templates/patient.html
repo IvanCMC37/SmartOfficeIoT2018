@@ -32,9 +32,9 @@
               <tr>
                 <td>{{ a.id }}</td>
                 <td>{{ a.title }}</td>
-                <td>{{ a.start_datetime }}</td>
-                <td>{{ a.end_datetime}}</td>
-                <td>{{ a.doctor.first_name }}</td>
+                <td>{{ a.start_datetime.strftime('%d/%m/%Y') }}</td>
+                <td>{{ a.end_datetime.strftime('%d/%m/%Y') }}</td>
+                <td>{{ a.doctor.first_name }} {{ a.doctor.last_name }}</td>
                 <td>
                     <form action="{{ url_for('patient_appointments') }}" method="post">
                         <input type="hidden" name="delete_appmt" value="{{ a.id }}">
@@ -58,11 +58,13 @@
                 {{ form.csrf }}
                 <input type="hidden" name="reg_patient"/>
                 <div>
-                    <ul>
-                        <li>{{ reg_form.first_name.label }} {{ reg_form.first_name }}</li>
-                        <li>{{ reg_form.last_name.label }} {{ reg_form.last_name }}</li>
-                        <li>{{ reg_form.email.label }} {{ reg_form.email }}</li>
-                    </ul> 
+                    <table class="table">
+                        <tbody>
+                            <tr><td>{{ reg_form.first_name.label }}</td><td>{{ reg_form.first_name }}</td></tr>
+                            <tr><td>{{ reg_form.last_name.label }}</td><td>{{ reg_form.last_name }}</td></tr>
+                            <tr><td>{{ reg_form.email.label }}</td><td>{{ reg_form.email }}</td></tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
@@ -84,7 +86,7 @@
                     {{ form.csrf }}
                     <input type="hidden" name="book_appmt"/>
                     <div>
-                        <table>
+                        <table class="table"> 
                            <tbody>
                                <tr><td>{{ form.title.label }}</td> <td>{{ form.title }}</td></tr>
                                <tr><td>{{ form.start_datetime.label }}</td> <td>{{ form.start_datetime }}</td></tr>

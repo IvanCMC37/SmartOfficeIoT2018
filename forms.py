@@ -1,6 +1,5 @@
-from wtforms import Form, TextField, validators, StringField, SelectField
+from wtforms import Form, TextField, validators, StringField, SelectField, DateField
 from flask_wtf import FlaskForm
-from wtforms.fields.html5 import DateField
   
 
 class AppointmentForm(FlaskForm):
