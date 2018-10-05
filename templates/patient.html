@@ -92,7 +92,7 @@
                                <tr><td>{{ form.start_datetime.label }}</td> <td>{{ form.start_datetime }}</td></tr>
                                <tr><td>{{ form.end_datetime.label }}</td><td>{{ form.end_datetime }}</td></tr>
                             <tr>
-                                <select required name="select_doctor" class="custom-select combo-box extra-bottom-margin">
+                                <select name="select_doctor" class="custom-select combo-box extra-bottom-margin">
                                     <option selected="">Select a doctor</option>
                                     {% for d in doctors %}
                                     <option value="{{ d.id }}">{{ d.first_name }} {{ d.last_name }}</option>
