@@ -1,7 +1,10 @@
 from flask import Flask
-from app import db, ma
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 import os
 
+db = SQLAlchemy()
+ma = Marshmallow()
 
 class Patient(db.Model):
     """Patient class for the database schema"""
