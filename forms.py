@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
   
 
 class AppointmentForm(FlaskForm):
+  doctor = SelectField('Type:', validators=[validators.required()])
   title = TextField('Type:', validators=[validators.required()])
   start_datetime = DateField('Start Date:', format ='%d/%m/%Y' , validators=[validators.required()])
   end_datetime = DateField('End Date:', format ='%d/%m/%Y', validators=[validators.required()])

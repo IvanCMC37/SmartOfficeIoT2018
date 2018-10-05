@@ -22,6 +22,7 @@ APP.config['SECRET_KEY'] = 'secret'
 
 db = SQLAlchemy(APP)
 ma = Marshmallow(APP)
+doctor_choices=None
 
 # Register api blueprints
 APP.register_blueprint(p_mod, url_prefix="/api")
@@ -74,13 +75,19 @@ def search_results(search):
 @APP.route("/patient", methods=["GET", "POST"])
 def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made and deleted"""
-    form = AppointmentForm()
-    reg_form = RegisterPatientForm()
-
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
     # Get all doctors and generate combo box values
     doctors = doctor_api.get_docs()
+    doctor_choices=[['','--None--']]
+    for doctor in doctors.data:
+        doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
+    form = AppointmentForm()
+    #form.doctor.choices=[('','--None--'), ('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')]
+    form.doctor.choices=doctor_choices
+    
+    reg_form = RegisterPatientForm()
+    
 
     # Set default patient to 1
     pat = patient_api.get_patient_by_object(1)
