@@ -87,13 +87,13 @@
                     <input type="hidden" name="book_appmt"/>
                     <div>
                         <table class="table"> 
-                           <tbody>
-                               <tr><td>{{ form.title.label }}</td> <td>{{ form.title }}</td></tr>
-                               <tr><td>{{ form.start_datetime.label }}</td> <td>{{ form.start_datetime }}</td></tr>
-                               <tr><td>{{ form.end_datetime.label }}</td><td>{{ form.end_datetime }}</td></tr>
-                            <tr>{{ form.doctor }}
-                            </tr>
-                            </tbody>
+                        <tbody>
+                            <tr><td>Select Doctor</td> <td>{{ form.doctor }}</td></tr>
+                            <tr><td>Appointment Year</td> <td>{{ form.year }}</td></tr>
+                            <tr><td>Appointment Month</td> <td>{{ form.month }}</td></tr>
+                            <tr><td>Appointment Date</td> <td>{{ form.day }}</td></tr>
+                            <!--<tr><td>Appointment Slot</td> <td>{{ form.slot }}</td></tr>-->
+                        </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">

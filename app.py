@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm
 import os, schema, json, config
+import requests
 
 APP = Flask(__name__)
 
@@ -74,6 +75,7 @@ def search_results(search):
 ##
 @APP.route("/patient", methods=["GET", "POST"])
 def patient_appointments():
+    print('patient GET OR POST')
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
@@ -83,8 +85,11 @@ def patient_appointments():
     for doctor in doctors.data:
         doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
     form = AppointmentForm()
-    #form.doctor.choices=[('','--None--'), ('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')]
     form.doctor.choices=doctor_choices
+    # Generate Days
+    date_list = []
+    date_list.extend(range(1, 32))
+    form.day.choices = [(str(x),str(x)) for x in date_list]
     
     reg_form = RegisterPatientForm()
     
@@ -100,18 +105,33 @@ def patient_appointments():
         return redirect(url_for('patient_appointments'))
 
     elif request.method == 'POST' and "book_appmt" in request.form:
+        print('patient POST book_appmt')
         # Submit form of appointment booking
-        start_datetime = form.start_datetime.data
-        end_datetime = form.end_datetime.data
+        #start_datetime = form.start_datetime.data
+        #end_datetime = form.end_datetime.data
+        doctor_id=request.form['doctor']
         
         if request.form['pat_id']:
             pat_id = request.form['pat_id']
         else:
             pat_id = 1
         print(pat_id)
-        title = form.title.data
-        d_id = request.form['select_doctor']
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, d_id)
+
+        # GET Doctor Available Appointments
+        input = {
+            "month":10,
+            "year":2018,
+            "doctor_id":doctor_id
+        }
+        avail_appmts=requests.post('http://10.132.155.20:5000/api/doctor/monthly_check', json=input).json()
+        print('avail_appmts---'+str(avail_appmts)) 
+
+        title = 'Patient Appointment'
+        for appmt in avail_appmts['days'] :
+            print('appmt---'+str(appmt))
+            start_datetime = appmt['start_time']
+            end_datetime = appmt['end_time']
+            patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, doctor_id)
         pat = patient_api.get_patient_by_object(pat_id)
         result = patient_api.get_patient_appointments(pat_id)
         print(result)
