@@ -21,4 +21,9 @@ gcloud sql instances patch smartoffice-db --authorized-networks=220.240.203.7
 #### rasppi time config
 sudo raspi-config  //should keep rasppi in UTC time for security reasons
 
+#### fixing a corrupted git
+delete .git folder, reclone git repo locally, copy .git folder back into project
+
+#### give github credentials for pushing/pulling
+git config credential.helper store
 
