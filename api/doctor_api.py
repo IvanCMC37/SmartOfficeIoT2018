@@ -131,6 +131,20 @@ def monthly_check():
 
     return jsonify({'days': respond})
 
+# Api to return list of event time of the day
+@d_mod.route("/doctor/daily_check", methods=["POST"])
+def daily_check():
+    input_json = request.json
+    print(len(input_json))
+    year = input_json['year']
+    month = input_json['month']
+    day = input_json['day']
+    doctor_id = input_json['doctor_id']
+
+    respond=doctor_calendar.daily_reader(int(year),int(month),int(day),int(doctor_id))
+
+    return jsonify({'days': respond})
+
 @d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
 def appoint_gcalendar():
     #  {
