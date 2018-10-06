@@ -13,7 +13,7 @@
             {%if doctor_id ==2%}
                 <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
             <!-- doctor2 -->
-                <iframe src="https://calendar.google.com/calendar/embed?src=3pjm535a9dnes869bmjc90ao78%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=3pjm535a9dnes869bmjc90ao78%40group.calendar.google.com&amp;color=%2323164E&amp;ctz=Australia%2FMelbourne" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
             {%endif%}
         </div>
         <div align ="left">
@@ -29,7 +29,6 @@
         </div>
         {%if doctor_id != 0%}
             <div align ="left">
-                <!-- <p>{{doctor_id}}</p> -->
                 <h3>Monthly quick assign for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
                 <form method="POST">
                     <p>Please choose year and month</p>
@@ -142,30 +141,23 @@
                     optionHTML ='';
                     optionHTML_2 ='';
                     min = ['00','30'];
-                    // console.log(hour_1);
-                    // console.log(hour_2);
-                    // console.log(hour_1>hour_2);
                     for(i =hour_1+1; i<=17; i++){
                         optionHTML +='<option value="'+i+'">'+i+'</option>';
                     }
                     hour_2_select.innerHTML=optionHTML;
                     hour_2 = parseInt(hour_2_select.value);
-                    // console.log(min[0]);
                     if(hour_2<17){
-                        // console.log("1");
                         for(i =0; i<min.length; i++){
                         optionHTML_2 +='<option value="'+min[i]+'">'+min[i]+'</option>';
                         }
                     }
                     else{
-                        // console.log("2");
                         optionHTML_2 +='<option value="'+"00"+'">'+"00"+'</option>';
                     }
                     minute_2_select.innerHTML=optionHTML_2;
                 }
                 hour_2_select.onchange = function(){
                     hour_2 = parseInt(hour_2_select.value);
-                    // h_start =9;
                     min = ['00','30'];
                     optionHTML ='';
                     if(hour_2==17){
@@ -177,10 +169,6 @@
                         }
                     }
                     minute_2_select.innerHTML=optionHTML;
-                    // console.log(hour_1);
-                    // console.log(hour_2);
-                    // console.log(hour_1>hour_2);
-                    
                 }
 
                 month_f2_select.onchange =function(){
@@ -209,52 +197,4 @@
                 }
 
         </script>
-        <!-- <div align="left">
-            <form method="POST">
-                    <select name="month_1">
-                        {% for x in date_list%}
-                            <option value={{x}}>{{x}}</option>
-                        {% endfor%}
-                    </select>
-                    <select name="date_1">
-                            {% for x in date_list%}
-                                <option value={{x}}>{{x}}</option>
-                            {% endfor%}
-                    </select>
-                    <select name="hour_1">
-                            {% for x in date_list%}
-                                <option value={{x}}>{{x}}</option>
-                            {% endfor%}
-                    </select>
-                    <select name="minute_1">
-                            {% for x in date_list%}
-                                <option value={{x}}>{{x}}</option>
-                            {% endfor%}
-                    </select>
-                    <br>
-                    <select name="month_2">
-                            {% for x in date_list%}
-                                <option value={{x}}>{{x}}</option>
-                            {% endfor%}
-                        </select>
-                        <select name="date_2">
-                                {% for x in date_list%}
-                                    <option value={{x}}>{{x}}</option>
-                                {% endfor%}
-                        </select>
-                        <select name="hour_2">
-                                {% for x in date_list%}
-                                    <option value={{x}}>{{x}}</option>
-                                {% endfor%}
-                        </select>
-                        <select name="minute_2">
-                                {% for x in date_list%}
-                                    <option value={{x}}>{{x}}</option>
-                                {% endfor%}
-                        </select>
-                    <br><br>
-                <input type="submit" >
-            </form>
-          </div> -->
-
 {% endblock content %}

@@ -10,7 +10,7 @@
             <script>
                 var server_url = '{{server_url}}';
                 setTimeout(function (){
-                    window.location.replace(server_url+"doctor/a");
+                    window.location.replace(server_url+"doctor/appointment");
                 }, 3000); 
             </script>
         </div> 
@@ -19,11 +19,6 @@
     <div align="center">
         <form method="POST">
                 <table>
-                    <!-- <tr>
-                        <td>
-                            <input type="text" name="date" readonly value="">
-                        </td>
-                    </tr> -->
                     <tr>
                         <td>
                             Patient ID : 
@@ -100,31 +95,4 @@
         </table>
     </div>
     {%endif%}
-    
-    <!-- <script>
-            function getCurrentDateTime(){
-                console.log("123123");
-                    var today = new Date();
-                    var dd = today.getDate();
-                    var mm = today.getMonth()+1; 
-                    var yyyy = today.getFullYear();
-                    var hh = today.getHours();
-                    var minutes = today.getMinutes();
-                    var sec = today.getSeconds();
-                    
-                    if(dd<10) 
-                    {
-                        dd='0'+dd;
-                    } 
-
-                    if(mm<10) 
-                    {
-                        mm='0'+mm;
-                    } 
-                    
-                    today = mm+'-'+dd+'-'+yyyy+' '+ hh+":"+minutes+":"+sec;
-                    
-                    document.getElementById("date").value ="today";
-                }
-        </script> -->
 {% endblock content %}

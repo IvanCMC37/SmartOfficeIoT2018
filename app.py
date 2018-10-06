@@ -14,6 +14,7 @@ from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 import requests
+
 bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -37,12 +38,10 @@ def homepage():
 
 @APP.route("/doctor", methods=['GET', 'POST'])
 def index():
-    # print(api_url)
     year_list = [2018,2019]
     month_list = [1,2,3,4,5,6,7,8,9,10,11,12]
     date_list = []
     date_list.extend(range(1, 32))
-    # print(date_list)
     doctor_id = 0
     form = CalendarForm()
     form_2 = CalendarForm_2()
@@ -50,15 +49,11 @@ def index():
     form_2.day_f2.choices = [(str(x),str(x)) for x in date_list]
 
     doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
-    # print(request.form)
-    # print(len(request.form))
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
         print(request.form['doctor_id'])
         doctor_id=int(request.form['doctor_id'])
     elif request.method == 'POST' and len(request.form)==3:
-        # print(len(request.form))
-        # print("Quick Assign Form")
         
         print(request.form)
         month = request.form['month']
@@ -70,11 +65,14 @@ def index():
             "year":year,
             "doctor_id":doctor_id
         }
+
         dup_check = requests.post('{}{}'.format(api_url,"doctor/duplicated_check"),json=input).json()
+
         if dup_check== False:
             r = requests.post('{}{}'.format(api_url,"doctor/quick_assign"),json=input)
         else:
             flash("{}-{} already creadted, can't create again!!!".format(year,month))
+
     elif request.method == 'POST' and len(request.form)==8:
         print(request.form)
         month = request.form['month']
@@ -104,6 +102,7 @@ def index():
         else:
             print("you can edit")
             r = requests.post('{}{}'.format(api_url,"doctor/update_event"),json=input)
+
     elif request.method == 'POST' and len(request.form)==4:
         print(request.form)
         month = request.form['month_f2']
@@ -129,11 +128,12 @@ def index():
     return render_template('doctor_calendar.html',form_2=form_2,form=form,doctor_id=doctor_id, doctor_infos= doctor_infos,year_list =year_list,month_list= month_list,date_list=date_list)
 
 
-@APP.route('/doctor/a', methods=['GET', 'POST'])
+@APP.route('/doctor/appointment', methods=['GET', 'POST'])
 def doctor_page_2():
     doctor_id = 0
     doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
     patient_infos = requests.get('{}{}'.format(api_url,"patient")).json()
+    
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
         print(request.form['doctor_id'])
@@ -144,8 +144,6 @@ def doctor_page_2():
         print("Proceeding to patient history page...")
 
         return redirect(url_for('doctor_page_3',patient_id=patient_id,doctor_id=doctor_id))
-        # return render_template('doctor_result.html',patient_id=patient_id,patient_infos=patient_infos,doctor_id=doctor_id, doctor_infos= doctor_infos )
-    # print(request.form)
     return render_template('doctor_appointment.html',patient_infos=patient_infos,doctor_id=doctor_id, doctor_infos= doctor_infos )
 
 @APP.route('/doctor/result', methods=['GET', 'POST'])
@@ -164,7 +162,7 @@ def doctor_page_3():
         now = datetime.datetime.now()
         defined_day = now.strftime("%Y-%m-%d")
         print(defined_day)
-        # print(patient_infos['first_name'])
+
         input ={
             "id":patient_id,
             "notes":request.form['notes'],
@@ -177,21 +175,18 @@ def doctor_page_3():
     else:
         doctor_id = request.args.get('doctor_id')
         patient_id = request.args.get('patient_id')
-        
         patient_histories = []
-        # print(server_url)
+
         if(patient_id==None or doctor_id==None):
             print("wrong use")
-            # return redirect(url_for('doctor_page_2'))
         else:
             logic = True
             print(patient_id)
             print(doctor_id)
+
             # doctor_info not needed
             doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
             patient_infos = requests.get('{}{}/{}'.format(api_url,"patient",patient_id)).json()
-            print(len(patient_infos))
-            # print(patient_infos['first_name'])
             patient_histories = requests.get('{}{}/{}'.format(api_url,"history",patient_id)).json()
             print(patient_histories)
 

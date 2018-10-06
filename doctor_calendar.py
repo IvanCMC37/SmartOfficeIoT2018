@@ -4,18 +4,9 @@ from datetime import timedelta
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
-# import credentials
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
-
-# Add more token files for different doctors
-# store = file.Storage('credentials/doctor_token_1.json')
-# creds = store.get()
-# if not creds or creds.invalid:
-#     flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
-#     creds = tools.run_flow(flow, store)
-# service = build('calendar', 'v3', http=creds.authorize(Http()))
 
 # Test format
 input_date=[]
@@ -36,13 +27,6 @@ def token_decider(doctor_num):
     # monthly_reader(2018,12,1)
     # main_calendar_appointer(1, 1)
 #     deletion_helper(2018,10,6,1)
-    # update_helper(2018,9,30,9,30,16,30,2)
-#     print(duplicated_calendar_checker(2018,12,2))
-    # for input_list in input_date:
-    #     print(input_list[0])
-    #     print(input_list[1])
-    # insertEvent_2(2019,2, 1)
-    # token_decider(2)
 
 def calendar_checker(service,calendar_summary):
     page_token = None
@@ -165,29 +149,10 @@ def insertEvent_2(inputYear, inputMonth, doctor_num):
 
     event = service.events().insert(calendarId=id, body=event).execute()
 
-    # print(event['id'])
     id_store=event['id']
-    # # First retrieve the instances from the API.
-    # instances = service.events().instances(calendarId=id, eventId=id_store).execute()
-    # # print(instances['items'][0])
-    # if(defined_day=="Saturday" or defined_day=="Sunday"):
-    #     instance = instances['items'][0]
-    #     instance['status'] = 'cancelled'
-    #     updated_instance = service.events().update(calendarId=id, eventId=instance['id'], body=instance).execute()
     
     first_event_check(id_store, defined_day, service,id)
     last_event_check(id_store, service,time_end_1,id)
-    # # Select the instance to cancel.
-    # instance = instances['items'][len(instances['items'])-1]
-    # if(time_end_1 in instance['end']['dateTime']):
-    #     print("include")
-    #     instance['status'] = 'cancelled'
-    # else:
-    #     print("not included")
-
-    # updated_instance = service.events().update(calendarId=id, eventId=instance['id'], body=instance).execute()
-
-    # Print the updated date.
     
     print('Event created: {}'.format(event.get('htmlLink')))
 
@@ -197,7 +162,6 @@ def insertEvent_2(inputYear, inputMonth, doctor_num):
 def first_event_check(id_store, defined_day, service,id):
     # First retrieve the instances from the API.
     instances = service.events().instances(calendarId=id, eventId=id_store).execute()
-    # print(instances['items'][0])
     if(defined_day=="Saturday" or defined_day=="Sunday"):
         instance = instances['items'][0]
         instance['status'] = 'cancelled'
@@ -232,10 +196,7 @@ def duplicated_calendar_checker(month_check,inputYear,inputMonth,inputDay,doctor
          # now = datetime.utcnow().isoformat() + 'Z'
         time_start = "{}-{}-{}T09:00:00+11:00".format(inputYear,inputMonth,inputDay)
         time_end = "{}-{:02d}-{}T17:00:00+11:00".format(inputYear,inputMonth,inputDay)
-   
 
-    # time_1 ="2018-09-01T00:00:00Z"
-    # time_2 ="2018-10-01T00:00:00Z"
     print(time_end)
     events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
                                         maxResults=5, singleEvents=True,
@@ -247,11 +208,6 @@ def duplicated_calendar_checker(month_check,inputYear,inputMonth,inputDay,doctor
         return True
     return False
 
-    # else:
-    #     print("not included")
-
-    # updated_instance = service.events().update(calendarId=id, eventId=instance['id'], body=instance).execute()
-
 def deletion_helper(inputYear,inputMonth,inputDay,doctor_num):
     # Swap doctor calendar token
     service = token_decider(doctor_num)
@@ -259,7 +215,6 @@ def deletion_helper(inputYear,inputMonth,inputDay,doctor_num):
     calendar_summary ="Work Day"
     id = id_checker(service,calendar_summary)
 
-    # now = datetime.utcnow().isoformat() + 'Z'
     time_start = "{}-{}-{}T0:00:00+10:00".format(inputYear,inputMonth,inputDay)
     time_end = "{}-{:02d}-{}T20:00:00+10:00".format(inputYear,inputMonth,inputDay)
     events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
@@ -312,8 +267,6 @@ def monthly_reader(inputYear,inputMonth,doctor_num):
         time_end = "{}-{:02d}-01T00:00:00+11:00".format(inputYear,inputMonth+1)
 
     # Call the Calendar API
-    # now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    # print('Getting the upcoming  events')
     events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
                                         maxResults=30, singleEvents=True,
                                         orderBy='startTime').execute()
@@ -330,8 +283,7 @@ def monthly_reader(inputYear,inputMonth,doctor_num):
         eventObj['start_time'] = start
         eventObj['end_time'] = end
         event_list.append(eventObj)
-    # print(event_list)
-    # print(len(event_list))
+
     return event_list
 
 def main_calendar_appointer(input_json, doctor_num):
