@@ -15,10 +15,12 @@ class AppointmentForm(FlaskForm):
  
 
 class RegisterPatientForm(FlaskForm):
+  """Define Register form"""
   first_name = TextField('First Name:', validators=[validators.required()])
   last_name = TextField('Last Name:', validators=[validators.required()])
   email = TextField('Email:', validators=[validators.required()])
 
 
 class PatientSearchForm(Form):
+  """Define Patient search form"""
   patient_number = StringField('Patient ID:', [validators.Length(min=1, max=5)])

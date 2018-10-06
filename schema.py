@@ -1,10 +1,14 @@
 from flask import Flask
-from app import db, ma
 from marshmallow import fields
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 import os
 
+db = SQLAlchemy()
+ma = Marshmallow()
 
 class Patient(db.Model):
+    """Patient class for the database schema"""
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), unique=False, nullable=False)
     last_name = db.Column(db.String(30), unique=False, nullable=False)

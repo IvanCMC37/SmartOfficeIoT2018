@@ -54,11 +54,12 @@ tr {
 */
 .modal {
     background-color: rgba(0,0,0,0.5);
+    top: -50px !important;
 }
 
 .modal2 {
     position: fixed;
-    top: 0;
+    top: -50px;
     right: 0;
     bottom: 0;
     left: 0;

@@ -1,7 +1,11 @@
 
 #### Set development mode as default for flask
-echo "export FLASK_ENV=development" >> ~/.bashrc
-source ~/.bashrc
+1. echo "export FLASK_ENV=development" >> ~/.bashrc
+   source ~/.bashrc
+2. (Better way)
+Add to .flaskenv file
+FLASK_APP=app.py
+FLASK_ENV=development
 
 #### Starting the virtual environment
 'source venv/bin/activate'. To stop run 'deactivate'
@@ -21,4 +25,11 @@ gcloud sql instances patch smartoffice-db --authorized-networks=220.240.203.7
 #### rasppi time config
 sudo raspi-config  //should keep rasppi in UTC time for security reasons
 
+#### fixing a corrupted git
+delete .git folder, reclone git repo locally, copy .git folder back into project
 
+#### give github credentials for pushing/pulling
+git config credential.helper store
+
+#### solving the circular import issue when using sqlalchemy and marshmallow
+use db.init_app(APP) and ma.init_app(APP) and import db and ma from another module

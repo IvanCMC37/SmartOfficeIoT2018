@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_file
 from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm
 import os, schema, json, config
 import requests
@@ -15,14 +12,11 @@ from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 
-bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
-db = SQLAlchemy(APP)
-ma = Marshmallow(APP)
 doctor_choices=None
 
 # Register api blueprints
@@ -30,6 +24,8 @@ APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
 
+db.init_app(APP)
+ma.init_app(APP)
 
 @APP.route("/")
 def homepage():
@@ -50,24 +46,24 @@ def index():
     return render_template('doctor_index.html', form=search)
 
 
-@APP.route('/results')
-def search_results(search):
-    results = []
-    qry = None
-    search_string = search.data['patient_number']
-    print(search_string)
-    if len(search_string)>0:
-        qry = schema.User.query.get(search_string)
-        print(qry)
-        results =  schema.user_schema.jsonify(qry)
-        # return redirect('/doctor')
-    if qry==None:
-        flash('No record on this patient number!')
-        return redirect('/doctor')
-    else:
+# @APP.route('/results')
+# def search_results(search):
+#     results = []
+#     qry = None
+#     search_string = search.data['patient_number']
+#     print(search_string)
+#     if len(search_string)>0:
+#         qry = schema.User.query.get(search_string)
+#         print(qry)
+#         results =  schema.user_schema.jsonify(qry)
+#         # return redirect('/doctor')
+#     if qry==None:
+#         flash('No record on this patient number!')
+#         return redirect('/doctor')
+#     else:
         
-        # display results
-        return render_template('doctor_result.html', results=qry)
+#         # display results
+#         return render_template('doctor_result.html', results=qry)
 
 
 ##
@@ -167,28 +163,28 @@ def patient_appointments():
 ##
 # CLERK
 ##
-@APP.route("/clerk", methods=["GET", "POST"])
-def clerks_page():
-    """Displays all the active appointments and allows new appointments to be made"""
-    form = AppointmentForm()
+# @APP.route("/clerk", methods=["GET", "POST"])
+# def clerks_page():
+#     """Displays all the active appointments and allows new appointments to be made"""
+#     form = AppointmentForm()
 
-    if request.method == 'POST':
-        start_datetime = form.start_datetime.data
-        end_datetime = form.end_datetime.data
+#     if request.method == 'POST':
+#         start_datetime = form.start_datetime.data
+#         end_datetime = form.end_datetime.data
 
-        patient = schema.Patient.query.get(1)
-        new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
-        schema.db.session.add(new_appointment)
-        schema.db.session.commit()
+#         patient = schema.Patient.query.get(1)
+#         new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
+#         schema.db.session.add(new_appointment)
+#         schema.db.session.commit()
 
-        # need to refresh page to update appointments
-        return redirect(url_for('clerks_page'))
+#         # need to refresh page to update appointments
+#         return redirect(url_for('clerks_page'))
 
-    all_appointments = schema.Appointment.query.all()
-    result = schema.appointments_schema.dump(all_appointments)
-    print(result)
+#     all_appointments = schema.Appointment.query.all()
+#     result = schema.appointments_schema.dump(all_appointments)
+#     print(result)
 
-    return render_template('clerk.html', form=form, all_appointments=result.data)
+#     return render_template('clerk.html', form=form, all_appointments=result.data)
 
 
 
