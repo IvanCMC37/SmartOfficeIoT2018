@@ -23,7 +23,7 @@ def appointment_detail(id):
 
 @p_mod.route("/patientAppmts/<id>", methods=["GET"])
 def get_patient_appointments(id):
-    print("id---"+id)
+    print("id---"+str(id))
     """Return appointments for patient as JSON"""
     #if id:
     all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=id).join(schema.Doctor).join(schema.Patient).all()
@@ -41,6 +41,7 @@ def get_patient_by_object(pat):
 
 def delete_patient_appointment(del_id):
     """Deletes appointment by patient"""
+    print('del_id---'+del_id)
     appointment = schema.Appointment.query.get(del_id)
     schema.db.session.delete(appointment)
     schema.db.session.commit()

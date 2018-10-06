@@ -4,9 +4,9 @@ from flask_wtf import FlaskForm
 
 class AppointmentForm(FlaskForm):
   year = SelectField('year', choices=[('2018','2018'),('2019','2019')])
-  month = SelectField('month', choices=[("1","1"),("2","2"),("3","3"),("4","4"),("5","5"),("6","6"),("7","7"),("8","8"),("9","9"),("10","10"),("11","11"),("12","12")])
-  day = SelectField('day',choices= [])
-  #slot = SelectField('slot', validators=[validators.required()])
+  month = SelectField('month', choices=[("","--None--"),("1","January"),("2","February"),("3","March"),("4","April"),("5","May"),("6","June"),("7","July"),("8","August"),("9","September"),("10","October"),("11","Novemeber"),("12","December")], validators=[validators.required()])
+  day = SelectField('day', choices= [], validators=[validators.required()])
+  slot = SelectField('slot',choices= [("","--None--")], validators=[validators.required()])
   patient= SelectField('patient', validators=[validators.required()])
   doctor = SelectField('doctor', validators=[validators.required()])
   #title = TextField('Type:', validators=[validators.required()])

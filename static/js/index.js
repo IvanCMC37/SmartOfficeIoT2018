@@ -3,13 +3,67 @@ $(document).ready(function() {
     var month_select = document.getElementById('month');
     var day_select = document.getElementById('day');
     getPatientAppmts($("#patient").val());
-    console.log("$(patient.value---"+$("#patient").val())
+    console.log("$(patient.value---"+$("#patient").val());
 
     //On Patient change - Populate Appointments
     $("#patient").change(function(){
         console.log("this.value---"+this.value)
         getPatientAppmts(this.value);
+        $("#pat_id").val(this.value);
     });
+
+    //On Day change - Populate Appointment Slots
+    $("#day").change(function(){
+        console.log("$(year.value---"+$("#year").val());
+        console.log("$(month.value---"+$("#month").val());
+        console.log("this.value---"+this.value)
+        console.log("$(doctor.value---"+$("#doctor").val());
+        var year=$("#year").val();
+        var month=$("#month").val();
+        var day=this.value;
+        var doctorId=$("#doctor").val();
+        getDoctorAvailableSlots(year, month, day, doctorId);
+    });
+
+    //Fetch Doctor Availalable Appointment Slots
+    function getDoctorAvailableSlots(year, month, day, doctorId){
+        input = {
+            "month":month,
+            "year":year,
+            "day":day,
+            "doctor_id":doctorId
+        }
+        $.ajax({
+            type: "POST",
+            url: "http://10.132.155.20:5000/api/doctor/daily_check",
+            data: JSON.stringify(input),
+            success: function(response) {
+                console.log((JSON.stringify(response)));
+                //response="{"days":[{"end_time":"2018-11-26T17:00:00+11:00","start_time":"2018-11-26T09:00:00+11:00"}]}";
+                if(response.days[0]!= null){
+                    var start_time=new Date(response.days[0].start_time);
+                    var end_time=new Date(response.days[0].end_time);
+                    console.log("start_time---"+start_time);
+                    console.log("end_time---"+end_time);
+                    var timeDifference=(end_time-start_time)/60000;
+                    console.log("timeDifference---"+timeDifference);
+                    var timeSlots=[];
+                    console.log("new Date(start_time.getTime() + 30*60000)---"+new Date(start_time.getTime() + 30*60000));
+                    var i=0;
+                    while(i<=timeDifference){
+                        timeSlots.push(new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
+                        //$("#slot").append($("<option />").val(new Date(start_time.getTime() + i*60000)).text(this.Name), new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
+                        var str="<option value='" +new Date(start_time.getTime() + i*60000) + "'>" +new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) + "</option>";
+                        $("#slot").append(str);
+                        i+=30;
+                    }
+                    console.log("timeSlots---"+timeSlots);
+                }
+            },
+            contentType:"application/json",
+            dataType:"json",
+        });
+    }
 
     //Fetch Patient Appointments
     function getPatientAppmts(patientId){
@@ -18,15 +72,18 @@ $(document).ready(function() {
         $.ajax({url: "/api/patientAppmts/"+patientId, success: function(result){
             console.log("patientResultSTRINGIFY---"+JSON.stringify(result));
             console.log("patientResult---"+result);
-            patientResult=result[0];
-            var row="<tr>";
-                row=row + "<td>"+ patientResult.id +"</td>";
-                row=row + "<td>"+ patientResult.title +"</td>";
-                row=row + "<td>"+ patientResult.start_datetime +"</td>";
-                row=row + "<td>"+ patientResult.end_datetime +"</td>";
-                row=row + "<td>"+ patientResult.doctor.first_name +" "+patientResult.doctor.last_name +"</td>";
+            var row;
+            for(var i=0;i<result.length;i++){
+                row="<tr>";
+                row=row + "<td>"+ result[i].id +"</td>";
+                row=row + "<td>"+ result[i].title +"</td>";
+                row=row + "<td>"+ result[i].start_datetime +"</td>";
+                row=row + "<td>"+ result[i].end_datetime +"</td>";
+                row=row + "<td>"+ result[i].doctor.first_name +" "+result[i].doctor.last_name +"</td>";
+                row=row + "<td>"+ "<form action='/patient' method='post'><input type='hidden' name='delete_appmt' value='"+result[i].id+"'><input type='submit' class='btn btn-secondary' value='Delete'/></form></td>";   
                 row=row + "</tr>";
-            $("#table tbody").append(row);
+                $("#table tbody").append(row);
+            }            
         }});
     }
 

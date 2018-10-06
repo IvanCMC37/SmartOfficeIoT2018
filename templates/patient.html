@@ -28,23 +28,6 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <!--<tbody>
-            {% for a in all_appointments %}
-              <tr>
-                <td>{{ a.id }}</td>
-                <td>{{ a.title }}</td>
-                <td>{{ a.start_datetime }}</td>
-                <td>{{ a.end_datetime }}</td>
-                <td>{{ a.doctor.first_name }} {{ a.doctor.last_name }}</td>
-                <td>
-                    <form action="{{ url_for('patient_appointments') }}" method="post">
-                        <input type="hidden" name="delete_appmt" value="{{ a.id }}">
-                        <input type="submit" class="btn btn-secondary" value="Delete"/>
-                    </form>
-                </td>      
-              </tr>
-            {% endfor %}
-            </tbody>-->
             <tbody id="tbody"></tbody>
         </table>
    </div>
@@ -94,12 +77,12 @@
                             <tr><td>Appointment Year</td> <td>{{ form.year }}</td></tr>
                             <tr><td>Appointment Month</td> <td>{{ form.month }}</td></tr>
                             <tr><td>Appointment Date</td> <td>{{ form.day }}</td></tr>
-                            <!--<tr><td>Appointment Slot</td> <td>{{ form.slot }}</td></tr>-->
+                            <tr><td>Appointment Slot</td> <td>{{ form.slot }}</td></tr>
                         </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="pat_id" value ={{pat_id}}>
+                        <input id="pat_id" type="hidden" name="pat_id" value="">
                         <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
                     </div>
                 </form>           

@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm
 import os, schema, json, config
 from schema import db, ma
+from datetime import timedelta, datetime
 import requests
 
 APP = Flask(__name__)
@@ -84,15 +85,15 @@ def patient_appointments():
     form.patient.choices=patient_choices
     # Get all doctors and generate combo box values
     doctors = doctor_api.get_docs()
-    doctor_choices=[['','--None--']]
+    doctor_choices=[]
     for doctor in doctors.data:
         doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
     form.doctor.choices=doctor_choices
     # Generate Days
-    date_list = []
-    date_list.extend(range(1, 32))
-    form.day.choices = [(str(x),str(x)) for x in date_list]
-    
+    date_list = [("","--None--")]
+    form.day.choices = date_list
+    # date_list.extend(range(1, 32))
+    # form.day.choices = [(str(x),str(x)) for x in date_list]
     reg_form = RegisterPatientForm()
     
 
@@ -119,21 +120,20 @@ def patient_appointments():
             pat_id = 1
         print(pat_id)
 
-        # GET Doctor Available Appointments
-        input = {
-            "month":10,
-            "year":2018,
-            "doctor_id":doctor_id
-        }
-        avail_appmts=requests.post('http://10.132.155.20:5000/api/doctor/monthly_check', json=input).json()
-        print('avail_appmts---'+str(avail_appmts)) 
-
+        start_datetime = request.form['slot']
+        print(start_datetime)
+        print(type(start_datetime))
+        #Thu Oct 04 2018 14:30:00 GMT+1000
+        start_datetime=start_datetime.replace(' (Australian Eastern Standard Time)','')
+        start_datetime= datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
+        print(start_datetime)
+        print(type(start_datetime))
         title = 'Patient Appointment'
-        for appmt in avail_appmts['days'] :
-            print('appmt---'+str(appmt))
-            start_datetime = appmt['start_time']
-            end_datetime = appmt['end_time']
-            patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, doctor_id)
+        # for appmt in avail_appmts['days'] :
+        #     print('appmt---'+str(appmt))
+        #     start_datetime = appmt['start_time']
+        #     end_datetime = appmt['end_time']
+        patient_api.add_patient_appointment(start_datetime, start_datetime+timedelta(minutes=30), title, pat_id, doctor_id)
         pat = patient_api.get_patient_by_object(pat_id)
         result = patient_api.get_patient_appointments(pat_id)
         print(result)
