@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_file
 from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm
 import os, schema, json, config
+from schema import db, ma
 import requests
 
 APP = Flask(__name__)
