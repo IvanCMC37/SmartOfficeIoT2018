@@ -8,11 +8,6 @@ from oauth2client import file, client, tools
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
-# Test format
-input_date=[]
-input_date.append(["2018-10-1T09:00:00","2018-10-1T17:00:00"])
-
-
 def token_decider(doctor_num):
     store = file.Storage('credentials/doctor_token_{}.json'.format(doctor_num))
     creds = store.get()
@@ -110,7 +105,7 @@ def event_checker(id,service):
         print(start, event['summary'])
 
 # Create monthly timetable
-def insertEvent_2(inputYear, inputMonth, doctor_num):
+def insertMonthlyEvents(inputYear, inputMonth, doctor_num):
     # Swap doctor calendar token
     service = token_decider(doctor_num)
     calendar_summary ="Work Day"
@@ -319,19 +314,21 @@ def daily_reader(inputYear,inputMonth,inputDay,doctor_num):
 
     return event_list
 
-def main_calendar_appointer(input_json, doctor_num):
+def main_calendar_appointer(start_datetime,end_datetime, doctor_num, patient_num):
     service = token_decider(doctor_num)
-    calendar_summary ="Patient Appointment"
+    calendar_summary = "Patient Appointment"
     id = id_checker(service,calendar_summary)
     # for inputDate_list in inputDate:
-    time_start = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_1'],input_json['minute_1'])
-    time_end = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_2'],input_json['minute_2'])
+    # time_start = start_datetime
+    # time_end = end_datetime
+    time_start = "{}-{}-{}T{}:{}:00".format(start_datetime.year, start_datetime.month, start_datetime.day, start_datetime.hour, start_datetime.minute)
+    time_end = "{}-{}-{}T{}:{}:00".format(end_datetime.year, end_datetime.month, end_datetime.day, end_datetime.hour, end_datetime.minute)
     print(time_start)
     print(time_end)
     event = {
         'summary': 'Patient appointment',
         'location': 'SmartOffice',
-        'description': 'Medical appointment with patient no.{}'.format(input_json['id']),
+        'description': 'Medical appointment with patient no.{}'.format(patient_num),
         'start': {
             'dateTime': time_start,
             'timeZone': 'Australia/Melbourne',
@@ -350,6 +347,25 @@ def main_calendar_appointer(input_json, doctor_num):
     event_checker(id,service)
     return event_
 
+# Delete single event from doctor appointment calendar
+def appointment_deleter(start_datetime,end_datetime, doctor_num):
+    # Swap doctor calendar token
+    service = token_decider(doctor_num)
+    calendar_summary = "Patient Appointment"
+    id = id_checker(service,calendar_summary)
+
+    time_start = "{}-{}-{}T{}:{}:00+11:00".format(start_datetime.year, start_datetime.month, start_datetime.day, start_datetime.hour, start_datetime.minute)
+    time_end = "{}-{}-{}T{}:{}:01+11:00".format(end_datetime.year, end_datetime.month, end_datetime.day, end_datetime.hour, end_datetime.minute)
+    events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
+                                        maxResults=1, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['id'])
+        event['status']='cancelled'
+        service.events().update(calendarId=id, eventId=event['id'], body=event).execute()
+    return event
 
 # if __name__ == '__main__':
 #     main()
