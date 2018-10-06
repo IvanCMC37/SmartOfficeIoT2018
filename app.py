@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
-from flask import Flask, render_template, request, jsonify, redirect, url_for, flash
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from wtforms_sqlalchemy.fields import QuerySelectField
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_file
 from forms import AppointmentForm, PatientSearchForm,CalendarForm,CalendarForm_2
-import os, schema, json, config
+from schema import db, ma
+import os, json, config, schema
+
 APP = Flask(__name__)
 import datetime
 from api.patient_api import p_mod
@@ -15,15 +13,13 @@ from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
 import requests
 
-bootstrap = Bootstrap(APP)
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
-db = SQLAlchemy(APP)
-ma = Marshmallow(APP)
 
+# Register api blueprints
 APP.register_blueprint(p_mod, url_prefix="/api")
 APP.register_blueprint(d_mod, url_prefix="/api")
 APP.register_blueprint(c_mod, url_prefix="/api")
@@ -31,9 +27,17 @@ doc_list=[]
 api_url= ""
 server_url=""
 
+db.init_app(APP)
+ma.init_app(APP)
+
 @APP.route("/")
 def homepage():
     return render_template('home.html', title='Home')
+
+
+@APP.route("/about")
+def aboutpage():
+    return render_template('about.html', title='About')
 
 
 @APP.route("/doctor", methods=['GET', 'POST'])
@@ -200,7 +204,16 @@ def doctor_page_3():
 def patient_appointments():
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
+    reg_form = RegisterPatientForm()
 
+    # Get all patients and generate combo box values
+    patients = patient_api.get_reg_patients()
+    # Get all doctors and generate combo box values
+    doctors = doctor_api.get_docs()
+
+    # Set default patient to 1
+    pat = patient_api.get_patient_by_object(1)
+    
     if request.method == 'POST' and "delete_appmt" in request.form:
         # Deletes the appointment by id  
         del_id = request.form['delete_appmt']
@@ -212,45 +225,67 @@ def patient_appointments():
         # Submit form of appointment booking
         start_datetime = form.start_datetime.data
         end_datetime = form.end_datetime.data
-        title = form.title.data
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title)
         
-        return redirect(url_for('patient_appointments'))   
+        if request.form['pat_id']:
+            pat_id = request.form['pat_id']
+        else:
+            pat_id = 1
+        print(pat_id)
+        title = form.title.data
+        d_id = request.form['select_doctor']
+        patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, d_id)
+        pat = patient_api.get_patient_by_object(pat_id)
+        result = patient_api.get_patient_appointments(pat_id)
+        print(result)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
 
-    # Gets all appoinments in list format and json format from api
-    all_appointments = patient_api.get_patient_appointments()
-    result = patient_api.get_patient_appointments_json()
+    elif request.method == 'POST' and "reg_patient" in request.form:
+        # Register a patient
+        first_name = reg_form.first_name.data
+        last_name = reg_form.last_name.data
+        email = reg_form.email.data
+        patient_api.reg_patient(first_name, last_name, email)
 
-    return render_template('patient.html', form=form, all_appointments=result.data)
+        return redirect(url_for('patient_appointments'))
+    
+    elif request.method == 'POST' and 'select_patient' in request.form:
+        # Select a patient from the combo box and display appointments
+        pat_id = request.form['select_patient']
+        result = patient_api.get_patient_appointments(pat_id)
+        pat = patient_api.get_patient_by_object(pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
+    
+    result = patient_api.get_patient_appointments()
 
-
+    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
 
 
 ##
 # CLERK
 ##
-@APP.route("/clerk", methods=["GET", "POST"])
-def clerks_page():
-    """Displays all the active appointments and allows new appointments to be made"""
-    form = AppointmentForm()
+# @APP.route("/clerk", methods=["GET", "POST"])
+# def clerks_page():
+#     """Displays all the active appointments and allows new appointments to be made"""
+#     form = AppointmentForm()
 
-    if request.method == 'POST':
-        start_datetime = form.start_datetime.data
-        end_datetime = form.end_datetime.data
+#     if request.method == 'POST':
+#         start_datetime = form.start_datetime.data
+#         end_datetime = form.end_datetime.data
 
-        patient = schema.Patient.query.get(1)
-        new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
-        schema.db.session.add(new_appointment)
-        schema.db.session.commit()
+#         patient = schema.Patient.query.get(1)
+#         new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
+#         schema.db.session.add(new_appointment)
+#         schema.db.session.commit()
 
-        # need to refresh page to update appointments
-        return redirect(url_for('clerks_page'))
+#         # need to refresh page to update appointments
+#         return redirect(url_for('clerks_page'))
 
-    all_appointments = schema.Appointment.query.all()
-    result = schema.appointments_schema.dump(all_appointments)
-    print(result)
+#     all_appointments = schema.Appointment.query.all()
+#     result = schema.appointments_schema.dump(all_appointments)
+#     print(result)
 
-    return render_template('clerk.html', form=form, all_appointments=result.data)
+#     return render_template('clerk.html', form=form, all_appointments=result.data)
+
 
 
 # Launch Application
@@ -261,4 +296,4 @@ if __name__ == "__main__":
     api_url = "http://{}:{}/api/".format(host[0],5000)
     server_url = "http://{}:{}/".format(host[0],5000)
     APP.run(host=host[0], port=5000, debug=True)
-    
+

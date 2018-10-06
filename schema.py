@@ -1,9 +1,13 @@
 from flask import Flask
-from app import db, ma
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 import os
 
+db = SQLAlchemy()
+ma = Marshmallow()
 
 class Patient(db.Model):
+    """Patient class for the database schema"""
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), unique=False, nullable=False)
     last_name = db.Column(db.String(30), unique=False, nullable=False)
@@ -23,6 +27,7 @@ class Patient(db.Model):
 
 
 class Doctor(db.Model):
+    __tablename__ = 'doctor'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), unique=False, nullable=False)
     last_name = db.Column(db.String(30), unique=False, nullable=False)
@@ -42,6 +47,7 @@ class Doctor(db.Model):
 
 
 class Appointment(db.Model):
+    __tablename__ = 'appointment'
     id = db.Column(db.Integer, primary_key=True)
     start_datetime = db.Column(db.DateTime, unique = False)
     end_datetime = db.Column(db.DateTime, unique = False)
@@ -82,19 +88,19 @@ class PatientHistory(db.Model):
 class PatientSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','first_name', 'last_name', 'email')
+        fields = ('id', 'first_name', 'last_name', 'email')
 
 
 class DoctorSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','first_name', 'last_name', 'email', 'specialization')
+        fields = ('id', 'first_name', 'last_name', 'email', 'specialization')
 
 
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id', 'start_datetime', 'end_datetime', 'title')
+        fields = ('id','start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor_id')
 
 
 class PatientHistorySchema(ma.Schema):
