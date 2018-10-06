@@ -2,7 +2,35 @@ $(document).ready(function() {
     var year_select = document.getElementById('year');
     var month_select = document.getElementById('month');
     var day_select = document.getElementById('day');
+    getPatientAppmts($("#patient").val());
+    console.log("$(patient.value---"+$("#patient").val())
 
+    //On Patient change - Populate Appointments
+    $("#patient").change(function(){
+        console.log("this.value---"+this.value)
+        getPatientAppmts(this.value);
+    });
+
+    //Fetch Patient Appointments
+    function getPatientAppmts(patientId){
+        $("#table tbody tr").empty();
+        console.log("patientId---"+patientId)
+        $.ajax({url: "/api/patientAppmts/"+patientId, success: function(result){
+            console.log("patientResultSTRINGIFY---"+JSON.stringify(result));
+            console.log("patientResult---"+result);
+            patientResult=result[0];
+            var row="<tr>";
+                row=row + "<td>"+ patientResult.id +"</td>";
+                row=row + "<td>"+ patientResult.title +"</td>";
+                row=row + "<td>"+ patientResult.start_datetime +"</td>";
+                row=row + "<td>"+ patientResult.end_datetime +"</td>";
+                row=row + "<td>"+ patientResult.doctor.first_name +" "+patientResult.doctor.last_name +"</td>";
+                row=row + "</tr>";
+            $("#table tbody").append(row);
+        }});
+    }
+
+    //On Month select - Populate Days 
     month_select.onchange =function(){
         month = month_select.value;
         year = year_select.value;

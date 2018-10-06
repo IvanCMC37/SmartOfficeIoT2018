@@ -77,14 +77,19 @@ def search_results(search):
 def patient_appointments():
     print('patient GET OR POST')
     """Displays all the active appointments and allows new appointments to be made and deleted"""
+    form = AppointmentForm()
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
+    #patient_choices=[['','--None--']]
+    patient_choices=[]
+    for patient in patients.data:
+        patient_choices.append([patient['id'], patient['first_name'] + ' ' + patient['last_name']])
+    form.patient.choices=patient_choices
     # Get all doctors and generate combo box values
     doctors = doctor_api.get_docs()
     doctor_choices=[['','--None--']]
     for doctor in doctors.data:
         doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
-    form = AppointmentForm()
     form.doctor.choices=doctor_choices
     # Generate Days
     date_list = []
@@ -153,9 +158,10 @@ def patient_appointments():
         pat = patient_api.get_patient_by_object(pat_id)
         return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
     
-    result = patient_api.get_patient_appointments()
+    #result = patient_api.get_patient_appointments()
 
-    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
+    #return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
+    return render_template('patient.html', form=form, reg_form=reg_form, patients=patients.data, doctors = doctors.data, pat=pat)
 
 
 ##

@@ -6,17 +6,18 @@
     <span class="extra-bottom-margin">Change Patient:</span>
     <!-- Select a patient from the combox -->
     <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
-        <select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
+        <!--<select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
             <option selected="">Select a patient</option>
             {% for p in patients %}
             <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>
             {% endfor %}
-        </select>  
+        </select>-->
+        {{form.patient}}  
     </form>
-    <h3 class="extra-top-padding extra-bottom-padding">{{ pat.first_name }}'s appointments</h3>
+    <h3 class="extra-top-padding extra-bottom-padding">Patient Appointments</h3>
     <!-- Display all appointments based on the patient selected -->
     <div>
-        <table class="table table-hover table-spacing">
+        <table id="table" class="table table-hover table-spacing">
             <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -27,7 +28,7 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
+            <!--<tbody>
             {% for a in all_appointments %}
               <tr>
                 <td>{{ a.id }}</td>
@@ -43,7 +44,8 @@
                 </td>      
               </tr>
             {% endfor %}
-            </tbody>
+            </tbody>-->
+            <tbody id="tbody"></tbody>
         </table>
    </div>
    <!-- Modal for registering a patient -->
