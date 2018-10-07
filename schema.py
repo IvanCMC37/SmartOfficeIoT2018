@@ -1,9 +1,14 @@
 from flask import Flask
-from app import db, ma
+from marshmallow import fields
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 import os
 
+db = SQLAlchemy()
+ma = Marshmallow()
 
 class Patient(db.Model):
+    """Patient class for the database schema"""
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), unique=False, nullable=False)
     last_name = db.Column(db.String(30), unique=False, nullable=False)
@@ -23,6 +28,7 @@ class Patient(db.Model):
 
 
 class Doctor(db.Model):
+    __tablename__ = 'doctor'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(30), unique=False, nullable=False)
     last_name = db.Column(db.String(30), unique=False, nullable=False)
@@ -42,9 +48,10 @@ class Doctor(db.Model):
 
 
 class Appointment(db.Model):
+    __tablename__ = 'appointment'
     id = db.Column(db.Integer, primary_key=True)
-    start_datetime = db.Column(db.DateTime, unique = False)
-    end_datetime = db.Column(db.DateTime, unique = False)
+    start_datetime = db.Column(db.String(50), unique = False)
+    end_datetime = db.Column(db.String(50), unique = False)
     title = db.Column(db.String(255), unique = False)
 
     def __init__(self, start_datetime, end_datetime, title, patient_id, doctor_id):
@@ -67,15 +74,16 @@ class PatientHistory(db.Model):
     diagnoses = db.Column(db.String(50), unique=False, nullable=False)
     date = db.Column(db.Date, unique = False)
 
-    def __init__(self, notes, diagnoses,date):
+    def __init__(self, notes, diagnoses,date,patient_id):
         self.notes = notes
         self.diagnoses = diagnoses
         self.date = date
+        self.patient_id = patient_id
 
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
     def __repr__(self):
-        return 'PatientHistory(%s,%s, %s)' % (self.date,self.notes, self.diagnoses)
+        return 'PatientHistory(%s,%s, %s, %s)' % (self.date,self.notes, self.diagnoses, self.patient_id)
 
 
 class PatientSchema(ma.Schema):
@@ -93,13 +101,19 @@ class DoctorSchema(ma.Schema):
 class AppointmentSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','start_datetime', 'end_datetime', 'title')
+        fields = ('id','start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor_id')
+
+class AppointmentWithDoctorSchema(ma.Schema):
+    doctor = fields.Nested(DoctorSchema, only=('first_name', 'last_name'))
+    class Meta:
+        # Fields to expose
+        fields = ('id','start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor')       
 
 
 class PatientHistorySchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id','date','notes', 'diagnoses')
+        fields = ('id','date','notes', 'diagnoses','patient_id')
 
 patient_schema = PatientSchema()
 patients_schema = PatientSchema(many=True)
@@ -109,6 +123,7 @@ doctors_schema = DoctorSchema(many=True)
 
 appointment_schema = AppointmentSchema()
 appointments_schema = AppointmentSchema(many=True)
+appointments_with_doctor_schema = AppointmentWithDoctorSchema(many=True)
 
 patient_history_schema = PatientHistorySchema()
 patient_histories_schema = PatientHistorySchema(many=True)

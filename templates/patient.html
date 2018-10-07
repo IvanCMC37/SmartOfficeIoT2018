@@ -1,22 +1,17 @@
 {% extends 'layout.html' %}
-
 {% block content %}
     <h1 class="extra-top-padding extra-bottom-padding">Appointments</h1>
     <button id="modalBtn" type="button" class="btn btn-primary extra-bottom-margin">Book Appointment</button>
     <button id="registerModal" type="button" class="btn btn-info extra-bottom-margin">Register Patient</button>
     <span class="extra-bottom-margin">Change Patient:</span>
+    <!-- Select a patient from the combox -->
     <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
-
-        <select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
-                <option selected="">Select a patient</option>
-                {% for p in patients %}
-                <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>
-                {% endfor %}
-        </select>  
+        {{form.patient}}  
     </form>
-    <h3 class="extra-top-padding extra-bottom-padding">This persons appointments</h3>
+    <h3 class="extra-top-padding extra-bottom-padding">Patient Appointments</h3>
+    <!-- Display all appointments based on the patient selected -->
     <div>
-        <table class="table table-hover table-spacing">
+        <table id="table" class="table table-hover table-spacing">
             <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -27,25 +22,10 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            {% for a in all_appointments %}
-            <tbody>
-              <tr>
-                <td>{{ a.id }}</td>
-                <td>{{ a.title }}</td>
-                <td>{{ a.start_datetime }}</td>
-                <td>{{ a.end_datetime }}</td>
-                <td>doctor</td>
-                <td>
-                    <form action="{{ url_for('patient_appointments') }}" method="post">
-                        <input type="hidden" name="delete_appmt" value="{{ a.id }}">
-                        <input type="submit" class="btn btn-secondary" value="Delete"/>
-                    </form>
-                </td>      
-              </tr>
-            </tbody>
-            {% endfor %}
+            <tbody id="tbody"></tbody>
         </table>
    </div>
+   <!-- Modal for registering a patient -->
    <div class="modal2">
     <div class="modal-content" id="register-modal">
         <div class="modal-header primary">
@@ -57,11 +37,13 @@
                 {{ form.csrf }}
                 <input type="hidden" name="reg_patient"/>
                 <div>
-                    <ul>
-                        <li>{{ reg_form.first_name.label }} {{ reg_form.first_name }}</li>
-                        <li>{{ reg_form.last_name.label }} {{ reg_form.last_name }}</li>
-                        <li>{{ reg_form.email.label }} {{ reg_form.email }}</li>
-                    </ul> 
+                    <table class="table">
+                        <tbody>
+                            <tr><td>{{ reg_form.first_name.label }}</td><td>{{ reg_form.first_name }}</td></tr>
+                            <tr><td>{{ reg_form.last_name.label }}</td><td>{{ reg_form.last_name }}</td></tr>
+                            <tr><td>{{ reg_form.email.label }}</td><td>{{ reg_form.email }}</td></tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
@@ -70,27 +52,31 @@
         </div>
     </div>
    </div>
+
+    <!-- Modal for booking appointments based on patient -->
     <div class="modal">
         <div class="modal-content" id="patient-modal">
            <div class="modal-header primary">
                <h2>Book an Appointment</h2>
                <span id="closeBtn" class="closeBtn">&times;</span>
            </div>
-
             <div class="modal-body">
                 <form action="{{url_for('patient_appointments')}}" method="post">
                     {{ form.csrf }}
                     <input type="hidden" name="book_appmt"/>
                     <div>
-                        <ul>
-                            <li>{{ form.title.label }} {{ form.title }}</li>
-                            <li>{{ form.start_datetime.label }} {{ form.start_datetime }}</li>
-                            <li>{{ form.end_datetime.label }} {{ form.end_datetime }}</li>
-                           
-                           
-                        </ul> 
+                        <table class="table"> 
+                        <tbody>
+                            <tr><td>Select Doctor</td> <td>{{ form.doctor }}</td></tr>
+                            <tr><td>Appointment Year</td> <td>{{ form.year }}</td></tr>
+                            <tr><td>Appointment Month</td> <td>{{ form.month }}</td></tr>
+                            <tr><td>Appointment Date</td> <td>{{ form.day }}</td></tr>
+                            <tr><td>Appointment Slot</td> <td>{{ form.slot }}</td></tr>
+                        </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
+                        <input id="pat_id" type="hidden" name="pat_id" value="">
                         <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
                     </div>
                 </form>           
@@ -98,3 +84,4 @@
         </div>     
     </div>
 {% endblock content %}
+

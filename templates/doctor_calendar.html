@@ -1,0 +1,200 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+        <head>
+            <title>Doctor Calendar Assignment</title>
+        </head>
+        <div align="middle">
+            {%if doctor_id ==1%}
+                <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor1 -->
+                <iframe src="https://calendar.google.com/calendar/embed?src=iil8aoh34pcl0e737aldnrrjnc%40group.calendar.google.com&ctz=Australia%2FMelbourne" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+            {%if doctor_id ==2%}
+                <h3>Calendar for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+            <!-- doctor2 -->
+            <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=3pjm535a9dnes869bmjc90ao78%40group.calendar.google.com&amp;color=%2323164E&amp;ctz=Australia%2FMelbourne" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+            {%endif%}
+        </div>
+        <div align ="left">
+            <h3>Choose a doctor to log in</h3>
+            <form method="POST">
+                <select name="doctor_id">
+                        {% for x in doctor_infos%}
+                            <option value={{x['id']}}>{{"Dr. "+x['first_name']+" "+x['last_name']}}</option>
+                        {% endfor%}
+                </select>
+                <input type="submit" value ="Submit">
+            </form>
+        </div>
+        {%if doctor_id != 0%}
+            <div align ="left">
+                <h3>Monthly quick assign for Dr. {{doctor_infos[doctor_id-1]['first_name']}} {{doctor_infos[doctor_id-1]['last_name']}}</h3>
+                <form method="POST">
+                    <p>Please choose year and month</p>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        
+                            {% for message in messages %}
+                                <p class=flashes style="color:red;">{{ message }}</p>
+                            {% endfor %}
+                        
+                        {% endif %}
+                    {% endwith %} 
+                    <p></p>
+                    <select name="year">
+                            {% for x in year_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    
+                    <select name="month">
+                            {% for x in month_list%}
+                                <option value={{x}}>{{x}}</option>
+                            {% endfor%}
+                    </select>
+                    <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                    <input type="submit" value ="Quick assign">
+                </form>
+            </div>
+        {%endif%}
+        {%if doctor_id != 0%}
+            <div>
+                <h3>Fill in the follow form in order to edit/add event on calendar</h3>
+                <form method="POST">
+                    {{form.csrf}}
+                    <p>Date: </p>
+                    {{form.year}}
+                    {{form.month}}
+                    {{form.day}}
+                    <br>
+                    <p>Start time: </p>
+                    {{form.hour_1}}
+                    {{form.minute_1}}
+                    <br>
+                    <p>End time: </p>
+                    {{form.hour_2}}
+                    {{form.minute_2}}
+                    <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                    <input type="submit" value="Edit/Add event">
+                </form>
+                
+            </div>
+        {%endif%}
+        {%if doctor_id != 0%}
+            <div>
+                <h3>Fill in the follow form in order to delete event on calendar</h3>
+                <form method="POST">
+                    {{form_2.csrf}}
+                    <p>Date: </p>
+                    {{form_2.year_f2}}
+                    {{form_2.month_f2}}
+                    {{form_2.day_f2}}
+                    
+                    <input type="hidden" name ="doctor_id" value={{doctor_id}}>
+                    <input type="submit" value="Delete event">
+                </form>
+                
+            </div>
+        {%endif%}
+        <script>
+                let year_select = document.getElementById('year');
+                let month_select = document.getElementById('month');
+                let day_select = document.getElementById('day');
+                let hour_1_select = document.getElementById('hour_1');
+                let minute_1_select = document.getElementById('minute_1');
+                let hour_2_select = document.getElementById('hour_2');
+                let minute_2_select = document.getElementById('minute_2');
+
+                let year_f2_select = document.getElementById('year_f2');
+                let month_f2_select = document.getElementById('month_f2');
+                let day_f2_select = document.getElementById('day_f2');
+                
+                month_select.onchange =function(){
+                    month = month_select.value;
+                    year = year_select.value;
+                    day = 0;
+                    optionHTML ='';
+                    if (month==2){
+                        if((year%4==0 && year%100!=0 )||(year%400==0)){
+                            day =29;
+                        }
+                        else{
+                            day =28;
+                        }
+                    }
+                    else if (month==1 ||month==3||month==5||month==7||month==8||month==10||month==12){
+                        day =31;
+                    }
+                    else{
+                        day=30;
+                    }
+                    for(i =1; i<=day; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    day_select.innerHTML=optionHTML;
+                }
+                hour_1_select.onchange = function(){
+                    hour_1 = parseInt(hour_1_select.value);
+                    hour_2 = parseInt(hour_2_select.value);
+                    h_start =9;
+                    optionHTML ='';
+                    optionHTML_2 ='';
+                    min = ['00','30'];
+                    for(i =hour_1+1; i<=17; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    hour_2_select.innerHTML=optionHTML;
+                    hour_2 = parseInt(hour_2_select.value);
+                    if(hour_2<17){
+                        for(i =0; i<min.length; i++){
+                        optionHTML_2 +='<option value="'+min[i]+'">'+min[i]+'</option>';
+                        }
+                    }
+                    else{
+                        optionHTML_2 +='<option value="'+"00"+'">'+"00"+'</option>';
+                    }
+                    minute_2_select.innerHTML=optionHTML_2;
+                }
+                hour_2_select.onchange = function(){
+                    hour_2 = parseInt(hour_2_select.value);
+                    min = ['00','30'];
+                    optionHTML ='';
+                    if(hour_2==17){
+                        optionHTML +='<option value="'+"00"+'">'+"00"+'</option>';
+                    }
+                    else{
+                        for(i =0; i<min.length; i++){
+                        optionHTML +='<option value="'+min[i]+'">'+min[i]+'</option>';
+                        }
+                    }
+                    minute_2_select.innerHTML=optionHTML;
+                }
+
+                month_f2_select.onchange =function(){
+                    month = month_f2_select.value;
+                    year = year_f2_select.value;
+                    day = 0;
+                    optionHTML ='';
+                    if (month==2){
+                        if((year%4==0 && year%100!=0 )||(year%400==0)){
+                            day =29;
+                        }
+                        else{
+                            day =28;
+                        }
+                    }
+                    else if (month==1 ||month==3||month==5||month==7||month==8||month==10||month==12){
+                        day =31;
+                    }
+                    else{
+                        day=30;
+                    }
+                    for(i =1; i<=day; i++){
+                        optionHTML +='<option value="'+i+'">'+i+'</option>';
+                    }
+                    day_f2_select.innerHTML=optionHTML;
+                }
+
+        </script>
+{% endblock content %}
