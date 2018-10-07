@@ -33,6 +33,19 @@ def get_patient_appointments(id):
     #return schema.appointments_with_doctor_schema.jsonify(all_appmts)
     return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
 
+@p_mod.route("/doctorAppmts/<id>", methods=["GET"])
+def get_doctor_appointments(id):
+    print("id---"+str(id))
+    """Return appointments for patient as JSON"""
+    #if id:
+    all_appmts = schema.db.session.query(schema.Appointment).filter_by(doctor_id=id).all()
+    print('all_appmts---'+str(all_appmts))
+    #all_appmts = schema.Appointment.query.filter(schema.Appointment.patient_id ==id)
+        
+    #return schema.appointments_with_doctor_schema.jsonify(all_appmts)
+    return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
+
+
 def get_patient_by_object(pat):
     """Return patients by object"""
     patient = schema.Patient.query.get(pat)
