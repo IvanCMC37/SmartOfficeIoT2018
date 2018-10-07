@@ -9,19 +9,6 @@ from oauth2client import file, client, tools
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
-# Add more token files for different doctors
-# store = file.Storage('credentials/doctor_token_1.json')
-# creds = store.get()
-# if not creds or creds.invalid:
-#     flow = client.flow_from_clientsecrets('credentials/doctor_credentials_1.json', SCOPES)
-#     creds = tools.run_flow(flow, store)
-# service = build('calendar', 'v3', http=creds.authorize(Http()))
-
-# Test format
-input_date=[]
-input_date.append(["2018-10-1T09:00:00","2018-10-1T17:00:00"])
-
-
 def token_decider(doctor_num):
     store = file.Storage('credentials/doctor_token_{}.json'.format(doctor_num))
     creds = store.get()
@@ -126,7 +113,7 @@ def event_checker(id,service):
         print(start, event['summary'])
 
 # Create monthly timetable
-def insertEvent_2(inputYear, inputMonth, doctor_num):
+def insertMonthlyEvents(inputYear, inputMonth, doctor_num):
     # Swap doctor calendar token
     service = token_decider(doctor_num)
     calendar_summary ="Work Day"
@@ -334,19 +321,54 @@ def monthly_reader(inputYear,inputMonth,doctor_num):
     # print(len(event_list))
     return event_list
 
-def main_calendar_appointer(input_json, doctor_num):
+# list daily events that are assigned
+def daily_reader(inputYear,inputMonth,inputDay,doctor_num):
+    # Swap doctor calendar token
     service = token_decider(doctor_num)
-    calendar_summary ="Patient Appointment"
+    calendar_summary ="Work Day"
+    id = id_checker(service,calendar_summary)
+
+    event_list = []
+
+    # now = datetime.utcnow().isoformat() + 'Z'
+    time_start = "{}-{}-{}T00:00:00+11:00".format(inputYear,inputMonth,inputDay)
+    time_end = "{}-{:02d}-{:02d}T23:59:59+11:00".format(inputYear,inputMonth,inputDay)
+
+    # Call the Calendar API
+    events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
+                                        maxResults=1, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    print('Total {} events in {}-{}'.format(len(events),inputYear,inputMonth))
+
+    if not events:
+        print('No upcoming events found.')
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        end = event['end'].get('dateTime', event['end'].get('date'))
+        print(start, end)
+        eventObj ={}
+        eventObj['start_time'] = start
+        eventObj['end_time'] = end
+        event_list.append(eventObj)
+
+    return event_list
+
+def main_calendar_appointer(start_datetime,end_datetime, doctor_num, patient_num):
+    service = token_decider(doctor_num)
+    calendar_summary = "Patient Appointment"
     id = id_checker(service,calendar_summary)
     # for inputDate_list in inputDate:
-    time_start = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_1'],input_json['minute_1'])
-    time_end = "{}-{}-{}T{}:{}:00".format(input_json['year'],input_json['month'],input_json['day'],input_json['hour_2'],input_json['minute_2'])
+    # time_start = start_datetime
+    # time_end = end_datetime
+    time_start = "{}-{}-{}T{}:{}:00".format(start_datetime.year, start_datetime.month, start_datetime.day, start_datetime.hour, start_datetime.minute)
+    time_end = "{}-{}-{}T{}:{}:00".format(end_datetime.year, end_datetime.month, end_datetime.day, end_datetime.hour, end_datetime.minute)
     print(time_start)
     print(time_end)
     event = {
         'summary': 'Patient appointment',
         'location': 'SmartOffice',
-        'description': 'Medical appointment with patient no.{}'.format(input_json['id']),
+        'description': 'Medical appointment with patient no.{}'.format(patient_num),
         'start': {
             'dateTime': time_start,
             'timeZone': 'Australia/Melbourne',
@@ -365,6 +387,25 @@ def main_calendar_appointer(input_json, doctor_num):
     event_checker(id,service)
     return event_
 
+# Delete single event from doctor appointment calendar
+def appointment_deleter(start_datetime,end_datetime, doctor_num):
+    # Swap doctor calendar token
+    service = token_decider(doctor_num)
+    calendar_summary = "Patient Appointment"
+    id = id_checker(service,calendar_summary)
+
+    time_start = "{}-{}-{}T{}:{}:00+11:00".format(start_datetime.year, start_datetime.month, start_datetime.day, start_datetime.hour, start_datetime.minute)
+    time_end = "{}-{}-{}T{}:{}:01+11:00".format(end_datetime.year, end_datetime.month, end_datetime.day, end_datetime.hour, end_datetime.minute)
+    events_result = service.events().list(calendarId=id, timeMin=time_start,timeMax=time_end,
+                                        maxResults=1, singleEvents=True,
+                                        orderBy='startTime').execute()
+    events = events_result.get('items', [])
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        print(start, event['id'])
+        event['status']='cancelled'
+        service.events().update(calendarId=id, eventId=event['id'], body=event).execute()
+    return event
 
 # if __name__ == '__main__':
 #     main()

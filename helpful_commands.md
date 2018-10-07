@@ -33,3 +33,16 @@ git config credential.helper store
 
 #### solving the circular import issue when using sqlalchemy and marshmallow
 use db.init_app(APP) and ma.init_app(APP) and import db and ma from another module
+
+#### Set volume of your pi
+alsamixer
+
+#### disable assistantPi.service to prevent sensehat crash
+sudo systemctl stop AssistantPi.service
+sudo systemctl disable AssistantPi.service
+sudo reboot
+
+#### enable assistantPi.service in order to run google assistant
+<!-- sudo systemctl start AssistantPi.service -->
+sudo systemctl enable AssistantPi.service
+sudo reboot

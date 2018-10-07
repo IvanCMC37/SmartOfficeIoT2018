@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 import schema
-import doctor_calendar
-
+from datetime import datetime,timedelta
 d_mod = Blueprint("doctor_api",  __name__)
 
 import doctor_calendar
@@ -65,7 +64,7 @@ def add_monthly_availability():
     doctor_id = input_json['doctor_id']
 
     print("Quick assigning monthly event for Doctor No.{} on {}-{}".format(doctor_id,year,month))
-    doctor_calendar.insertEvent_2(int(year),int(month),int(doctor_id))
+    doctor_calendar.insertMonthlyEvents(int(year),int(month),int(doctor_id))
 
     return jsonify(input_json)
 
@@ -132,22 +131,54 @@ def monthly_check():
 
     return jsonify({'days': respond})
 
-@d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
-def appoint_gcalendar():
-    #  {
-    # "month":"10",
-    # "year":"2018",
-    # "day":"2",
-    # "hour_1":"12",
-    # "hour_2":"13",
-    # "minute_1": "30",
-    # "minute_2":"00",
-    # "doctor_id":"1",
-    # "id": "2"
-    # }
+# Api to return list of event time of the day
+@d_mod.route("/doctor/daily_check", methods=["POST"])
+def daily_check():
     input_json = request.json
+    print(len(input_json))
+    year = input_json['year']
+    month = input_json['month']
+    day = input_json['day']
     doctor_id = input_json['doctor_id']
 
-    event=doctor_calendar.main_calendar_appointer(input_json,int(doctor_id))
+    respond=doctor_calendar.daily_reader(int(year),int(month),int(day),int(doctor_id))
+
+    return jsonify({'days': respond})
+
+@d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
+def appoint_gcalendar():
+    # {
+    #     "start_datetime":"2018-10-4T09:00:00",
+    #     "doctor_id":1,
+    #     "patient_id":1
+    # }
+    input_json = request.json
+    start_datetime = datetime.strptime(input_json['start_datetime'],"%Y-%m-%dT%H:%M:%S")
+    doctor_id = input_json['doctor_id']
+    patient_id = input_json['id']
+    end_datetime = start_datetime + timedelta(minutes = 30)
+    
+    print(start_datetime)
+    print(end_datetime)
+    event=doctor_calendar.main_calendar_appointer(start_datetime,end_datetime,int(doctor_id), int(patient_id))
+
+    return jsonify(event)
+
+@d_mod.route("/doctor/delete_gcalendar", methods=["POST"])
+def delete_gcalendar():
+    # {
+    #     "start_datetime":"2018-10-4T09:00:00",
+    #     "doctor_id":1,
+    #     "patient_id":1
+    # }
+    input_json = request.json
+    start_datetime = datetime.strptime(input_json['start_datetime'],"%Y-%m-%dT%H:%M:%S")
+    doctor_id = input_json['doctor_id']
+    # patient_id = input_json['id']
+    end_datetime = start_datetime + timedelta(minutes = 30)
+    
+    print(start_datetime)
+    print(end_datetime)
+    event=doctor_calendar.appointment_deleter(start_datetime,end_datetime,int(doctor_id))
 
     return jsonify(event)
