@@ -6,17 +6,18 @@
     <span class="extra-bottom-margin">Change Patient:</span>
     <!-- Select a patient from the combox -->
     <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
-        <select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
+        <!--<select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
             <option selected="">Select a patient</option>
             {% for p in patients %}
             <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>
             {% endfor %}
-        </select>  
+        </select>-->
+        {{form.patient}}  
     </form>
-    <h3 class="extra-top-padding extra-bottom-padding">{{ pat.first_name }}'s appointments</h3>
+    <h3 class="extra-top-padding extra-bottom-padding">Patient Appointments</h3>
     <!-- Display all appointments based on the patient selected -->
     <div>
-        <table class="table table-hover table-spacing">
+        <table id="table" class="table table-hover table-spacing">
             <thead>
               <tr>
                 <th scope="col">ID</th>
@@ -27,23 +28,7 @@
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-            {% for a in all_appointments %}
-              <tr>
-                <td>{{ a.id }}</td>
-                <td>{{ a.title }}</td>
-                <td>{{ a.start_datetime }}</td>
-                <td>{{ a.end_datetime }}</td>
-                <td>{{ a.doctor.first_name }} {{ a.doctor.last_name }}</td>
-                <td>
-                    <form action="{{ url_for('patient_appointments') }}" method="post">
-                        <input type="hidden" name="delete_appmt" value="{{ a.id }}">
-                        <input type="submit" class="btn btn-secondary" value="Delete"/>
-                    </form>
-                </td>      
-              </tr>
-            {% endfor %}
-            </tbody>
+            <tbody id="tbody"></tbody>
         </table>
    </div>
    <!-- Modal for registering a patient -->
@@ -87,23 +72,17 @@
                     <input type="hidden" name="book_appmt"/>
                     <div>
                         <table class="table"> 
-                           <tbody>
-                               <tr><td>{{ form.title.label }}</td> <td>{{ form.title }}</td></tr>
-                               <tr><td>{{ form.start_datetime.label }}</td> <td>{{ form.start_datetime }}</td></tr>
-                               <tr><td>{{ form.end_datetime.label }}</td><td>{{ form.end_datetime }}</td></tr>
-                            <tr>
-                                <select name="select_doctor" class="custom-select combo-box extra-bottom-margin">
-                                    <option selected="">Select a doctor</option>
-                                    {% for d in doctors %}
-                                    <option value="{{ d.id }}">{{ d.first_name }} {{ d.last_name }}</option>
-                                    {% endfor %}
-                                </select>  
-                            </tr>
-                            </tbody>
+                        <tbody>
+                            <tr><td>Select Doctor</td> <td>{{ form.doctor }}</td></tr>
+                            <tr><td>Appointment Year</td> <td>{{ form.year }}</td></tr>
+                            <tr><td>Appointment Month</td> <td>{{ form.month }}</td></tr>
+                            <tr><td>Appointment Date</td> <td>{{ form.day }}</td></tr>
+                            <tr><td>Appointment Slot</td> <td>{{ form.slot }}</td></tr>
+                        </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
-                        <input type="hidden" name="pat_id" value ={{pat_id}}>
+                        <input id="pat_id" type="hidden" name="pat_id" value="">
                         <input type="submit" value="Submit" class="btn-primary btn extra-bottom-margin submitBtn"/>
                     </div>
                 </form>           

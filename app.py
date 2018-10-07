@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_file
-from forms import AppointmentForm, PatientSearchForm,CalendarForm,CalendarForm_2
+from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm, CalendarForm, CalendarForm_2
+import os, schema, json, config
 from schema import db, ma
-import os, json, config, schema
+from datetime import timedelta, datetime
+import requests
 
 APP = Flask(__name__)
 import datetime
@@ -18,6 +20,7 @@ APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.user
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 APP.config['SECRET_KEY'] = 'secret'
 
+doctor_choices=None
 
 # Register api blueprints
 APP.register_blueprint(p_mod, url_prefix="/api")
@@ -202,14 +205,31 @@ def doctor_page_3():
 ##
 @APP.route("/patient", methods=["GET", "POST"])
 def patient_appointments():
+    print('patient GET OR POST')
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
-    reg_form = RegisterPatientForm()
-
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
+    #patient_choices=[['','--None--']]
+    patient_choices=[]
+    for patient in patients.data:
+        patient_choices.append([patient['id'], patient['first_name'] + ' ' + patient['last_name']])
+    form.patient.choices=patient_choices
     # Get all doctors and generate combo box values
-    doctors = doctor_api.get_docs()
+    #doctors = doctor_api.get_doctors()
+    doctors = requests.get('{}{}'.format(api_url,"doctor")).json()
+    print("doctors---"+str(doctors))
+    doctor_choices=[]
+    for doctor in doctors:
+        doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
+    form.doctor.choices=doctor_choices
+    # Generate Days
+    date_list = [("","--None--")]
+    form.day.choices = date_list
+    # date_list.extend(range(1, 32))
+    # form.day.choices = [(str(x),str(x)) for x in date_list]
+    reg_form = RegisterPatientForm()
+    
 
     # Set default patient to 1
     pat = patient_api.get_patient_by_object(1)
@@ -222,22 +242,36 @@ def patient_appointments():
         return redirect(url_for('patient_appointments'))
 
     elif request.method == 'POST' and "book_appmt" in request.form:
+        print('patient POST book_appmt')
         # Submit form of appointment booking
-        start_datetime = form.start_datetime.data
-        end_datetime = form.end_datetime.data
+        #start_datetime = form.start_datetime.data
+        #end_datetime = form.end_datetime.data
+        doctor_id=request.form['doctor']
         
         if request.form['pat_id']:
             pat_id = request.form['pat_id']
         else:
             pat_id = 1
         print(pat_id)
-        title = form.title.data
-        d_id = request.form['select_doctor']
-        patient_api.add_patient_appointment(start_datetime, end_datetime, title, pat_id, d_id)
+
+        start_datetime = request.form['slot']
+        print(start_datetime)
+        print(type(start_datetime))
+        #Thu Oct 04 2018 14:30:00 GMT+1000
+        start_datetime=start_datetime.replace(' (Australian Eastern Standard Time)','')
+        start_datetime= datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
+        print(start_datetime)
+        print(type(start_datetime))
+        title = 'Patient Appointment'
+        # for appmt in avail_appmts['days'] :
+        #     print('appmt---'+str(appmt))
+        #     start_datetime = appmt['start_time']
+        #     end_datetime = appmt['end_time']
+        patient_api.add_patient_appointment(start_datetime, start_datetime+timedelta(minutes=30), title, pat_id, doctor_id)
         pat = patient_api.get_patient_by_object(pat_id)
         result = patient_api.get_patient_appointments(pat_id)
         print(result)
-        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data,pat_id=pat_id)
 
     elif request.method == 'POST' and "reg_patient" in request.form:
         # Register a patient
@@ -253,11 +287,12 @@ def patient_appointments():
         pat_id = request.form['select_patient']
         result = patient_api.get_patient_appointments(pat_id)
         pat = patient_api.get_patient_by_object(pat_id)
-        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat,pat_id=pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, pat_id=pat_id)
     
-    result = patient_api.get_patient_appointments()
+    #result = patient_api.get_patient_appointments()
 
-    return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
+    #return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
+    return render_template('patient.html', form=form, reg_form=reg_form, patients=patients.data)
 
 
 ##

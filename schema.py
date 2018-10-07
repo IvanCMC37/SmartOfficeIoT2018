@@ -1,4 +1,5 @@
 from flask import Flask
+from marshmallow import fields
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
@@ -102,6 +103,12 @@ class AppointmentSchema(ma.Schema):
         # Fields to expose
         fields = ('id','start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor_id')
 
+class AppointmentWithDoctorSchema(ma.Schema):
+    doctor = fields.Nested(DoctorSchema, only=('first_name', 'last_name'))
+    class Meta:
+        # Fields to expose
+        fields = ('id','start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor')       
+
 
 class PatientHistorySchema(ma.Schema):
     class Meta:
@@ -116,6 +123,7 @@ doctors_schema = DoctorSchema(many=True)
 
 appointment_schema = AppointmentSchema()
 appointments_schema = AppointmentSchema(many=True)
+appointments_with_doctor_schema = AppointmentWithDoctorSchema(many=True)
 
 patient_history_schema = PatientHistorySchema()
 patient_histories_schema = PatientHistorySchema(many=True)

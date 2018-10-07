@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 import schema
+import doctor_calendar
 
 d_mod = Blueprint("doctor_api",  __name__)
 

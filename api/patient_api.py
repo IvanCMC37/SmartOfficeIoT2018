@@ -21,15 +21,17 @@ def appointment_detail(id):
     patient = schema.Patient.query.get(id)
     return schema.patient_schema.jsonify(patient)
 
-def get_patient_appointments(*id):
+@p_mod.route("/patientAppmts/<id>", methods=["GET"])
+def get_patient_appointments(id):
+    print("id---"+str(id))
     """Return appointments for patient as JSON"""
-    if id:
-        all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=id).join(schema.Doctor).join(schema.Patient).all()
-    else:
-        # Loads appointments for first patient by default
-        all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=1).join(schema.Doctor).join(schema.Patient).all()
+    #if id:
+    all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=id).join(schema.Doctor).join(schema.Patient).all()
+    print('all_appmts---'+str(all_appmts))
+    #all_appmts = schema.Appointment.query.filter(schema.Appointment.patient_id ==id)
         
-    return all_appmts
+    #return schema.appointments_with_doctor_schema.jsonify(all_appmts)
+    return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
 
 def get_patient_by_object(pat):
     """Return patients by object"""
@@ -39,6 +41,7 @@ def get_patient_by_object(pat):
 
 def delete_patient_appointment(del_id):
     """Deletes appointment by patient"""
+    print('del_id---'+del_id)
     appointment = schema.Appointment.query.get(del_id)
     schema.db.session.delete(appointment)
     schema.db.session.commit()
