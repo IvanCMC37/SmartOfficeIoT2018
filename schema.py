@@ -83,7 +83,7 @@ class PatientHistory(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
     def __repr__(self):
-        return 'PatientHistory(%s,%s, %s)' % (self.date,self.notes, self.diagnoses)
+        return 'PatientHistory(%s,%s, %s, %s)' % (self.date,self.notes, self.diagnoses, self.patient_id)
 
 
 class PatientSchema(ma.Schema):
