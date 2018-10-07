@@ -1,7 +1,0 @@
-gRPC Google Assistant Advisor Pi Docs
-=======================================
-
-.. automodule:: GRPC_GoogleAssistant.advisor_pi.greeter_server
-	:members:
-	:undoc-members:
-	:show-inheritance:

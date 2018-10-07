@@ -47,77 +47,92 @@
 <dl class="function">
 <dt id="doctor_calendar.appointment_deleter">
 <code class="descclassname">doctor_calendar.</code><code class="descname">appointment_deleter</code><span class="sig-paren">(</span><em>start_datetime</em>, <em>end_datetime</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.appointment_deleter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>delete event on doctor working calendar</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.calendar_checker">
 <code class="descclassname">doctor_calendar.</code><code class="descname">calendar_checker</code><span class="sig-paren">(</span><em>service</em>, <em>calendar_summary</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.calendar_checker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decide which calendar to use</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.daily_reader">
 <code class="descclassname">doctor_calendar.</code><code class="descname">daily_reader</code><span class="sig-paren">(</span><em>inputYear</em>, <em>inputMonth</em>, <em>inputDay</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.daily_reader" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>list the daily event</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.deletion_helper">
 <code class="descclassname">doctor_calendar.</code><code class="descname">deletion_helper</code><span class="sig-paren">(</span><em>inputYear</em>, <em>inputMonth</em>, <em>inputDay</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.deletion_helper" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Delete single event</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.duplicated_calendar_checker">
 <code class="descclassname">doctor_calendar.</code><code class="descname">duplicated_calendar_checker</code><span class="sig-paren">(</span><em>month_check</em>, <em>inputYear</em>, <em>inputMonth</em>, <em>inputDay</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.duplicated_calendar_checker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Check if the certain month had already been assigned or not</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.event_checker">
 <code class="descclassname">doctor_calendar.</code><code class="descname">event_checker</code><span class="sig-paren">(</span><em>id</em>, <em>service</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.event_checker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>list events from now</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.first_event_check">
 <code class="descclassname">doctor_calendar.</code><code class="descname">first_event_check</code><span class="sig-paren">(</span><em>id_store</em>, <em>defined_day</em>, <em>service</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.first_event_check" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>check the contain of the first event of the month</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.id_checker">
 <code class="descclassname">doctor_calendar.</code><code class="descname">id_checker</code><span class="sig-paren">(</span><em>service</em>, <em>calendar_summary</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.id_checker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return the calendar id</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.insertEvent">
 <code class="descclassname">doctor_calendar.</code><code class="descname">insertEvent</code><span class="sig-paren">(</span><em>input_json</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.insertEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Insert single event on a day via google calendar api</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.insertMonthlyEvents">
 <code class="descclassname">doctor_calendar.</code><code class="descname">insertMonthlyEvents</code><span class="sig-paren">(</span><em>inputYear</em>, <em>inputMonth</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.insertMonthlyEvents" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create monthly timetable</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.last_event_check">
 <code class="descclassname">doctor_calendar.</code><code class="descname">last_event_check</code><span class="sig-paren">(</span><em>id_store</em>, <em>service</em>, <em>time_end_1</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.last_event_check" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>check the contain of the last event of the month</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.main_calendar_appointer">
 <code class="descclassname">doctor_calendar.</code><code class="descname">main_calendar_appointer</code><span class="sig-paren">(</span><em>start_datetime</em>, <em>end_datetime</em>, <em>doctor_num</em>, <em>patient_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.main_calendar_appointer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Appoint event to doctor working calendar</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.monthly_reader">
 <code class="descclassname">doctor_calendar.</code><code class="descname">monthly_reader</code><span class="sig-paren">(</span><em>inputYear</em>, <em>inputMonth</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.monthly_reader" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>List the events that were appointed in the month</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.token_decider">
 <code class="descclassname">doctor_calendar.</code><code class="descname">token_decider</code><span class="sig-paren">(</span><em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.token_decider" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Function to decide which token to use</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="doctor_calendar.update_helper">
 <code class="descclassname">doctor_calendar.</code><code class="descname">update_helper</code><span class="sig-paren">(</span><em>inputYear</em>, <em>inputMonth</em>, <em>inputDay</em>, <em>inputH1</em>, <em>inputM1</em>, <em>inputH2</em>, <em>inputM2</em>, <em>doctor_num</em><span class="sig-paren">)</span><a class="headerlink" href="#doctor_calendar.update_helper" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Update the time of the event</p>
+</dd></dl>
 
 </div>
 

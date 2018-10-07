@@ -18,7 +18,6 @@ Welcome to SmartOffice's documentation!
    doctor_calendar
    dictation_pi
    reception_pi
-   advisor_pi
 
 Indices and tables
 ==================
