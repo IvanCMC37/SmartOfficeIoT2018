@@ -72,6 +72,13 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
+@p_mod.route("/appointment/<id>", methods=["GET"])
+def get_appointment(id):
+    """Gets all appointments"""
+    appointment = schema.Appointment.query.get(id)
+    result = schema.appointment_schema.dump(appointment)
+    return jsonify(result.data)
+
 def add_patient_appointment(start, end, title, p_id, d_id):
     """Add patient's appointment"""
     appmt = schema.Appointment(start, end, title, patient_id = p_id, doctor_id = d_id)
@@ -83,29 +90,33 @@ def add_patient_appointment(start, end, title, p_id, d_id):
 ##
 # Patient history
 ##
-# get patient history
+# get specific patient history(s)
 @p_mod.route("/history/<id>", methods=["GET"])
 def patient_detail(id):
-    patient_history = schema.PatientHistory.query.get(id)
-    print(patient_history)
-    return schema.patient_history_schema.jsonify(patient_history)
+    # test = id
+    # print("test---"+test)
+    patient_history = schema.PatientHistory.query.filter(schema.PatientHistory.patient_id ==id)
+    # print(patient_history)
+    return schema.patient_histories_schema.jsonify(patient_history)
 
-# Edit patient history
-@p_mod.route("/history/<id>", methods=["POST"])
-def patient_history_update(id):
-    user = schema.PatientHistory.query.get(id)
+# Get all history 
+@p_mod.route("/history", methods=["GET"])
+def all_history():
+    patient_histories = schema.PatientHistory.query.all()
+
+    return schema.patient_histories_schema.jsonify(patient_histories)
+
+# Add new patient history
+@p_mod.route("/history", methods=["POST"])
+def add_patient_history():
+    user = request.json['id']
     diagnoses = request.json['diagnoses']
     notes = request.json['notes']
     date =request.json['date']
 
-    user.diagnoses = diagnoses
-    user.notes = notes
-    user.date = date
+    new_history = schema.PatientHistory(notes = notes,diagnoses = diagnoses,date =date, patient_id =user)
 
+    schema.db.session.add(new_history)
     schema.db.session.commit()
-    return schema.patient_history_schema.jsonify(user)
-# doctor calander event api 
 
-
-
-
+    return schema.patient_history_schema.jsonify(new_history)

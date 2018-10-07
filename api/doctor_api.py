@@ -4,6 +4,7 @@ from datetime import datetime,timedelta
 d_mod = Blueprint("doctor_api",  __name__)
 
 import doctor_calendar
+import requests
 
 ##
 # GET ALL DOCTORS TEST EXAMPLE
@@ -13,38 +14,6 @@ def get_doctors():
     all_doctors = schema.Doctor.query.all()
     result = schema.doctors_schema.dump(all_doctors)
     return jsonify(result.data)
-
-##
-# Patient history
-##
-# get specific patient history(s)
-@d_mod.route("/history/<id>", methods=["GET"])
-def patient_detail(id):
-    patient_history = schema.PatientHistory.query.filter(schema.PatientHistory.patient_id ==id)
-
-    return schema.patient_histories_schema.jsonify(patient_history)
-
-# Get all history 
-@d_mod.route("/history", methods=["GET"])
-def all_history():
-    patient_histories = schema.PatientHistory.query.all()
-
-    return schema.patient_histories_schema.jsonify(patient_histories)
-
-# Add new patient history
-@d_mod.route("/history", methods=["POST"])
-def add_patient_history():
-    user = request.json['id']
-    diagnoses = request.json['diagnoses']
-    notes = request.json['notes']
-    date =request.json['date']
-
-    new_history = schema.PatientHistory(notes = notes,diagnoses = diagnoses,date =date, patient_id =user)
-
-    schema.db.session.add(new_history)
-    schema.db.session.commit()
-
-    return schema.patient_history_schema.jsonify(new_history)
 
 # doctor calander event api 
 @d_mod.route("/doctor/assign", methods=["POST"])
@@ -147,15 +116,16 @@ def daily_check():
 
 @d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
 def appoint_gcalendar():
-    # {
-    #     "start_datetime":"2018-10-4T09:00:00",
-    #     "doctor_id":1,
-    #     "patient_id":1
-    # }
     input_json = request.json
-    start_datetime = datetime.strptime(input_json['start_datetime'],"%Y-%m-%dT%H:%M:%S")
+    start_datetime = input_json['start_datetime']
+    
+    start_datetime = start_datetime.replace("+10:00","")
+    start_datetime = start_datetime.replace("+11:00","")
+    
+    start_datetime = datetime.strptime(start_datetime,"%Y-%m-%d %H:%M:%S")
+    
     doctor_id = input_json['doctor_id']
-    patient_id = input_json['id']
+    patient_id = input_json['patient_id']
     end_datetime = start_datetime + timedelta(minutes = 30)
     
     print(start_datetime)
@@ -166,17 +136,14 @@ def appoint_gcalendar():
 
 @d_mod.route("/doctor/delete_gcalendar", methods=["POST"])
 def delete_gcalendar():
-    # {
-    #     "start_datetime":"2018-10-4T09:00:00",
-    #     "doctor_id":1,
-    #     "patient_id":1
-    # }
     input_json = request.json
-    start_datetime = datetime.strptime(input_json['start_datetime'],"%Y-%m-%dT%H:%M:%S")
-    doctor_id = input_json['doctor_id']
-    # patient_id = input_json['id']
-    end_datetime = start_datetime + timedelta(minutes = 30)
-    
+    print(input_json)
+    appointment_id = input_json['appointment_id']
+    r = requests.get("/api/{}/{}".format("appointment", appointment_id)).json()
+    start_datetime = datetime.strptime(r['start_datetime'],"%Y-%m-%d %H:%M:%S")
+    doctor_id = r['doctor_id']
+    end_datetime = datetime.strptime(r['end_datetime'],"%Y-%m-%d %H:%M:%S")
+    print(doctor_id)
     print(start_datetime)
     print(end_datetime)
     event=doctor_calendar.appointment_deleter(start_datetime,end_datetime,int(doctor_id))

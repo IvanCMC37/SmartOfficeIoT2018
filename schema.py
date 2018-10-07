@@ -50,8 +50,8 @@ class Doctor(db.Model):
 class Appointment(db.Model):
     __tablename__ = 'appointment'
     id = db.Column(db.Integer, primary_key=True)
-    start_datetime = db.Column(db.DateTime, unique = False)
-    end_datetime = db.Column(db.DateTime, unique = False)
+    start_datetime = db.Column(db.String(50), unique = False)
+    end_datetime = db.Column(db.String(50), unique = False)
     title = db.Column(db.String(255), unique = False)
 
     def __init__(self, start_datetime, end_datetime, title, patient_id, doctor_id):
@@ -83,7 +83,7 @@ class PatientHistory(db.Model):
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
     def __repr__(self):
-        return 'PatientHistory(%s,%s, %s)' % (self.date,self.notes, self.diagnoses)
+        return 'PatientHistory(%s,%s, %s, %s)' % (self.date,self.notes, self.diagnoses, self.patient_id)
 
 
 class PatientSchema(ma.Schema):
