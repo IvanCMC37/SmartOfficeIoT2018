@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Main module to load the application"""
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, send_file
-from forms import AppointmentForm, PatientSearchForm, RegisterPatientForm, CalendarForm, CalendarForm_2
+from forms import AppointmentForm, RegisterPatientForm, CalendarForm, CalendarForm_2
 import os, schema, json, config
 from schema import db, ma
 from datetime import timedelta, datetime
@@ -146,8 +146,8 @@ def index():
 
 
 @APP.route('/doctor/appointment', methods=['GET', 'POST'])
-"""route for doctor appointment"""
 def doctor_page_2():
+    """route for doctor appointment"""
     doctor_id = 0
     doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
     patient_infos = requests.get('{}{}'.format(api_url,"patient")).json()
@@ -336,4 +336,3 @@ if __name__ == "__main__":
     api_url = "http://{}:{}/api/".format(host[0],5000)
     server_url = "http://{}:{}/".format(host[0],5000)
     APP.run(host=host[0], port=5000, debug=True)
-
