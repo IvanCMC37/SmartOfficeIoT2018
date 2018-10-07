@@ -85,12 +85,12 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
-@p_mod.route("/appointment/<id>", methods=["GET"])
-def get_appointment(id):
-    """Gets all appointments"""
-    appointment = schema.Appointment.query.get(id)
-    result = schema.appointment_schema.dump(appointment)
-    return jsonify(result.data)
+# @p_mod.route("/appointment/<id>", methods=["GET"])
+# def get_appointment(id):
+#     """Gets all appointments"""
+#     appointment = schema.Appointment.query.get(id)
+#     result = schema.appointment_schema.dump(appointment)
+#     return jsonify(result.data)
 
 def add_patient_appointment(start, end, title, p_id, d_id):
     """Add patient's appointment"""
