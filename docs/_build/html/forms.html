@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Form Docs &#8212; SmartOffice 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="SmartOffice 1.0 documentation" href="index.html" />
+    <link rel="next" title="Patient Api Docs" href="patient_api.html" />
+    <link rel="prev" title="Schema Docs" href="schema.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-forms">
+<span id="form-docs"></span><h1>Form Docs<a class="headerlink" href="#module-forms" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="forms.AppointmentForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">AppointmentForm</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.AppointmentForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<dl class="attribute">
+<dt id="forms.AppointmentForm.day">
+<code class="descname">day</code><em class="property"> = &lt;UnboundField(SelectField, ('day',), {'validators': [&lt;wtforms.validators.Required object&gt;], 'choices': []})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.day" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.doctor">
+<code class="descname">doctor</code><em class="property"> = &lt;UnboundField(SelectField, ('doctor',), {'validators': [&lt;wtforms.validators.Required object&gt;]})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.doctor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.end_datetime">
+<code class="descname">end_datetime</code><em class="property"> = &lt;UnboundField(DateField, ('End Date:',), {'validators': [&lt;wtforms.validators.Required object&gt;], 'format': '%d/%m/%Y'})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.month">
+<code class="descname">month</code><em class="property"> = &lt;UnboundField(SelectField, ('month',), {'validators': [&lt;wtforms.validators.Required object&gt;], 'choices': [('', '--None--'), ('1', 'January'), ('2', 'February'), ('3', 'March'), ('4', 'April'), ('5', 'May'), ('6', 'June'), ('7', 'July'), ('8', 'August'), ('9', 'September'), ('10', 'October'), ('11', 'Novemeber'), ('12', 'December')]})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.month" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.patient">
+<code class="descname">patient</code><em class="property"> = &lt;UnboundField(SelectField, ('patient',), {'validators': [&lt;wtforms.validators.Required object&gt;]})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.patient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.slot">
+<code class="descname">slot</code><em class="property"> = &lt;UnboundField(SelectField, ('slot',), {'validators': [&lt;wtforms.validators.Required object&gt;], 'choices': [('', '--None--')]})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.slot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.start_datetime">
+<code class="descname">start_datetime</code><em class="property"> = &lt;UnboundField(DateField, ('Start Date:',), {'validators': [&lt;wtforms.validators.Required object&gt;], 'format': '%d/%m/%Y'})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.AppointmentForm.year">
+<code class="descname">year</code><em class="property"> = &lt;UnboundField(SelectField, ('year',), {'choices': [('2018', '2018'), ('2019', '2019')]})&gt;</em><a class="headerlink" href="#forms.AppointmentForm.year" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="forms.CalendarForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">CalendarForm</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.CalendarForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<dl class="attribute">
+<dt id="forms.CalendarForm.day">
+<code class="descname">day</code><em class="property"> = &lt;UnboundField(SelectField, ('day',), {'choices': []})&gt;</em><a class="headerlink" href="#forms.CalendarForm.day" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.hour_1">
+<code class="descname">hour_1</code><em class="property"> = &lt;UnboundField(SelectField, ('hour',), {'choices': [('9', '9'), ('10', '10'), ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'), ('16', '16')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.hour_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.hour_2">
+<code class="descname">hour_2</code><em class="property"> = &lt;UnboundField(SelectField, ('hour',), {'choices': [('10', '10'), ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'), ('16', '16'), ('17', '17')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.hour_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.minute_1">
+<code class="descname">minute_1</code><em class="property"> = &lt;UnboundField(SelectField, ('minute',), {'choices': [('00', '00'), ('30', '30')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.minute_1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.minute_2">
+<code class="descname">minute_2</code><em class="property"> = &lt;UnboundField(SelectField, ('minute',), {'choices': [('00', '00'), ('30', '30')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.minute_2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.month">
+<code class="descname">month</code><em class="property"> = &lt;UnboundField(SelectField, ('month',), {'choices': [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'), ('11', '11'), ('12', '12')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.month" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm.year">
+<code class="descname">year</code><em class="property"> = &lt;UnboundField(SelectField, ('year',), {'choices': [('2018', '2018'), ('2019', '2019')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm.year" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="forms.CalendarForm_2">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">CalendarForm_2</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.CalendarForm_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<dl class="attribute">
+<dt id="forms.CalendarForm_2.day_f2">
+<code class="descname">day_f2</code><em class="property"> = &lt;UnboundField(SelectField, ('day_f2',), {'choices': []})&gt;</em><a class="headerlink" href="#forms.CalendarForm_2.day_f2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm_2.month_f2">
+<code class="descname">month_f2</code><em class="property"> = &lt;UnboundField(SelectField, ('month_f2',), {'choices': [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'), ('11', '11'), ('12', '12')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm_2.month_f2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.CalendarForm_2.year_f2">
+<code class="descname">year_f2</code><em class="property"> = &lt;UnboundField(SelectField, ('year_f2',), {'choices': [('2018', '2018'), ('2019', '2019')]})&gt;</em><a class="headerlink" href="#forms.CalendarForm_2.year_f2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="forms.PatientSearchForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">PatientSearchForm</code><span class="sig-paren">(</span><em>formdata=None</em>, <em>obj=None</em>, <em>prefix=''</em>, <em>data=None</em>, <em>meta=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.PatientSearchForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">wtforms.form.Form</span></code></p>
+<dl class="attribute">
+<dt id="forms.PatientSearchForm.patient_number">
+<code class="descname">patient_number</code><em class="property"> = &lt;UnboundField(StringField, ('Patient ID:', [&lt;wtforms.validators.Length object&gt;]), {})&gt;</em><a class="headerlink" href="#forms.PatientSearchForm.patient_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="forms.RegisterPatientForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">RegisterPatientForm</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.RegisterPatientForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<p>Define Register form</p>
+<dl class="attribute">
+<dt id="forms.RegisterPatientForm.email">
+<code class="descname">email</code><em class="property"> = &lt;UnboundField(TextField, ('Email:',), {'validators': [&lt;wtforms.validators.Required object&gt;]})&gt;</em><a class="headerlink" href="#forms.RegisterPatientForm.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.RegisterPatientForm.first_name">
+<code class="descname">first_name</code><em class="property"> = &lt;UnboundField(TextField, ('First Name:',), {'validators': [&lt;wtforms.validators.Required object&gt;]})&gt;</em><a class="headerlink" href="#forms.RegisterPatientForm.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="forms.RegisterPatientForm.last_name">
+<code class="descname">last_name</code><em class="property"> = &lt;UnboundField(TextField, ('Last Name:',), {'validators': [&lt;wtforms.validators.Required object&gt;]})&gt;</em><a class="headerlink" href="#forms.RegisterPatientForm.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="schema.html" title="previous chapter">Schema Docs</a></li>
+      <li>Next: <a href="patient_api.html" title="next chapter">Patient Api Docs</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/forms.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, David, Ivan, Jay.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/forms.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

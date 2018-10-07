@@ -1,0 +1,7 @@
+Doctor Calendar Docs
+====================
+
+.. automodule:: doctor_calendar
+	:members:
+	:undoc-members:
+	:show-inheritance:
