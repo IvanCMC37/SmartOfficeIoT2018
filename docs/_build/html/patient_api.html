@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Patient Api Docs &#8212; SmartOffice 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="SmartOffice 1.0 documentation" href="index.html" />
+    <link rel="next" title="Doctor Api Docs" href="doctor_api.html" />
+    <link rel="prev" title="Form Docs" href="forms.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-api.patient_api">
+<span id="patient-api-docs"></span><h1>Patient Api Docs<a class="headerlink" href="#module-api.patient_api" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="api.patient_api.add_patient_appointment">
+<code class="descclassname">api.patient_api.</code><code class="descname">add_patient_appointment</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>title</em>, <em>p_id</em>, <em>d_id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.add_patient_appointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add patient&#8217;s appointment</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.add_patient_history">
+<code class="descclassname">api.patient_api.</code><code class="descname">add_patient_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.add_patient_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.all_appointments">
+<code class="descclassname">api.patient_api.</code><code class="descname">all_appointments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.all_appointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all appointments</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.all_history">
+<code class="descclassname">api.patient_api.</code><code class="descname">all_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.all_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.appointment_detail">
+<code class="descclassname">api.patient_api.</code><code class="descname">appointment_detail</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.appointment_detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns JSON of a single patient</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.delete_patient_appointment">
+<code class="descclassname">api.patient_api.</code><code class="descname">delete_patient_appointment</code><span class="sig-paren">(</span><em>del_id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.delete_patient_appointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes appointment by patient</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.get_doctor_appointments">
+<code class="descclassname">api.patient_api.</code><code class="descname">get_doctor_appointments</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.get_doctor_appointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return appointments for patient as JSON</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.get_patient_appointments">
+<code class="descclassname">api.patient_api.</code><code class="descname">get_patient_appointments</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.get_patient_appointments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return appointments for patient as JSON</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.get_patients">
+<code class="descclassname">api.patient_api.</code><code class="descname">get_patients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.get_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns JSON of all patients</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.get_reg_patients">
+<code class="descclassname">api.patient_api.</code><code class="descname">get_reg_patients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.get_reg_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all registered patients</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.patient_detail">
+<code class="descclassname">api.patient_api.</code><code class="descname">patient_detail</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.patient_detail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="api.patient_api.reg_patient">
+<code class="descclassname">api.patient_api.</code><code class="descname">reg_patient</code><span class="sig-paren">(</span><em>first</em>, <em>last</em>, <em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#api.patient_api.reg_patient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="forms.html" title="previous chapter">Form Docs</a></li>
+      <li>Next: <a href="doctor_api.html" title="next chapter">Doctor Api Docs</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/patient_api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, David, Ivan, Jay.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/patient_api.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

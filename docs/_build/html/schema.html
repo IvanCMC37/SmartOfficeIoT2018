@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Schema Docs &#8212; SmartOffice 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="SmartOffice 1.0 documentation" href="index.html" />
+    <link rel="next" title="Form Docs" href="forms.html" />
+    <link rel="prev" title="Main module App Docs" href="app.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-schema">
+<span id="schema-docs"></span><h1>Schema Docs<a class="headerlink" href="#module-schema" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="schema.Appointment">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">Appointment</code><span class="sig-paren">(</span><em>start_datetime</em>, <em>end_datetime</em>, <em>title</em>, <em>patient_id</em>, <em>doctor_id</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.Appointment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<dl class="attribute">
+<dt id="schema.Appointment.doctor_id">
+<code class="descname">doctor_id</code><a class="headerlink" href="#schema.Appointment.doctor_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Appointment.end_datetime">
+<code class="descname">end_datetime</code><a class="headerlink" href="#schema.Appointment.end_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Appointment.id">
+<code class="descname">id</code><a class="headerlink" href="#schema.Appointment.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Appointment.patient_id">
+<code class="descname">patient_id</code><a class="headerlink" href="#schema.Appointment.patient_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Appointment.start_datetime">
+<code class="descname">start_datetime</code><a class="headerlink" href="#schema.Appointment.start_datetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Appointment.title">
+<code class="descname">title</code><a class="headerlink" href="#schema.Appointment.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.AppointmentSchema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">AppointmentSchema</code><span class="sig-paren">(</span><em>extra=None</em>, <em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>strict=None</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.AppointmentSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<dl class="class">
+<dt id="schema.AppointmentSchema.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#schema.AppointmentSchema.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="schema.AppointmentSchema.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor_id')</em><a class="headerlink" href="#schema.AppointmentSchema.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.AppointmentSchema.opts">
+<code class="descclassname">AppointmentSchema.</code><code class="descname">opts</code><em class="property"> = &lt;marshmallow.schema.SchemaOpts object&gt;</em><a class="headerlink" href="#schema.AppointmentSchema.opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.AppointmentWithDoctorSchema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">AppointmentWithDoctorSchema</code><span class="sig-paren">(</span><em>extra=None</em>, <em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>strict=None</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.AppointmentWithDoctorSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<dl class="class">
+<dt id="schema.AppointmentWithDoctorSchema.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#schema.AppointmentWithDoctorSchema.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="schema.AppointmentWithDoctorSchema.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'start_datetime', 'end_datetime', 'title', 'patient_id', 'doctor')</em><a class="headerlink" href="#schema.AppointmentWithDoctorSchema.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.AppointmentWithDoctorSchema.opts">
+<code class="descclassname">AppointmentWithDoctorSchema.</code><code class="descname">opts</code><em class="property"> = &lt;marshmallow.schema.SchemaOpts object&gt;</em><a class="headerlink" href="#schema.AppointmentWithDoctorSchema.opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.Doctor">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">Doctor</code><span class="sig-paren">(</span><em>first_name</em>, <em>last_name</em>, <em>email</em>, <em>specialization</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.Doctor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<dl class="attribute">
+<dt id="schema.Doctor.appointments">
+<code class="descname">appointments</code><a class="headerlink" href="#schema.Doctor.appointments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Doctor.email">
+<code class="descname">email</code><a class="headerlink" href="#schema.Doctor.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Doctor.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#schema.Doctor.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Doctor.id">
+<code class="descname">id</code><a class="headerlink" href="#schema.Doctor.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Doctor.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#schema.Doctor.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Doctor.specialization">
+<code class="descname">specialization</code><a class="headerlink" href="#schema.Doctor.specialization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.DoctorSchema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">DoctorSchema</code><span class="sig-paren">(</span><em>extra=None</em>, <em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>strict=None</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.DoctorSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<dl class="class">
+<dt id="schema.DoctorSchema.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#schema.DoctorSchema.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="schema.DoctorSchema.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'first_name', 'last_name', 'email', 'specialization')</em><a class="headerlink" href="#schema.DoctorSchema.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.DoctorSchema.opts">
+<code class="descclassname">DoctorSchema.</code><code class="descname">opts</code><em class="property"> = &lt;marshmallow.schema.SchemaOpts object&gt;</em><a class="headerlink" href="#schema.DoctorSchema.opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.Patient">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">Patient</code><span class="sig-paren">(</span><em>first_name</em>, <em>last_name</em>, <em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.Patient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>Patient class for the database schema</p>
+<dl class="attribute">
+<dt id="schema.Patient.appointments">
+<code class="descname">appointments</code><a class="headerlink" href="#schema.Patient.appointments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Patient.email">
+<code class="descname">email</code><a class="headerlink" href="#schema.Patient.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Patient.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#schema.Patient.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Patient.id">
+<code class="descname">id</code><a class="headerlink" href="#schema.Patient.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Patient.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#schema.Patient.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.Patient.patient_history">
+<code class="descname">patient_history</code><a class="headerlink" href="#schema.Patient.patient_history" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.PatientHistory">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">PatientHistory</code><span class="sig-paren">(</span><em>notes</em>, <em>diagnoses</em>, <em>date</em>, <em>patient_id</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.PatientHistory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<dl class="attribute">
+<dt id="schema.PatientHistory.date">
+<code class="descname">date</code><a class="headerlink" href="#schema.PatientHistory.date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientHistory.diagnoses">
+<code class="descname">diagnoses</code><a class="headerlink" href="#schema.PatientHistory.diagnoses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientHistory.id">
+<code class="descname">id</code><a class="headerlink" href="#schema.PatientHistory.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientHistory.notes">
+<code class="descname">notes</code><a class="headerlink" href="#schema.PatientHistory.notes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientHistory.patient_id">
+<code class="descname">patient_id</code><a class="headerlink" href="#schema.PatientHistory.patient_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.PatientHistorySchema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">PatientHistorySchema</code><span class="sig-paren">(</span><em>extra=None</em>, <em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>strict=None</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.PatientHistorySchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<dl class="class">
+<dt id="schema.PatientHistorySchema.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#schema.PatientHistorySchema.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="schema.PatientHistorySchema.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'date', 'notes', 'diagnoses', 'patient_id')</em><a class="headerlink" href="#schema.PatientHistorySchema.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientHistorySchema.opts">
+<code class="descclassname">PatientHistorySchema.</code><code class="descname">opts</code><em class="property"> = &lt;marshmallow.schema.SchemaOpts object&gt;</em><a class="headerlink" href="#schema.PatientHistorySchema.opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="schema.PatientSchema">
+<em class="property">class </em><code class="descclassname">schema.</code><code class="descname">PatientSchema</code><span class="sig-paren">(</span><em>extra=None</em>, <em>only=None</em>, <em>exclude=()</em>, <em>prefix=''</em>, <em>strict=None</em>, <em>many=False</em>, <em>context=None</em>, <em>load_only=()</em>, <em>dump_only=()</em>, <em>partial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#schema.PatientSchema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">flask_marshmallow.schema.Schema</span></code></p>
+<dl class="class">
+<dt id="schema.PatientSchema.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#schema.PatientSchema.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="schema.PatientSchema.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'first_name', 'last_name', 'email')</em><a class="headerlink" href="#schema.PatientSchema.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="schema.PatientSchema.opts">
+<code class="descclassname">PatientSchema.</code><code class="descname">opts</code><em class="property"> = &lt;marshmallow.schema.SchemaOpts object&gt;</em><a class="headerlink" href="#schema.PatientSchema.opts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="app.html" title="previous chapter">Main module App Docs</a></li>
+      <li>Next: <a href="forms.html" title="next chapter">Form Docs</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/schema.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, David, Ivan, Jay.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/schema.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

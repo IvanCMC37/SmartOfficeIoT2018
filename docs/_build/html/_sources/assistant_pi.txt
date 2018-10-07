@@ -1,0 +1,7 @@
+gRPC Google Assistant Dictation Pi Docs
+=======================================
+
+.. automodule:: GRPC_GoogleAssistant.dictation.src.AssistantPi
+	:members:
+	:undoc-members:
+	:show-inheritance:
