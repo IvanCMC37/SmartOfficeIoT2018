@@ -34,16 +34,19 @@ ma.init_app(APP)
 
 @APP.route("/")
 def homepage():
+    """Render the homepage"""
     return render_template('home.html', title='Home')
 
 
 @APP.route("/about")
 def aboutpage():
+    """Render the about page"""
     return render_template('about.html', title='About')
 
 
 @APP.route("/doctor", methods=['GET', 'POST'])
 def index():
+    """Reder the doctor main page"""
     year_list = [2018,2019]
     month_list = [1,2,3,4,5,6,7,8,9,10,11,12]
     date_list = []
@@ -55,12 +58,15 @@ def index():
     form_2.day_f2.choices = [(str(x),str(x)) for x in date_list]
 
     doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
+
+    # After selecting doctor
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
         print(request.form['doctor_id'])
+
         doctor_id=int(request.form['doctor_id'])
+    # After selecting quick assign
     elif request.method == 'POST' and len(request.form)==3:
-        
         print(request.form)
         month = request.form['month']
         year = request.form['year']
@@ -74,11 +80,13 @@ def index():
 
         dup_check = requests.post('{}{}'.format(api_url,"doctor/duplicated_check"),json=input).json()
 
+        # check if the quick assign can be completed, flash msg if cant
         if dup_check== False:
-            r = requests.post('{}{}'.format(api_url,"doctor/quick_assign"),json=input)
+            requests.post('{}{}'.format(api_url,"doctor/quick_assign"),json=input)
         else:
             flash("{}-{} already creadted, can't create again!!!".format(year,month))
 
+    # if chose to add/edit event
     elif request.method == 'POST' and len(request.form)==8:
         print(request.form)
         month = request.form['month']
@@ -102,13 +110,14 @@ def index():
             "doctor_id":doctor_id
         }
         dup_check = requests.post('{}{}'.format(api_url,"doctor/duplicated_check"),json=input).json()
-        if dup_check== False:
-            print("you can add")
-            r = requests.post('{}{}'.format(api_url,"doctor/assign"),json=input)
-        else:
-            print("you can edit")
-            r = requests.post('{}{}'.format(api_url,"doctor/update_event"),json=input)
 
+        # add if dont have, edit if have
+        if dup_check== False:
+            requests.post('{}{}'.format(api_url,"doctor/assign"),json=input)
+        else:
+            requests.post('{}{}'.format(api_url,"doctor/update_event"),json=input)
+
+    # if chose to delete event
     elif request.method == 'POST' and len(request.form)==4:
         print(request.form)
         month = request.form['month_f2']
@@ -123,11 +132,13 @@ def index():
             "doctor_id":doctor_id
         }
         dup_check = requests.post('{}{}'.format(api_url,"doctor/duplicated_check"),json=input).json()
+
+        # if event exists then deletion can be performed
         if dup_check== False:
             flash("{}-{}-{} doesn't have any event to be deleted.".format(year,month,day))
         else:
             print("you can delete")
-            r = requests.post('{}{}'.format(api_url,"doctor/delete_event"),json=input)
+            requests.post('{}{}'.format(api_url,"doctor/delete_event"),json=input)
     else:
         print("Normal GET request")
  
@@ -135,28 +146,37 @@ def index():
 
 
 @APP.route('/doctor/appointment', methods=['GET', 'POST'])
+"""route for doctor appointment"""
 def doctor_page_2():
     doctor_id = 0
     doctor_infos = requests.get('{}{}'.format(api_url,"doctor")).json()
     patient_infos = requests.get('{}{}'.format(api_url,"patient")).json()
     
+    # If doctor had been selected
     if request.method == 'POST' and len(request.form)==1:
         print("Chose a doctor calendar")
         print(request.form['doctor_id'])
         doctor_id=int(request.form['doctor_id'])
+
+    # If patient had been selected
     elif request.method == 'POST' :
         doctor_id=int(request.form['doctor_id'])
         patient_id=int(request.form['patient_id'])
         print("Proceeding to patient history page...")
 
+        # route to result page
         return redirect(url_for('doctor_page_3',patient_id=patient_id,doctor_id=doctor_id))
+    
     return render_template('doctor_appointment.html',patient_infos=patient_infos,doctor_id=doctor_id, doctor_infos= doctor_infos )
 
 @APP.route('/doctor/result', methods=['GET', 'POST'])
 def doctor_page_3():
+    """Page of patient appointment"""
     logic = False
     doctor_infos=[]
     patient_infos=[]
+
+    # If the notes form had been submitted
     if request.method == 'POST':
         logic = True
         print(request.form)
@@ -175,17 +195,21 @@ def doctor_page_3():
             "diagnoses": request.form['diagnoses'],
             "date":defined_day
         }
-        r = requests.post('{}{}'.format(api_url,"history"),json=input)
+        requests.post('{}{}'.format(api_url,"history"),json=input)
         patient_histories = requests.get('{}{}/{}'.format(api_url,"history",patient_id)).json()
         print(patient_histories)
+    
+    
     else:
         doctor_id = request.args.get('doctor_id')
         patient_id = request.args.get('patient_id')
         patient_histories = []
 
+        # preventing wrong use fo the page 
         if(patient_id==None or doctor_id==None):
             print("wrong use")
         else:
+            #normal get request
             logic = True
             print(patient_id)
             print(doctor_id)

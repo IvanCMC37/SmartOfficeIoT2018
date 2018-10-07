@@ -11,6 +11,7 @@ import requests
 ##
 @d_mod.route("/doctor", methods=["GET"])
 def get_doctors():
+    """Get all doctor details"""
     all_doctors = schema.Doctor.query.all()
     result = schema.doctors_schema.dump(all_doctors)
     return jsonify(result.data)
@@ -18,6 +19,7 @@ def get_doctors():
 # doctor calander event api 
 @d_mod.route("/doctor/assign", methods=["POST"])
 def add_availabiliy():
+    """assign doctor availability"""
     input_json = request.json
     doctor_id = input_json['doctor_id']
 
@@ -27,6 +29,7 @@ def add_availabiliy():
 
 @d_mod.route("/doctor/quick_assign", methods=["POST"])
 def add_monthly_availability():
+    """Quick assign doctor availability monthly"""
     input_json = request.json
     year = input_json['year']
     month = input_json['month']
@@ -39,8 +42,9 @@ def add_monthly_availability():
 
 @d_mod.route("/doctor/duplicated_check", methods=["POST"])
 def duplicated_check():
+    """Check if event had been created before"""
     input_json = request.json
-    print(len(input_json))
+
 
     if(len(input_json)>3):
         day = input_json['day']
@@ -59,8 +63,9 @@ def duplicated_check():
 
 @d_mod.route("/doctor/delete_event", methods=["POST"])
 def delete_action():
+    """Delete daily event on doctor api"""
     input_json = request.json
-    print(len(input_json))
+
     day = input_json['day']
     year = input_json['year']
     month = input_json['month']
@@ -72,8 +77,9 @@ def delete_action():
 
 @d_mod.route("/doctor/update_event", methods=["POST"])
 def update_action():
+    """Update time for certain dotcor event"""
     input_json = request.json
-    print(len(input_json))
+
     day = input_json['day']
     year = input_json['year']
     month = input_json['month']
@@ -90,8 +96,9 @@ def update_action():
 # Api to return list of event time of the month
 @d_mod.route("/doctor/monthly_check", methods=["POST"])
 def monthly_check():
+    """Check doctors monthly availability"""
     input_json = request.json
-    print(len(input_json))
+
     year = input_json['year']
     month = input_json['month']
     doctor_id = input_json['doctor_id']
@@ -103,6 +110,7 @@ def monthly_check():
 # Api to return list of event time of the day
 @d_mod.route("/doctor/daily_check", methods=["POST"])
 def daily_check():
+    """Check doctors daily availability"""
     input_json = request.json
     print(len(input_json))
     year = input_json['year']
@@ -116,12 +124,14 @@ def daily_check():
 
 @d_mod.route("/doctor/appoint_gcalendar", methods=["POST"])
 def appoint_gcalendar():
+    """Appoint event to google calendar"""
     input_json = request.json
     start_datetime = input_json['start_datetime']
     
     start_datetime = start_datetime.replace("+10:00","")
     start_datetime = start_datetime.replace("+11:00","")
     
+    # extract datetimes
     start_datetime = datetime.strptime(start_datetime,"%Y-%m-%d %H:%M:%S")
     
     doctor_id = input_json['doctor_id']
@@ -136,18 +146,22 @@ def appoint_gcalendar():
 
 @d_mod.route("/doctor/delete_gcalendar", methods=["POST"])
 def delete_gcalendar():
+    """delete event on google calendar"""
     input_json = request.json
-    print(input_json)
     appointment_id = input_json['appointment_id']
     appointment = schema.Appointment.query.get(appointment_id)
     result = schema.appointment_schema.dump(appointment)
     r = result.data
+
+    # extract datetimes
     start_datetime = datetime.strptime(r['start_datetime'],"%Y-%m-%d %H:%M:%S")
     doctor_id = r['doctor_id']
     end_datetime = datetime.strptime(r['end_datetime'],"%Y-%m-%d %H:%M:%S")
+
     print(doctor_id)
     print(start_datetime)
     print(end_datetime)
+
     event=doctor_calendar.appointment_deleter(start_datetime,end_datetime,int(doctor_id))
 
     return jsonify(event)

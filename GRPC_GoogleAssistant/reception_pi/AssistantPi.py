@@ -32,7 +32,7 @@ import aiy.audio
 import aiy.voicehat
 from google.assistant.library.event import EventType
 
-sys.path.insert(0, '/home/pi/TL7/helloworld')
+sys.path.insert(0, '/home/pi/Tutorials/Week7/helloworld')
 import greeter_client
 
 logging.basicConfig(

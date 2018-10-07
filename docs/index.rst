@@ -15,6 +15,10 @@ Welcome to SmartOffice's documentation!
    forms
    patient_api
    doctor_api
+   doctor_calendar
+   dictation_pi
+   reception_pi
+   advisor_pi
 
 Indices and tables
 ==================
