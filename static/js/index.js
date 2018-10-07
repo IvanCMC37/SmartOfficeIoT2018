@@ -248,6 +248,7 @@ $(document).ready(function() {
         for(i =1; i<=day; i++){
             optionHTML +='<option value="'+i+'">'+i+'</option>';
         }
+        getDoctorAvailableSlots(year, month, 1, $("#doctor_id").val());
         day_select.innerHTML=optionHTML;
     }
     //Populating Full Calendar UI with Appointments
