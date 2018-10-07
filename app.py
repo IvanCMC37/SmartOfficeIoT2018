@@ -230,7 +230,7 @@ def patient_appointments():
         input={
             "appointment_id":del_id
         }
-        requests.post('{}{}'.format("http://10.132.155.20:5000/api/","doctor/delete_gcalendar"), json=input).json()
+        requests.post('{}{}'.format(api_url,"doctor/delete_gcalendar"), json=input).json()
 
         # Deletes the appointment by id  
         patient_api.delete_patient_appointment(del_id)
@@ -254,7 +254,7 @@ def patient_appointments():
             "doctor_id":doctor_id,
             "patient_id":pat_id
         }
-        requests.post('{}{}'.format("http://10.132.155.20:5000/api/","doctor/appoint_gcalendar"), json=input).json()
+        requests.post('{}{}'.format(api_url,"doctor/appoint_gcalendar"), json=input).json()
         return render_template('patient.html', form=form, reg_form=reg_form)
 
     elif request.method == 'POST' and "reg_patient" in request.form:
