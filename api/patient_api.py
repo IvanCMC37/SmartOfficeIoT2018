@@ -30,15 +30,8 @@ def get_patient_appointments(id):
 @p_mod.route("/doctorAppmts/<id>", methods=["GET"])
 def get_doctor_appointments(id):
     """Return appointments for patient as JSON"""
-    #if id:
     all_appmts = schema.db.session.query(schema.Appointment).filter_by(doctor_id=id).all()
     return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
-
-# @p_mod.route("/get_pat_object", methods=["GET"])
-# def get_patient_by_object(pat):
-#     """Return patients by object"""
-#     patient = schema.Patient.query.get(pat)
-#     return patient
 
 @p_mod.route("/delete_patient", methods=["POST"])
 def delete_patient_appointment(del_id):
@@ -69,8 +62,9 @@ def get_reg_patients():
 @p_mod.route("/appointment", methods=["GET"])
 def all_appointments():
     """Gets all appointments"""
-    all_appointments = schema.Appointment.query.all() 
-    result = schema.appointments_schema.dump(all_appointments)
+    #all_appointments = schema.Appointment.query.all()
+    all_appointments = schema.db.session.query(schema.Appointment).join(schema.Doctor).all() 
+    result = schema.appointments_with_doctor_schema.dump(all_appointments)
     return jsonify(result.data)
 
 @p_mod.route("/add_appointment", methods=["POST"])

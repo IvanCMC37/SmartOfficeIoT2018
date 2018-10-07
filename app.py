@@ -303,28 +303,79 @@ def patient_appointments():
 ##
 # CLERK
 ##
-# @APP.route("/clerk", methods=["GET", "POST"])
-# def clerks_page():
-#     """Displays all the active appointments and allows new appointments to be made"""
-#     form = AppointmentForm()
+@APP.route("/clerk", methods=["GET", "POST"])
+def clerk_page():
+    """Displays all the active appointments and allows new appointments to be made and deleted"""
+    form = AppointmentForm()
+    # Get all patients and generate combo box values
+    patients = patient_api.get_reg_patients()
+    patient_choices=[]
+    for patient in patients.data:
+        patient_choices.append([patient['id'], patient['first_name'] + ' ' + patient['last_name']])
+    form.patient.choices=patient_choices
+    # Get all doctors and generate combo box values
+    doctors = requests.get('{}{}'.format(api_url,"doctor")).json()
+    doctor_choices=[]
+    for doctor in doctors:
+        doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
+    form.doctor.choices=doctor_choices
+    # Generate Days combo box values
+    date_list = [("","--None--")]
+    form.day.choices = date_list
 
-#     if request.method == 'POST':
-#         start_datetime = form.start_datetime.data
-#         end_datetime = form.end_datetime.data
+    reg_form = RegisterPatientForm()
 
-#         patient = schema.Patient.query.get(1)
-#         new_appointment = schema.Appointment(start_datetime, end_datetime, title, patient_id = patient.id)
-#         schema.db.session.add(new_appointment)
-#         schema.db.session.commit()
+    if request.method == 'POST' and "delete_appmt" in request.form:
+        del_id = request.form['delete_appmt']
+        # Delete Appointment to GCalendar
+        input={
+            "appointment_id":del_id
+        }
+        requests.post('{}{}'.format(api_url,"doctor/delete_gcalendar"), json=input).json()
 
-#         # need to refresh page to update appointments
-#         return redirect(url_for('clerks_page'))
+        # Deletes the appointment by id  
+        patient_api.delete_patient_appointment(del_id)
+        return redirect(url_for('clerk_page'))
 
-#     all_appointments = schema.Appointment.query.all()
-#     result = schema.appointments_schema.dump(all_appointments)
-#     print(result)
+    elif request.method == 'POST' and "book_appmt" in request.form:
+        doctor_id=request.form['doctor_id']
+        print("doctor_id---"+doctor_id)
+        pat_id = request.form['pat_id']
 
-#     return render_template('clerk.html', form=form, all_appointments=result.data)
+        start_datetime = request.form['slot']
+        start_datetime=start_datetime.replace(' (Australian Eastern Standard Time)','')
+        start_datetime=start_datetime.replace(' (Australian Eastern Daylight Time)','')
+        
+        start_datetime= datetime.datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
+        title = 'Patient Appointment'
+        # Add Apppointment to Database
+        patient_api.add_patient_appointment(start_datetime, start_datetime+timedelta(minutes=30), title, pat_id, doctor_id)
+        # Add Appointment to GCalendar
+        input={
+            "start_datetime":str(start_datetime),
+            "doctor_id":doctor_id,
+            "patient_id":pat_id
+        }
+        requests.post('{}{}'.format(api_url,"doctor/appoint_gcalendar"), json=input).json()
+        return render_template('clerk.html', form=form, reg_form=reg_form)
+
+    elif request.method == 'POST' and "reg_patient" in request.form:
+        # Register a patient
+        first_name = reg_form.first_name.data
+        last_name = reg_form.last_name.data
+        email = reg_form.email.data
+        patient_api.reg_patient(first_name, last_name, email)
+
+        return redirect(url_for('clerk_page'))
+    
+    elif request.method == 'POST' and 'select_patient' in request.form:
+        # Select a patient from the combo box and display appointments
+        pat_id = request.form['select_patient']
+        result = patient_api.get_patient_appointments(pat_id)
+        pat = patient_api.get_patient_by_object(pat_id)
+        return render_template('clerk.html', form=form, reg_form=reg_form)
+    
+    return render_template('clerk.html', form=form, reg_form=reg_form)
 
 
 
