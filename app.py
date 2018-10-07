@@ -204,73 +204,58 @@ def doctor_page_3():
 ##
 @APP.route("/patient", methods=["GET", "POST"])
 def patient_appointments():
-    print('patient GET OR POST')
     """Displays all the active appointments and allows new appointments to be made and deleted"""
     form = AppointmentForm()
     # Get all patients and generate combo box values
     patients = patient_api.get_reg_patients()
-    #patient_choices=[['','--None--']]
     patient_choices=[]
     for patient in patients.data:
         patient_choices.append([patient['id'], patient['first_name'] + ' ' + patient['last_name']])
     form.patient.choices=patient_choices
     # Get all doctors and generate combo box values
-    #doctors = doctor_api.get_doctors()
     doctors = requests.get('{}{}'.format(api_url,"doctor")).json()
-    print("doctors---"+str(doctors))
     doctor_choices=[]
     for doctor in doctors:
         doctor_choices.append([doctor['id'], doctor['first_name'] + ' ' + doctor['last_name']])
     form.doctor.choices=doctor_choices
-    # Generate Days
+    # Generate Days combo box values
     date_list = [("","--None--")]
     form.day.choices = date_list
-    # date_list.extend(range(1, 32))
-    # form.day.choices = [(str(x),str(x)) for x in date_list]
-    reg_form = RegisterPatientForm()
-    
 
-    # Set default patient to 1
-    pat = patient_api.get_patient_by_object(1)
-    
+    reg_form = RegisterPatientForm()
+
     if request.method == 'POST' and "delete_appmt" in request.form:
-        # Deletes the appointment by id  
         del_id = request.form['delete_appmt']
+        # Delete Appointment to GCalendar
+        input={
+            "appointment_id":del_id
+        }
+        requests.post('{}{}'.format("http://10.132.155.20:5000/api/","doctor/delete_gcalendar"), json=input).json()
+
+        # Deletes the appointment by id  
         patient_api.delete_patient_appointment(del_id)
-        
         return redirect(url_for('patient_appointments'))
 
     elif request.method == 'POST' and "book_appmt" in request.form:
-        print('patient POST book_appmt')
-        # Submit form of appointment booking
-        #start_datetime = form.start_datetime.data
-        #end_datetime = form.end_datetime.data
         doctor_id=request.form['doctor']
-        
-        if request.form['pat_id']:
-            pat_id = request.form['pat_id']
-        else:
-            pat_id = 1
-        print(pat_id)
+        pat_id = request.form['pat_id']
 
         start_datetime = request.form['slot']
-        print(start_datetime)
-        print(type(start_datetime))
-        #Thu Oct 04 2018 14:30:00 GMT+1000
         start_datetime=start_datetime.replace(' (Australian Eastern Standard Time)','')
+        start_datetime=start_datetime.replace(' (Australian Eastern Daylight Time)','')
+        
         start_datetime= datetime.datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
-        print(start_datetime)
-        print(type(start_datetime))
         title = 'Patient Appointment'
-        # for appmt in avail_appmts['days'] :
-        #     print('appmt---'+str(appmt))
-        #     start_datetime = appmt['start_time']
-        #     end_datetime = appmt['end_time']
+        # Add Apppointment to Database
         patient_api.add_patient_appointment(start_datetime, start_datetime+timedelta(minutes=30), title, pat_id, doctor_id)
-        pat = patient_api.get_patient_by_object(pat_id)
-        result = patient_api.get_patient_appointments(pat_id)
-        print(result)
-        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data,pat_id=pat_id)
+        # Add Appointment to GCalendar
+        input={
+            "start_datetime":str(start_datetime),
+            "doctor_id":doctor_id,
+            "patient_id":pat_id
+        }
+        requests.post('{}{}'.format("http://10.132.155.20:5000/api/","doctor/appoint_gcalendar"), json=input).json()
+        return render_template('patient.html', form=form, reg_form=reg_form)
 
     elif request.method == 'POST' and "reg_patient" in request.form:
         # Register a patient
@@ -286,12 +271,9 @@ def patient_appointments():
         pat_id = request.form['select_patient']
         result = patient_api.get_patient_appointments(pat_id)
         pat = patient_api.get_patient_by_object(pat_id)
-        return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, pat_id=pat_id)
+        return render_template('patient.html', form=form, reg_form=reg_form)
     
-    #result = patient_api.get_patient_appointments()
-
-    #return render_template('patient.html', form=form, reg_form=reg_form, all_appointments=result, patients=patients.data, doctors = doctors.data, pat=pat)
-    return render_template('patient.html', form=form, reg_form=reg_form, patients=patients.data)
+    return render_template('patient.html', form=form, reg_form=reg_form)
 
 
 ##

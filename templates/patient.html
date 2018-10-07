@@ -6,12 +6,6 @@
     <span class="extra-bottom-margin">Change Patient:</span>
     <!-- Select a patient from the combox -->
     <form action="{{ url_for('patient_appointments') }}" method="post" class="form-select-patient">
-        <!--<select name="select_patient" onchange="this.form.submit()" class="custom-select combo-box extra-bottom-margin">
-            <option selected="">Select a patient</option>
-            {% for p in patients %}
-            <option value="{{ p.id }}">{{ p.first_name }} {{ p.last_name }}</option>
-            {% endfor %}
-        </select>-->
         {{form.patient}}  
     </form>
     <h3 class="extra-top-padding extra-bottom-padding">Patient Appointments</h3>

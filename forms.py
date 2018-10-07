@@ -8,7 +8,6 @@ class AppointmentForm(FlaskForm):
   slot = SelectField('slot',choices= [("","--None--")], validators=[validators.required()])
   patient= SelectField('patient', validators=[validators.required()])
   doctor = SelectField('doctor', validators=[validators.required()])
-  #title = TextField('Type:', validators=[validators.required()])
   start_datetime = DateField('Start Date:', format ='%d/%m/%Y' , validators=[validators.required()])
   end_datetime = DateField('End Date:', format ='%d/%m/%Y', validators=[validators.required()])
 

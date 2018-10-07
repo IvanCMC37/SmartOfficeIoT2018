@@ -3,21 +3,16 @@ $(document).ready(function() {
     var month_select = document.getElementById('month');
     var day_select = document.getElementById('day');
     getPatientAppmts($("#patient").val());
-    console.log("$(patient.value---"+$("#patient").val());
+    $("#pat_id").val($("#patient").val());
 
     //On Patient change - Populate Appointments
     $("#patient").change(function(){
-        console.log("this.value---"+this.value)
         getPatientAppmts(this.value);
         $("#pat_id").val(this.value);
     });
 
     //On Day change - Populate Appointment Slots
     $("#day").change(function(){
-        console.log("$(year.value---"+$("#year").val());
-        console.log("$(month.value---"+$("#month").val());
-        console.log("this.value---"+this.value)
-        console.log("$(doctor.value---"+$("#doctor").val());
         var year=$("#year").val();
         var month=$("#month").val();
         var day=this.value;
@@ -28,7 +23,6 @@ $(document).ready(function() {
     //Fetch Doctor Availalable Appointment Slots
     function getDoctorAvailableSlots(year, month, day, doctorId){
         $("#slot").children('option:not(:first)').remove();
-        alert("called");
         input = {
             "month":month,
             "year":year,
@@ -56,12 +50,7 @@ $(document).ready(function() {
                             //Skip if slot is already booked
                             var booked=false;
                             for(var j=0;j<bookedAppmts.length;j++){
-                                console.log("bookedAppmts---"+bookedAppmts);
-                                console.log("j---"+j);
-                                console.log("bookedAppmts[j]---"+bookedAppmts[j]);
                                 var bookedSlot=new Date(bookedAppmts[j].start_datetime);
-                                console.log("bookedSlot---"+bookedSlot);
-                                console.log("timeSlot---"+timeSlot);
                                 if(new Date(bookedAppmts[j].start_datetime).getTime() === timeSlot.getTime()){
                                     booked=true;
                                 }
@@ -73,7 +62,6 @@ $(document).ready(function() {
                             }
                             i+=30;  
                         }
-                        console.log("timeSlots---"+timeSlots);
                     }});     
                 }
             },
@@ -136,12 +124,9 @@ $(document).ready(function() {
     var today = d.getFullYear() + '-' +
         ((''+month).length<2 ? '0' : '') + month + '-' +
         ((''+day).length<2 ? '0' : '') + day;
-        console.log("appointments---"+appointments);
         appointments=appointments.replace("start_datetime", "start");
         appointments=appointments.replace("end_datetime", "end");
         appointments= JSON.parse(appointments);
-        console.log(appointments[0].start);
-        console.log("appointments---"+appointments);
     $('#calendar').fullCalendar({
         defaultDate: today,
         defaultView: 'agendaWeek',
@@ -166,5 +151,4 @@ $(document).ready(function() {
         eventLimit: true, // allow "more" link when too many events
         events: appointments
     })
-
 });

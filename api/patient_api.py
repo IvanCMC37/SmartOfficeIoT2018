@@ -23,52 +23,39 @@ def appointment_detail(id):
 
 @p_mod.route("/patientAppmts/<id>", methods=["GET"])
 def get_patient_appointments(id):
-    print("id---"+str(id))
     """Return appointments for patient as JSON"""
-    #if id:
     all_appmts = schema.db.session.query(schema.Appointment).filter_by(patient_id=id).join(schema.Doctor).join(schema.Patient).all()
-    print('all_appmts---'+str(all_appmts))
-    #all_appmts = schema.Appointment.query.filter(schema.Appointment.patient_id ==id)
-        
-    #return schema.appointments_with_doctor_schema.jsonify(all_appmts)
     return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
 
 @p_mod.route("/doctorAppmts/<id>", methods=["GET"])
 def get_doctor_appointments(id):
-    print("id---"+str(id))
     """Return appointments for patient as JSON"""
     #if id:
     all_appmts = schema.db.session.query(schema.Appointment).filter_by(doctor_id=id).all()
-    print('all_appmts---'+str(all_appmts))
-    #all_appmts = schema.Appointment.query.filter(schema.Appointment.patient_id ==id)
-        
-    #return schema.appointments_with_doctor_schema.jsonify(all_appmts)
     return jsonify(schema.appointments_with_doctor_schema.dump(all_appmts).data)
 
+# @p_mod.route("/get_pat_object", methods=["GET"])
+# def get_patient_by_object(pat):
+#     """Return patients by object"""
+#     patient = schema.Patient.query.get(pat)
+#     return patient
 
-def get_patient_by_object(pat):
-    """Return patients by object"""
-    patient = schema.Patient.query.get(pat)
-    return patient
-
-
+@p_mod.route("/delete_patient", methods=["POST"])
 def delete_patient_appointment(del_id):
     """Deletes appointment by patient"""
-    print('del_id---'+del_id)
     appointment = schema.Appointment.query.get(del_id)
     schema.db.session.delete(appointment)
     schema.db.session.commit()
 
-
+@p_mod.route("/reg_patient", methods=["POST"])
 def reg_patient(first, last, email):
-    """Registers a new patient"""
     patient = schema.Patient(first, last, email)
     schema.db.session.add(patient)
     schema.db.session.commit()
     result = schema.patient_schema.dump(patient)
     return jsonify(result.data)
 
-
+@p_mod.route("/get_reg_patients", methods=["GET"])
 def get_reg_patients():
     """Gets all registered patients"""
     reg_patients = schema.Patient.query.all()
@@ -85,6 +72,7 @@ def all_appointments():
     result = schema.appointments_schema.dump(all_appointments)
     return jsonify(result.data)
 
+@p_mod.route("/add_appointment", methods=["POST"])
 def add_patient_appointment(start, end, title, p_id, d_id):
     """Add patient's appointment"""
     appmt = schema.Appointment(start, end, title, patient_id = p_id, doctor_id = d_id)
