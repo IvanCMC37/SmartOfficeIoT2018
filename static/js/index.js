@@ -27,6 +27,8 @@ $(document).ready(function() {
 
     //Fetch Doctor Availalable Appointment Slots
     function getDoctorAvailableSlots(year, month, day, doctorId){
+        $("#slot").children('option:not(:first)').remove();
+        alert("called");
         input = {
             "month":month,
             "year":year,
@@ -39,25 +41,40 @@ $(document).ready(function() {
             data: JSON.stringify(input),
             success: function(response) {
                 console.log((JSON.stringify(response)));
-                //response="{"days":[{"end_time":"2018-11-26T17:00:00+11:00","start_time":"2018-11-26T09:00:00+11:00"}]}";
                 if(response.days[0]!= null){
-                    var start_time=new Date(response.days[0].start_time);
-                    var end_time=new Date(response.days[0].end_time);
-                    console.log("start_time---"+start_time);
-                    console.log("end_time---"+end_time);
-                    var timeDifference=(end_time-start_time)/60000;
-                    console.log("timeDifference---"+timeDifference);
-                    var timeSlots=[];
-                    console.log("new Date(start_time.getTime() + 30*60000)---"+new Date(start_time.getTime() + 30*60000));
-                    var i=0;
-                    while(i<=timeDifference){
-                        timeSlots.push(new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
-                        //$("#slot").append($("<option />").val(new Date(start_time.getTime() + i*60000)).text(this.Name), new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
-                        var str="<option value='" +new Date(start_time.getTime() + i*60000) + "'>" +new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) + "</option>";
-                        $("#slot").append(str);
-                        i+=30;
-                    }
-                    console.log("timeSlots---"+timeSlots);
+                    //Show Available Time Slots 
+                    $.ajax({url: "/api/doctorAppmts/"+$("#doctor").val(), success: function(bookedAppmts){
+                        var start_time=new Date(response.days[0].start_time);
+                        var end_time=new Date(response.days[0].end_time);
+                        var timeDifference=(end_time-start_time)/60000;
+                        var timeSlots=[];
+                        var i=0;
+                        while(i<=timeDifference){
+                            var timeSlot=new Date(start_time.getTime() + i*60000);
+                            var timeSlotLocale=new Date(start_time.getTime() + i*60000).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                            timeSlots.push(timeSlotLocale);
+                            //Skip if slot is already booked
+                            var booked=false;
+                            for(var j=0;j<bookedAppmts.length;j++){
+                                console.log("bookedAppmts---"+bookedAppmts);
+                                console.log("j---"+j);
+                                console.log("bookedAppmts[j]---"+bookedAppmts[j]);
+                                var bookedSlot=new Date(bookedAppmts[j].start_datetime);
+                                console.log("bookedSlot---"+bookedSlot);
+                                console.log("timeSlot---"+timeSlot);
+                                if(new Date(bookedAppmts[j].start_datetime).getTime() === timeSlot.getTime()){
+                                    booked=true;
+                                }
+                            }
+                            //Add if not in Booked Appointments
+                            if(booked==false){
+                                var str="<option value='" +timeSlot + "'>" +timeSlotLocale + "</option>";
+                                $("#slot").append(str);
+                            }
+                            i+=30;  
+                        }
+                        console.log("timeSlots---"+timeSlots);
+                    }});     
                 }
             },
             contentType:"application/json",
@@ -83,7 +100,7 @@ $(document).ready(function() {
                 row=row + "<td>"+ "<form action='/patient' method='post'><input type='hidden' name='delete_appmt' value='"+result[i].id+"'><input type='submit' class='btn btn-secondary' value='Delete'/></form></td>";   
                 row=row + "</tr>";
                 $("#table tbody").append(row);
-            }            
+            }          
         }});
     }
 

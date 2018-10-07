@@ -13,7 +13,6 @@ from api.patient_api import p_mod
 from api.doctor_api import d_mod
 from api.clerk_api import c_mod
 from api import patient_api, doctor_api, clerk_api
-import requests
 
 # Load from config.py
 APP.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{}:{}@{}/{}'.format(config.username, config.password, config.ip, config.database)
@@ -259,7 +258,7 @@ def patient_appointments():
         print(type(start_datetime))
         #Thu Oct 04 2018 14:30:00 GMT+1000
         start_datetime=start_datetime.replace(' (Australian Eastern Standard Time)','')
-        start_datetime= datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
+        start_datetime= datetime.datetime.strptime(start_datetime, '%a %b %d %Y %H:%M:%S %Z%z')
         print(start_datetime)
         print(type(start_datetime))
         title = 'Patient Appointment'
