@@ -139,7 +139,9 @@ def delete_gcalendar():
     input_json = request.json
     print(input_json)
     appointment_id = input_json['appointment_id']
-    r = requests.get("/api/{}/{}".format("appointment", appointment_id)).json()
+    appointment = schema.Appointment.query.get(appointment_id)
+    result = schema.appointment_schema.dump(appointment)
+    r = result.data
     start_datetime = datetime.strptime(r['start_datetime'],"%Y-%m-%d %H:%M:%S")
     doctor_id = r['doctor_id']
     end_datetime = datetime.strptime(r['end_datetime'],"%Y-%m-%d %H:%M:%S")
