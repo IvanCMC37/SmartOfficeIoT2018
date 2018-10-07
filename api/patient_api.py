@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import schema
 
-p_mod = Blueprint("patient_api",  __name__)
+p_mod = Blueprint("patient_api", __name__)
 
 
 ##
@@ -10,7 +10,7 @@ p_mod = Blueprint("patient_api",  __name__)
 @p_mod.route("/patient", methods=["GET"])
 def get_patients():
     """Returns JSON of all patients"""
-    all_patients = schema.Patient.query.all() 
+    all_patients = schema.Patient.query.all()
     result = schema.patients_schema.dump(all_patients)
     return jsonify(result.data)
 
@@ -49,6 +49,7 @@ def delete_patient_appointment(del_id):
 
 @p_mod.route("/reg_patient", methods=["POST"])
 def reg_patient(first, last, email):
+    """Register a new patient"""
     patient = schema.Patient(first, last, email)
     schema.db.session.add(patient)
     schema.db.session.commit()
@@ -87,6 +88,7 @@ def add_patient_appointment(start, end, title, p_id, d_id):
 # get specific patient history(s)
 @p_mod.route("/history/<id>", methods=["GET"])
 def patient_detail(id):
+    """Gets patients details"""
     # test = id
     # print("test---"+test)
     patient_history = schema.PatientHistory.query.filter(schema.PatientHistory.patient_id ==id)
@@ -96,6 +98,7 @@ def patient_detail(id):
 # Get all history 
 @p_mod.route("/history", methods=["GET"])
 def all_history():
+    """Get the history of the patients"""
     patient_histories = schema.PatientHistory.query.all()
 
     return schema.patient_histories_schema.jsonify(patient_histories)
@@ -103,6 +106,7 @@ def all_history():
 # Add new patient history
 @p_mod.route("/history", methods=["POST"])
 def add_patient_history():
+    """Adds the patient history"""
     user = request.json['id']
     diagnoses = request.json['diagnoses']
     notes = request.json['notes']
